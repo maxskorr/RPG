@@ -36,4 +36,8 @@ public class ResourceManager {
         }
         return Toolkit.getDefaultToolkit().createImage(sourceImage.getSource());
     }
+
+    public static Sprite getSprite(String title, Object o) {
+        return new Sprite(getImage(title, o));
+    }
 }
