@@ -7,6 +7,7 @@ import game.graphics.Sprite;
  * Created by Max on 6/27/2014.
  */
 public abstract class GameObject {
+
     private int x;
     private int y;
     private Sprite sprite;
@@ -21,11 +22,12 @@ public abstract class GameObject {
     }
 
     public void setXY(Integer x, Integer y) {
-        if (!x.equals(null))
+        if (x != null) {
             this.x = x;
-        if (!y.equals(null))
+        }
+        if (y != null) {
             this.y = y;
-
+        }
         gameWorld.getTile(getX(), getY()).trigger(this);
     }
 
