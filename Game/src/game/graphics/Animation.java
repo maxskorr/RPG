@@ -17,6 +17,10 @@ public class Animation {
 
     private boolean isTimeDependent;
 
+    public Animation(final Image[] frames) {
+        this.frames = frames;
+    }
+
     public int getFramesQuantity() {
         return framesQuantity;
     }

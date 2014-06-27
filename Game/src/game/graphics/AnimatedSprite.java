@@ -7,9 +7,13 @@ import java.util.Map;
 /**
  * Created by Semyon Danilov on 27.06.2014.
  */
-public class AnimatedSprite implements Drawable {
+public class AnimatedSprite extends AbstractSprite implements Drawable {
 
-    private Map<Integer, Animation> animations = new HashMap<>();
+    final private Animation animation;
+
+    public AnimatedSprite(final Animation animation) {
+        this.animation = animation;
+    }
 
     @Override
     public void beforeRender() {

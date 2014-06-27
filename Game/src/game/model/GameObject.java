@@ -1,22 +1,36 @@
 package game.model;
 
 import game.core.GameWorld;
+import game.graphics.AbstractSprite;
 import game.graphics.Sprite;
+import game.util.GameOptions;
+import game.util.ResourceManager;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by Max on 6/27/2014.
+ * Created by Max & Edik on 6/27/2014.
  */
 public abstract class GameObject {
     private int x;
     private int y;
-    private Sprite sprite;
+    private List<AbstractSprite> sprites;
     private GameWorld gameWorld;
 
-    public GameObject(final Integer x, final Integer y, final Sprite sprite, final GameWorld gameWorld) {
+    public GameObject(final Integer x, final Integer y, final String title, final GameWorld gameWorld) {
         this.x = x;
         this.y = y;
+        sprites = new ArrayList<>();
 
-        setSprite(sprite);
+        final int totalAnimations = ResourceManager.getAnimationsNumberByTitle(title);
+
+        for (int i = 0; i < totalAnimations; i++) {
+            putSprite( ResourceManager.getSprite(title, i) );
+        }
+
         setGameWorld(gameWorld);
     }
 
@@ -37,8 +51,8 @@ public abstract class GameObject {
         return x;
     }
 
-    public Sprite getSprite() {
-        return sprite;
+    public List<AbstractSprite> getSprites() {
+        return sprites;
     }
 
     public abstract void update();
@@ -51,7 +65,7 @@ public abstract class GameObject {
         this.gameWorld = gameWorld;
     }
 
-    public void setSprite(Sprite sprite) {
-        this.sprite = sprite;
+    public void putSprite(AbstractSprite sprite) {
+        sprites.add(sprite);
     }
 }
