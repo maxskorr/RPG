@@ -6,11 +6,15 @@ package game.model;
 public abstract class GameObject {
     private int x;
     private int y;
-    private Tile tile;
+    private Sprite sprite;
+    private GameWorld gameWorld;
 
-    public GameObject(Integer x, Integer y, Tile tile) {
-        setXY(x, y);
-        setTile(tile);
+    public GameObject(Integer x, Integer y, Sprite sprite, GameWorld gameWorld) {
+        this.x = x;
+        this.y = y;
+
+        setSprite(sprite);
+        setGameWorld(gameWorld);
     }
 
     public void setXY(Integer x, Integer y) {
@@ -18,6 +22,8 @@ public abstract class GameObject {
             this.x = x;
         if (!y.equals(null))
             this.y = y;
+
+        gameWorld.getTile(getX(), getY()).trigger(this);
     }
 
     public int getX() {
@@ -28,13 +34,21 @@ public abstract class GameObject {
         return x;
     }
 
-    public Tile getTile() {
-        return tile;
-    }
-
-    public void setTile(Tile tile) {
-        this.tile = tile;
+    public Sprite getSprite() {
+        return sprite;
     }
 
     public abstract void update();
+
+    public GameWorld getGameWorld() {
+        return gameWorld;
+    }
+
+    public void setGameWorld(GameWorld gameWorld) {
+        this.gameWorld = gameWorld;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
 }
