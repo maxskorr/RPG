@@ -1,5 +1,8 @@
 package game.model;
 
+import game.core.GameWorld;
+import game.graphics.Sprite;
+
 /**
  * Created by Max on 6/27/2014.
  */
@@ -9,7 +12,7 @@ public abstract class GameObject {
     private Sprite sprite;
     private GameWorld gameWorld;
 
-    public GameObject(Integer x, Integer y, Sprite sprite, GameWorld gameWorld) {
+    public GameObject(final Integer x, final Integer y, final Sprite sprite, final GameWorld gameWorld) {
         this.x = x;
         this.y = y;
 

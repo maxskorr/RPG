@@ -1,12 +1,15 @@
 package game.graphics;
 
+import game.core.GameWorld;
+import game.model.GameObject;
+
 /**
  * Created by Max on 6/27/2014.
  */
 public class Tile extends GameObject {
     private boolean visitable;
 
-    public Tile(Integer x, Integer y, Sprite sprite) {
+    public Tile(final Integer x, final Integer y, final Sprite sprite, final GameWorld gameWorld) {
         super(x, y, sprite, gameWorld);
     }
 
@@ -14,7 +17,7 @@ public class Tile extends GameObject {
      * Будет переопределён в классах-наследниках типа ловушек/телепортов..
      * @param gameObject Тот, кто инициирует вызов триггера
      */
-    public void trigger(GameObject gameObject) {
+    public void trigger(final GameObject gameObject) {
         // EMPTY
     }
 

@@ -1,5 +1,6 @@
 package game.core;
 
+import game.graphics.Tile;
 import game.model.GameObject;
 
 import java.util.ArrayList;
@@ -12,20 +13,35 @@ public class GameWorld {
 
     private List<GameObject> gameObjects = null;
 
+    private Tile[][] map;
+
     public GameWorld() {
         this.gameObjects = new ArrayList<GameObject>();
     }
 
-    public void addObject(final GameObject gameObject) {
+    public void addGameObject(final GameObject gameObject) {
         gameObjects.add(gameObject);
     }
 
-    private <T extends Enum<T>> void check(final Class<T> ars) {
-
-    }
-
-    public void addObjects(final List<? extends GameObject> gameObjects) {
+    public void addGameObjects(final List<? extends GameObject> gameObjects) {
         this.gameObjects.addAll(gameObjects);
     }
 
+    public Tile getTile(final int x, final int y) {
+        return map[x][y];
+    }
+
+    public void removeGameObject(final GameObject gameObject) {
+        gameObjects.remove(gameObject);
+    }
+
+    public boolean isOccupied(final int x, final int y) {
+        for (final GameObject gameObject : gameObjects) {
+            if (gameObject.getX() == x && gameObject.getY() == y) {
+                return true;
+            }
+        }
+        return !map[x][y].isVisitable();
+    }
+    
 }
