@@ -1,9 +1,6 @@
 package game.util;
 
-import game.graphics.AbstractSprite;
-import game.graphics.AnimatedSprite;
-import game.graphics.Animation;
-import game.graphics.Sprite;
+import game.graphics.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,10 +19,10 @@ public class ResourceManager {
 
     private static final Logger LOGGER = Logger.getLogger(ResourceManager.class);
 
-    private static Map<String, AbstractSprite> sprites = new HashMap<>();
+    private static Map<String, ImageSet> imageSets = new HashMap<>();
     private static Map<String, Integer> animationsPerTile = new HashMap<>();
 
-    public static Image loadImage(final String title, final Object o) {
+    private static Image loadImage(final String title, final Object o) {
         BufferedImage sourceImage = null;
         try {
             LOGGER.log(o.toString());
@@ -40,8 +37,9 @@ public class ResourceManager {
 
         final int totalFrames = sourceImage.getWidth() / GameOptions.TILE_SIZE;
         final int totalAnimations = sourceImage.getHeight() / GameOptions.TILE_SIZE;
-        final ArrayList<Image> frames = new ArrayList<>();
         animationsPerTile.put(title, totalAnimations);
+
+        final ArrayList<Image> frames = new ArrayList<>(totalFrames);
 
         for (int i = 0; i < totalAnimations; i++) {
             for (int j = 0; j < totalFrames; j++) {
@@ -54,19 +52,18 @@ public class ResourceManager {
                 frames.add(Toolkit.getDefaultToolkit().createImage(frame.getSource()));
             }
 
-            AbstractSprite sprite = null;
+            ImageSet imageSet = null;
 
             if (frames.size() == 1) {
-                sprite = new Sprite(frames.get(0));
+                imageSet = new ImageSet(frames.get(0));
             } else {
                 Image[] images = Arrays.copyOf(frames.toArray(), frames.size(), Image[].class);
-                Animation animation = new Animation(images);
-                sprite = new AnimatedSprite(animation);
+                imageSet = new ImageSet(images);
             }
 
             String key = title + "_" + i;
 
-            sprites.put(key, sprite);
+            imageSets.put(key, imageSet);
             frames.clear();
         }
 
@@ -76,15 +73,23 @@ public class ResourceManager {
     public static AbstractSprite getSprite(final String title, final int animationNumber) {
         String key = title + "_" + animationNumber;
 
-        if (!sprites.containsKey(key)) {
+        if (!imageSets.containsKey(key)) {
             loadImage(title, new Object());
         }
 
-        if (!sprites.containsKey(key)) {
+        if (!imageSets.containsKey(key)) {
             throw new NullPointerException();
         }
 
-        return sprites.get(key);
+        ImageSet imageSet = imageSets.get(key);
+        AbstractSprite sprite = null;
+        if (imageSet.hasMany()) {
+            Animation animation = new Animation(imageSet);
+            sprite = new AnimatedSprite(animation);
+        } else {
+            sprite = new Sprite(imageSet.getImage(0));
+        }
+        return sprite;
     }
 
     public static int getAnimationsNumberByTitle(final String title) {
