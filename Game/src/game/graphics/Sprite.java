@@ -5,7 +5,7 @@ import java.awt.*;
 /**
  * Created by Max on 6/27/2014.
  */
-public class Sprite implements Drawable {
+public class Sprite extends AbstractSprite implements Drawable {
 
     private Image image;
 

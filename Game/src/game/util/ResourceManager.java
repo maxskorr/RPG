@@ -1,31 +1,29 @@
 package game.util;
 
+import game.graphics.AbstractSprite;
+import game.graphics.AnimatedSprite;
+import game.graphics.Animation;
 import game.graphics.Sprite;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Max on 6/27/2014.
+ * Created by Max & Edik on 6/27/2014.
  */
 public class ResourceManager {
-    private static Map<String, Image> images = new HashMap<>();
+    private static Map<String, AbstractSprite> sprites = new HashMap<>();
+    private static Map<String, Integer> animationsPerTile = new HashMap<>();
 
-    public static Image getImage(String title, Object o) {
-        if(images.containsKey(title)){
-            return images.get(title);
-        }else{
-            images.put(title, loadImage(title, o));
-            return images.get(title);
-        }
-    }
-
-    public static Image loadImage(String title, Object o) {
+    public static Image loadImage(final String title, final Object o) {
         BufferedImage sourceImage = null;
         try {
             URL url = o.getClass().getClassLoader().getResource("assets/" + title);
@@ -34,10 +32,62 @@ public class ResourceManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        final int totalFrames = sourceImage.getWidth() / GameOptions.TILE_SIZE;
+        final int totalAnimations = sourceImage.getHeight() / GameOptions.TILE_SIZE;
+        final ArrayList<Image> frames = new ArrayList<>();
+        animationsPerTile.put(title, totalAnimations);
+
+        for (int i = 0; i < totalAnimations; i++) {
+            for (int j = 0; j < totalFrames; j++) {
+                final int x = i * GameOptions.TILE_SIZE;
+                final int y = j * GameOptions.TILE_SIZE;
+
+                BufferedImage frame = sourceImage.getSubimage(x, y,
+                        GameOptions.TILE_SIZE, GameOptions.TILE_SIZE);
+
+                frames.add(Toolkit.getDefaultToolkit().createImage(frame.getSource()));
+            }
+
+            AbstractSprite sprite = null;
+
+            if (frames.size() == 1) {
+                sprite = new Sprite( frames.get(0) );
+            } else {
+                Animation animation = new Animation((Image[]) frames.toArray());
+                sprite = new AnimatedSprite( animation );
+            }
+
+            String key = title + "_" + i;
+
+            sprites.put(key, sprite);
+            frames.clear();
+        }
+
         return Toolkit.getDefaultToolkit().createImage(sourceImage.getSource());
     }
 
-    public static Sprite getSprite(String title, Object o) {
-        return new Sprite(getImage(title, o));
+    public static AbstractSprite getSprite(final String title, final int animationNumber) {
+        String key = title + "_" + animationNumber;
+
+        if (!sprites.containsKey(key)) {
+            loadImage(title, new Object());
+        }
+
+        if (!sprites.containsKey(key)) {
+            throw new NullPointerException();
+        }
+
+        return sprites.get(key);
+    }
+
+    public static int getAnimationsNumberByTitle(final String title) {
+        if (!animationsPerTile.containsKey(title))
+            loadImage(title, new Object());
+
+        if (!animationsPerTile.containsKey(title))
+            throw new NullPointerException();
+
+        return animationsPerTile.get(title);
     }
 }
