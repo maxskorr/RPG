@@ -2,12 +2,9 @@ package game.model;
 
 import game.core.GameWorld;
 import game.graphics.AbstractSprite;
-import game.graphics.Sprite;
-import game.util.GameOptions;
+import game.graphics.Drawable;
 import game.util.ResourceManager;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,18 +16,21 @@ public abstract class GameObject {
     private int x;
     private int y;
     private List<AbstractSprite> sprites;
+    private AbstractSprite currentSprite;
     private GameWorld gameWorld;
 
-    public GameObject(final Integer x, final Integer y, final String title, final GameWorld gameWorld) {
+    public GameObject(final Integer x, final Integer y, final String spriteFileName, final GameWorld gameWorld) {
         this.x = x;
         this.y = y;
         sprites = new ArrayList<>();
 
-        final int totalAnimations = ResourceManager.getAnimationsNumberByTitle(title);
+        final int totalAnimations = ResourceManager.getAnimationsNumberByTitle(spriteFileName);
 
         for (int i = 0; i < totalAnimations; i++) {
-            putSprite( ResourceManager.getSprite(title, i) );
+            putSprite(ResourceManager.getSprite(spriteFileName, i));
         }
+
+        currentSprite = sprites.get(0);
 
         setGameWorld(gameWorld);
     }
@@ -43,6 +43,10 @@ public abstract class GameObject {
             this.y = y;
         }
         gameWorld.getTile(getX(), getY()).trigger(this);
+    }
+
+    public Drawable getDrawable() {
+        return currentSprite;
     }
 
     public int getX() {

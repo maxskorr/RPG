@@ -5,7 +5,7 @@ import java.awt.*;
 /**
  * Created by Max on 6/27/2014.
  */
-public class Sprite extends AbstractSprite implements Drawable {
+public class Sprite extends AbstractSprite {
 
     private Image image;
 
@@ -27,8 +27,8 @@ public class Sprite extends AbstractSprite implements Drawable {
     }
 
     @Override
-    public void onRender(final Canvas canvas, final int x, final int y) {
-
+    public void onRender(final Graphics graphics, final int x, final int y) {
+        graphics.drawImage(image, x, y, null);
     }
 
 }

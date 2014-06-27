@@ -3,6 +3,7 @@ package game.core;
 /**
  * Created by Semyon Danilov on 27.06.2014.
  */
+//TODO: add pause
 public class UpdateThread extends Thread {
 
     private Game game;
@@ -18,7 +19,7 @@ public class UpdateThread extends Thread {
 
     @Override
     public void run() {
-        while(true) {
+        while (true) {
             renderLock.lock();
             try {
                 update();

@@ -1,13 +1,11 @@
 package game.graphics;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Semyon Danilov on 27.06.2014.
  */
-public class AnimatedSprite extends AbstractSprite implements Drawable {
+public class AnimatedSprite extends AbstractSprite {
 
     final private Animation animation;
 
@@ -21,7 +19,7 @@ public class AnimatedSprite extends AbstractSprite implements Drawable {
     }
 
     @Override
-    public void onRender(final Canvas canvas, final int x, final int y) {
+    public void onRender(final Graphics graphics, final int x, final int y) {
 
     }
 

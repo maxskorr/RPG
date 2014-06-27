@@ -9,6 +9,6 @@ public interface Drawable {
 
     public void beforeRender();
 
-    public void onRender(final Canvas canvas, final int x, final int y);
+    public void onRender(final Graphics graphics, final int x, final int y);
 
 }

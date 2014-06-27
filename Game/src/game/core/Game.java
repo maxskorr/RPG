@@ -1,5 +1,6 @@
 package game.core;
 
+import game.graphics.Tile;
 import game.log.Logger;
 
 import javax.swing.*;
@@ -19,8 +20,39 @@ public class Game {
 
     private GameEngineLock renderLock = new GameEngineLock();
 
-    public Game() {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Game game = new Game();
+                UpdateThread updateThread = new UpdateThread(game);
+                updateThread.start();
+            }
+        });
+    }
 
+    public Game() {
+        init();
+        frame = new GameFrame(this);
+        frame.init();
+    }
+
+    public void init() {
+        int width = 100;
+        int height = 100;
+        Tile[][] map = new Tile[width][height];
+        gameWorld = new GameWorld();
+        gameWorld.setMap(map);
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if ((x == 3 && y % 3 == 0) || (x == 0 || y == 0 || (width - 1) == x || (height - 1) == y)) {
+                    map[x][y] = new Tile(x, y, "tile_floor.png", gameWorld);
+                } else {
+                    map[x][y] = new Tile(x, y, "tile_wall.png", gameWorld);
+                }
+            }
+        }
     }
 
     public void startRender() {

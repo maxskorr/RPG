@@ -1,5 +1,6 @@
 package game.core;
 
+import game.graphics.Drawable;
 import game.graphics.Tile;
 import game.model.GameObject;
 
@@ -21,16 +22,26 @@ public class GameFrame extends JFrame {
     private GameObject player;
 
     public GameFrame(final Game game) {
+        super(NAME);
         this.game = game;
         this.gameWorld = game.getGameWorld();
     }
 
     void init() {
-
+        canvas = new Canvas();
+        canvas.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //выход из приложения по нажатию клавиши ESC
+        setLayout(new BorderLayout());
+        add(canvas, BorderLayout.CENTER); //добавляем холст на наш фрейм
+        pack();
+        setResizable(false);
+        setVisible(true);
     }
 
     public static int WINDOW_WIDTH = 400; //ширина
     public static int WINDOW_HEIGHT = 300; //высота
+    public static int CANVAS_HEIGHT = 300; //высота canvas
+    public static int CANVAS_WIDTH = 300; //высота canvas
     public static int TILE_SIZE = 20; //размер тайла
     public static int SPEED = 50; //миллисекунд на кадр
     public static int RANGE = 10; //дальность обзора
@@ -39,11 +50,11 @@ public class GameFrame extends JFrame {
     public void render() {
         List<GameObject> gameObjects = gameWorld.getGameObjects();
         Tile[][] map = gameWorld.getMap();
-
-        BufferStrategy bs = getBufferStrategy();
+        player = map[0][0];
+        BufferStrategy bs = canvas.getBufferStrategy();
         if (bs == null) {
-            createBufferStrategy(2); //создаем BufferStrategy для нашего холста
-            requestFocus();
+            canvas.createBufferStrategy(2); //создаем BufferStrategy для нашего холста
+            canvas.requestFocus();
             return;
         }
 
@@ -76,13 +87,20 @@ public class GameFrame extends JFrame {
 
         for (int x = startRenderX; x < finalRenderX; x++) {
             for (int y = startRenderY; y < finalRenderY; y++) {
-                g.drawImage(map[x][y].getImage(), (x-centetRenderX) * TILE_SIZE, (y-centetRenderY) * TILE_SIZE, null);
+                Tile tile = map[x][y];
+                int xC = (x - centetRenderX) * TILE_SIZE;
+                int yC = (y - centetRenderY) * TILE_SIZE;
+                Drawable drawable = tile.getDrawable();
+                drawable.onRender(g, xC, yC);
             }
         }
         for (Iterator<GameObject> it = gameObjects.iterator(); it.hasNext();) {
             GameObject object = it.next();
             if ((startRenderX < object.getX() && object.getX() < finalRenderX) && (startRenderY < object.getY() && object.getY() < finalRenderY)) {
-                g.drawImage(object.getImage(), (object.getX()-centetRenderX) * TILE_SIZE, (object.getY()-centetRenderY) * TILE_SIZE, null);
+                Drawable drawable = object.getDrawable();
+                int x = (object.getX() - centetRenderX) * TILE_SIZE;
+                int y = (object.getY() - centetRenderY) * TILE_SIZE;
+                drawable.onRender(g, x, y);
             }
         }
 

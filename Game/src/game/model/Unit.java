@@ -1,7 +1,6 @@
 package game.model;
 
 import game.core.GameWorld;
-import game.graphics.Sprite;
 
 /**
  * Created by Max & Edik on 6/27/2014.
@@ -19,10 +18,10 @@ public class Unit extends GameObject {
     private int maxSpeed;
     private GameWorld gameWorld;
 
-    public Unit(final Integer x, final Integer y, final Sprite sprite,
+    public Unit(final Integer x, final Integer y, final String spriteFileName,
                 boolean alive, String name, int hp,
                 int speedX, int speedY, int maxSpeed, GameWorld gameWorld) {
-        super(x, y, sprite, gameWorld);
+        super(x, y, spriteFileName, gameWorld);
         setGameWorld(gameWorld);
         setAlive(alive);
         setHp(hp);

@@ -4,15 +4,14 @@ import game.graphics.AbstractSprite;
 import game.graphics.AnimatedSprite;
 import game.graphics.Animation;
 import game.graphics.Sprite;
+import game.log.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,13 +19,19 @@ import java.util.Map;
  * Created by Max & Edik on 6/27/2014.
  */
 public class ResourceManager {
+
+    private static final Logger LOGGER = Logger.getLogger(ResourceManager.class);
+
     private static Map<String, AbstractSprite> sprites = new HashMap<>();
     private static Map<String, Integer> animationsPerTile = new HashMap<>();
 
     public static Image loadImage(final String title, final Object o) {
         BufferedImage sourceImage = null;
         try {
-            URL url = o.getClass().getClassLoader().getResource("assets/" + title);
+            LOGGER.log(o.toString());
+            Class c = ResourceManager.class;
+            ClassLoader cl = c.getClassLoader();
+            URL url = cl.getResource("assets/" + title);
             System.out.println(url);
             sourceImage = ImageIO.read(url);
         } catch (IOException e) {
@@ -52,10 +57,10 @@ public class ResourceManager {
             AbstractSprite sprite = null;
 
             if (frames.size() == 1) {
-                sprite = new Sprite( frames.get(0) );
+                sprite = new Sprite(frames.get(0));
             } else {
                 Animation animation = new Animation((Image[]) frames.toArray());
-                sprite = new AnimatedSprite( animation );
+                sprite = new AnimatedSprite(animation);
             }
 
             String key = title + "_" + i;

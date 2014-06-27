@@ -7,10 +7,11 @@ import game.model.GameObject;
  * Created by Max on 6/27/2014.
  */
 public class Tile extends GameObject {
+
     private boolean visitable;
 
-    public Tile(final Integer x, final Integer y, final Sprite sprite, final GameWorld gameWorld) {
-        super(x, y, sprite, gameWorld);
+    public Tile(final Integer x, final Integer y, final String spriteFileName, final GameWorld gameWorld) {
+        super(x, y, spriteFileName, gameWorld);
     }
 
     /**

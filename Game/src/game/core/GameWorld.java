@@ -27,6 +27,10 @@ public class GameWorld {
         this.gameObjects.addAll(gameObjects);
     }
 
+    public void setMap(final Tile[][] map) {
+        this.map = map;
+    }
+
     public Tile getTile(final int x, final int y) {
         return map[x][y];
     }
