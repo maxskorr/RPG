@@ -1,4 +1,4 @@
-package game.log;
+package game.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

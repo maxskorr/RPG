@@ -1,7 +1,8 @@
 package game.core;
 
 import game.graphics.Tile;
-import game.log.Logger;
+import game.util.GameOptions;
+import game.util.Logger;
 
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,18 +39,16 @@ public class Game {
     }
 
     public void init() {
-        int width = 100;
-        int height = 100;
-        Tile[][] map = new Tile[width][height];
+        Tile[][] map = new Tile[GameOptions.MAP_WIDTH][GameOptions.MAP_HEIGHT];
         gameWorld = new GameWorld();
         gameWorld.setMap(map);
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if ((x == 3 && y % 3 == 0) || (x == 0 || y == 0 || (width - 1) == x || (height - 1) == y)) {
-                    map[x][y] = new Tile(x, y, "tile_floor.png", gameWorld);
-                } else {
+        for (int x = 0; x < GameOptions.MAP_WIDTH; x++) {
+            for (int y = 0; y < GameOptions.MAP_HEIGHT; y++) {
+                if ((x == 3 && y % 3 == 0) || (x == 0 || y == 0 || (GameOptions.MAP_WIDTH - 1) == x || (GameOptions.MAP_HEIGHT - 1) == y)) {
                     map[x][y] = new Tile(x, y, "tile_wall.png", gameWorld);
+                } else {
+                    map[x][y] = new Tile(x, y, "player.png", gameWorld);
                 }
             }
         }

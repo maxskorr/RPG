@@ -20,7 +20,7 @@ public class AnimatedSprite extends AbstractSprite {
 
     @Override
     public void onRender(final Graphics graphics, final int x, final int y) {
-
+        graphics.drawImage( animation.next(), x, y, null);
     }
 
 }

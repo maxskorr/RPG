@@ -4,7 +4,6 @@ import game.graphics.AbstractSprite;
 import game.graphics.AnimatedSprite;
 import game.graphics.Animation;
 import game.graphics.Sprite;
-import game.log.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,8 +45,8 @@ public class ResourceManager {
 
         for (int i = 0; i < totalAnimations; i++) {
             for (int j = 0; j < totalFrames; j++) {
-                final int x = i * GameOptions.TILE_SIZE;
-                final int y = j * GameOptions.TILE_SIZE;
+                final int x = j * GameOptions.TILE_SIZE;
+                final int y = i * GameOptions.TILE_SIZE;
 
                 BufferedImage frame = sourceImage.getSubimage(x, y,
                         GameOptions.TILE_SIZE, GameOptions.TILE_SIZE);
@@ -59,7 +59,8 @@ public class ResourceManager {
             if (frames.size() == 1) {
                 sprite = new Sprite(frames.get(0));
             } else {
-                Animation animation = new Animation((Image[]) frames.toArray());
+                Image[] images = Arrays.copyOf(frames.toArray(), frames.size(), Image[].class);
+                Animation animation = new Animation(images);
                 sprite = new AnimatedSprite(animation);
             }
 

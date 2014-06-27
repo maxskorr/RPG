@@ -3,6 +3,7 @@ package game.core;
 import game.graphics.Drawable;
 import game.graphics.Tile;
 import game.model.GameObject;
+import game.util.GameOptions;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,11 +78,11 @@ public class GameFrame extends JFrame {
 
         int finalRenderX = player.getX() + RANGE;
         int finalRenderY = player.getY() + RANGE;
-        if (finalRenderX > canvas.getWidth()) {
-            finalRenderX = canvas.getWidth();
+        if (finalRenderX > GameOptions.MAP_WIDTH) {
+            finalRenderX = GameOptions.MAP_WIDTH;
         }
-        if (finalRenderY > canvas.getHeight()) {
-            finalRenderY = canvas.getHeight();
+        if (finalRenderY > GameOptions.MAP_HEIGHT) {
+            finalRenderY = GameOptions.MAP_HEIGHT;
         }
 
 
@@ -94,6 +95,7 @@ public class GameFrame extends JFrame {
                 drawable.onRender(g, xC, yC);
             }
         }
+
         for (Iterator<GameObject> it = gameObjects.iterator(); it.hasNext();) {
             GameObject object = it.next();
             if ((startRenderX < object.getX() && object.getX() < finalRenderX) && (startRenderY < object.getY() && object.getY() < finalRenderY)) {

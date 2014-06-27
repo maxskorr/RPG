@@ -5,6 +5,8 @@ package game.util;
  */
 public class GameOptions {
     public static int TILE_SIZE = 20;
+    public static int MAP_WIDTH = 3; // убрать, когда будут реализованы уровни
+    public static int MAP_HEIGHT = 4; //
 
     private static GameOptions ourInstance = new GameOptions();
 

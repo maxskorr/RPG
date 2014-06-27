@@ -19,6 +19,9 @@ public class Animation {
 
     public Animation(final Image[] frames) {
         this.frames = frames;
+        setCurrentFrame(0);
+        setFramesQuantity(frames.length);
+        setTimeDependent(false);
     }
 
     public int getFramesQuantity() {
@@ -59,5 +62,17 @@ public class Animation {
 
     public void setTimeDependent(final boolean isTimeDependent) {
         this.isTimeDependent = isTimeDependent;
+    }
+
+    public Image next() {
+        int currentFrame = getCurrentFrame();
+        final Image frame = frames[currentFrame++];
+
+        if (currentFrame >= getFramesQuantity())
+            currentFrame = 0;
+
+        setCurrentFrame(currentFrame);
+
+       return frame;
     }
 }
