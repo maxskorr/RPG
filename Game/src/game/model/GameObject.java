@@ -6,8 +6,11 @@ import game.graphics.Tile;
  * Created by Max on 6/27/2014.
  */
 public abstract class GameObject {
+
     private int x;
+
     private int y;
+
     private Tile tile;
 
     public GameObject(Integer x, Integer y, Tile tile) {

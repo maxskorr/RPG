@@ -9,11 +9,12 @@ public class UpdateThread extends Thread {
 
     @Override
     public void run() {
+        update();
         game.startRender();
     }
 
     private void update() {
-        
+
     }
 
 }
