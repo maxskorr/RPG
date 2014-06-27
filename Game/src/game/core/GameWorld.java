@@ -31,6 +31,14 @@ public class GameWorld {
         return map[x][y];
     }
 
+    public Tile[][] getMap() {
+        return map;
+    }
+
+    public List<GameObject> getGameObjects() {
+        return gameObjects;
+    }
+
     public void removeGameObject(final GameObject gameObject) {
         gameObjects.remove(gameObject);
     }
@@ -43,5 +51,5 @@ public class GameWorld {
         }
         return !map[x][y].isVisitable();
     }
-    
+
 }
