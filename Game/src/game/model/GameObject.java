@@ -1,5 +1,7 @@
 package game.model;
 
+import game.graphics.Tile;
+
 /**
  * Created by Max on 6/27/2014.
  */

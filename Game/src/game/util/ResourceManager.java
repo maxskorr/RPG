@@ -1,6 +1,6 @@
 package game.util;
 
-import game.model.Sprite;
+import game.graphics.Sprite;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -35,5 +35,9 @@ public class ResourceManager {
             e.printStackTrace();
         }
         return Toolkit.getDefaultToolkit().createImage(sourceImage.getSource());
+    }
+
+    public static Sprite getSprite(String title, Object o) {
+        return new Sprite(getImage(title, o));
     }
 }
