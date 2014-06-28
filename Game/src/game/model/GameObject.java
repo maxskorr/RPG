@@ -42,7 +42,7 @@ public abstract class GameObject {
         if (y != null) {
             this.y = y;
         }
-        gameWorld.getTile(getX(), getY()).trigger(this);
+        gameWorld.getCurrentLevel().getLevelMap().getTile(getX(), getY()).trigger(this);
     }
 
     public Drawable getDrawable() {

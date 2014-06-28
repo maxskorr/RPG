@@ -2,6 +2,7 @@ package game.core;
 
 import game.graphics.Drawable;
 import game.graphics.Tile;
+import game.map.model.LevelMap;
 import game.model.GameObject;
 import game.util.GameOptions;
 
@@ -50,9 +51,10 @@ public class GameFrame extends JFrame {
 
     public void render() {
         List<GameObject> gameObjects = gameWorld.getGameObjects();
-        Tile[][] map = gameWorld.getMap();
-        player = map[0][0];
+        LevelMap map = gameWorld.getCurrentLevel().getLevelMap();
+        player = map.getTile(0, 0);
         BufferStrategy bs = canvas.getBufferStrategy();
+
         if (bs == null) {
             canvas.createBufferStrategy(2); //создаем BufferStrategy для нашего холста
             canvas.requestFocus();
@@ -78,17 +80,20 @@ public class GameFrame extends JFrame {
 
         int finalRenderX = player.getX() + RANGE;
         int finalRenderY = player.getY() + RANGE;
-        if (finalRenderX > GameOptions.MAP_WIDTH) {
-            finalRenderX = GameOptions.MAP_WIDTH;
+        final int maxRenderX = gameWorld.getCurrentLevel().getLevelMap().getWidth();
+        final int maxRenderY = gameWorld.getCurrentLevel().getLevelMap().getHeight();
+
+        if (finalRenderX > maxRenderX) {
+            finalRenderX = maxRenderX;
         }
-        if (finalRenderY > GameOptions.MAP_HEIGHT) {
-            finalRenderY = GameOptions.MAP_HEIGHT;
+        if (finalRenderY > maxRenderY) {
+            finalRenderY = maxRenderY;
         }
 
 
         for (int x = startRenderX; x < finalRenderX; x++) {
             for (int y = startRenderY; y < finalRenderY; y++) {
-                Tile tile = map[x][y];
+                Tile tile = gameWorld.getCurrentLevel().getLevelMap().getTile(x, y);
                 int xC = (x - centetRenderX) * TILE_SIZE;
                 int yC = (y - centetRenderY) * TILE_SIZE;
                 Drawable drawable = tile.getDrawable();
