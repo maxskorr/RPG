@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import static game.util.GameOptions.ANIMATION_DELAY_MILLISECONDS;
+
 /**
  * Created by Max & Edik on 6/27/2014.
  */
@@ -91,6 +93,8 @@ public class ResourceManager {
         if (imageSet.hasMany()) {
             Animation animation = new Animation(imageSet);
             sprite = new AnimatedSprite(animation);
+            animation.setFrameDelay(ANIMATION_DELAY_MILLISECONDS);
+            animation.setTimeDependent(true);
         } else {
             sprite = new Sprite(imageSet.getImage(0));
         }

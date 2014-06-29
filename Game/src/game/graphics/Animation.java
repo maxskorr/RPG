@@ -11,7 +11,7 @@ public class Animation {
 
     private int currentFrame;
 
-    private int duration;
+    private int frameDelay; // Минимальная продолжительность показа очередного фрейма анимации
 
     private Image[] frames;
 
@@ -19,12 +19,19 @@ public class Animation {
 
     private boolean paused; // Находится ли анимация в состоянии паузы
 
+    private long lastMeasure = 0; // Последнее измерение времени с предыдущей смены кадра
+
     public Animation(final ImageSet frames) {
         this.frames = frames.getImages();
         setCurrentFrame(0);
         setFramesQuantity(this.frames.length);
+        setFrameDelay(0);
         setTimeDependent(false);
         setPaused(true);
+    }
+
+    private boolean isReadyToChangeFrame() {
+        return (System.currentTimeMillis() - lastMeasure) >= getFrameDelay();
     }
 
     public boolean isPaused() {
@@ -51,12 +58,12 @@ public class Animation {
         this.currentFrame = currentFrame;
     }
 
-    public int getDuration() {
-        return duration;
+    public int getFrameDelay() {
+        return frameDelay;
     }
 
-    public void setDuration(final int duration) {
-        this.duration = duration;
+    public void setFrameDelay(final int frameDelay) {
+        this.frameDelay = frameDelay;
     }
 
     public Image[] getFrames() {
@@ -77,14 +84,21 @@ public class Animation {
 
     public Image next() {
         int currentFrame = getCurrentFrame();
-        final Image frame = frames[paused ? currentFrame : currentFrame++];
+        final Image frame = frames[paused ? currentFrame : (isReadyToChangeFrame() ? nextFrame() : currentFrame)];
+
+        return frame;
+    }
+
+    private int nextFrame() {
+        currentFrame++;
 
         if (currentFrame >= framesQuantity) {
             currentFrame = 0;
         }
 
         setCurrentFrame(currentFrame);
+        lastMeasure = System.currentTimeMillis();
 
-        return frame;
+        return currentFrame;
     }
 }
