@@ -1,7 +1,7 @@
 package game.core;
 
-import game.graphics.Tile;
-import game.model.GameObject;
+import game.gameobject.model.GameObject;
+import game.level.model.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +13,18 @@ public class GameWorld {
 
     private List<GameObject> gameObjects = null;
 
-    private Tile[][] map;
+    private Level currentLevel;
 
     public GameWorld() {
-        this.gameObjects = new ArrayList<GameObject>();
+        this.gameObjects = new ArrayList<>();
+    }
+
+    public Level getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void setCurrentLevel(Level currentLevel) {
+        this.currentLevel = currentLevel;
     }
 
     public void addGameObject(final GameObject gameObject) {
@@ -25,18 +33,6 @@ public class GameWorld {
 
     public void addGameObjects(final List<? extends GameObject> gameObjects) {
         this.gameObjects.addAll(gameObjects);
-    }
-
-    public void setMap(final Tile[][] map) {
-        this.map = map;
-    }
-
-    public Tile getTile(final int x, final int y) {
-        return map[x][y];
-    }
-
-    public Tile[][] getMap() {
-        return map;
     }
 
     public List<GameObject> getGameObjects() {
@@ -53,7 +49,8 @@ public class GameWorld {
                 return true;
             }
         }
-        return !map[x][y].isVisitable();
+
+        return !getCurrentLevel().getLevelMap().getTile(x, y).isVisitable();
     }
 
 }

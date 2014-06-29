@@ -1,7 +1,10 @@
 package game.core;
 
-import game.graphics.Tile;
-import game.util.GameOptions;
+import game.controller.KeyboardController;
+import game.gameobject.unit.Player;
+import game.graphics.AnimatedSprite;
+import game.level.StartMenu;
+import game.level.model.Level;
 import game.util.Logger;
 
 import javax.swing.*;
@@ -36,22 +39,18 @@ public class Game {
         init();
         frame = new GameFrame(this);
         frame.init();
+
+        final Player player = (Player) gameWorld.getCurrentLevel().getLevelMap().getTile(1, 1).getResident();
+        gameWorld.addGameObject(player);
+        final KeyboardController keyboardController = new KeyboardController(player);
+        frame.getCanvas().addKeyListener(keyboardController);
     }
 
     public void init() {
-        Tile[][] map = new Tile[GameOptions.MAP_WIDTH][GameOptions.MAP_HEIGHT];
         gameWorld = new GameWorld();
-        gameWorld.setMap(map);
-
-        for (int x = 0; x < GameOptions.MAP_WIDTH; x++) {
-            for (int y = 0; y < GameOptions.MAP_HEIGHT; y++) {
-                if ((x == 3 && y % 3 == 0) || (x == 0 || y == 0 || (GameOptions.MAP_WIDTH - 1) == x || (GameOptions.MAP_HEIGHT - 1) == y)) {
-                    map[x][y] = new Tile(x, y, "tile_wall.png", gameWorld);
-                } else {
-                    map[x][y] = new Tile(x, y, "player.png", gameWorld);
-                }
-            }
-        }
+        final Level level = new StartMenu(gameWorld);
+        gameWorld.setCurrentLevel( level );
+        ((AnimatedSprite)level.getLevelMap().getTile(1, 1).getDrawable()).setPaused(false);
     }
 
     public void startRender() {

@@ -7,10 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Max & Edik on 6/27/2014.
@@ -18,17 +15,25 @@ import java.util.Map;
 public class ResourceManager {
 
     private static final Logger LOGGER = Logger.getLogger(ResourceManager.class);
+    public static final Random random = new Random();
 
     private static Map<String, ImageSet> imageSets = new HashMap<>();
     private static Map<String, Integer> animationsPerTile = new HashMap<>();
 
-    private static Image loadImage(final String title, final Object o) {
+    public static URL getPath(final String filename) {
+        final Class c = ResourceManager.class;
+        final ClassLoader cl = c.getClassLoader();
+        final URL url = cl.getResource(filename);
+
+        return url;
+    }
+
+    private static Image loadImage(final String filename, final Object o) {
         BufferedImage sourceImage = null;
         try {
             LOGGER.log(o.toString());
-            Class c = ResourceManager.class;
-            ClassLoader cl = c.getClassLoader();
-            URL url = cl.getResource("assets/" + title);
+            final URL url = getPath(GameOptions.ASSETS_GRAPHICS_PATH + filename);
+
             System.out.println(url);
             sourceImage = ImageIO.read(url);
         } catch (IOException e) {
@@ -37,7 +42,7 @@ public class ResourceManager {
 
         final int totalFrames = sourceImage.getWidth() / GameOptions.TILE_SIZE;
         final int totalAnimations = sourceImage.getHeight() / GameOptions.TILE_SIZE;
-        animationsPerTile.put(title, totalAnimations);
+        animationsPerTile.put(filename, totalAnimations);
 
         final ArrayList<Image> frames = new ArrayList<>(totalFrames);
 
@@ -61,7 +66,7 @@ public class ResourceManager {
                 imageSet = new ImageSet(images);
             }
 
-            String key = title + "_" + i;
+            String key = filename + "_" + i;
 
             imageSets.put(key, imageSet);
             frames.clear();

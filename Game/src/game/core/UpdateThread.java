@@ -1,5 +1,7 @@
 package game.core;
 
+import game.gameobject.model.GameObject;
+
 /**
  * Created by Semyon Danilov on 27.06.2014.
  */
@@ -33,7 +35,9 @@ public class UpdateThread extends Thread {
     }
 
     private void update() {
-
+        for (GameObject go: gameWorld.getGameObjects()) {
+            go.update();
+        }
     }
 
 }
