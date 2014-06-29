@@ -8,7 +8,6 @@ import game.map.model.Tile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -108,15 +107,15 @@ public class GameFrame extends JFrame {
             }
         }
 
-        for (Iterator<GameObject> it = gameObjects.iterator(); it.hasNext();) {
-            GameObject object = it.next();
-            if ((startRenderX < object.getX() && object.getX() < finalRenderX) && (startRenderY < object.getY() && object.getY() < finalRenderY)) {
-                Drawable drawable = object.getDrawable();
-                int x = (object.getX() - centetRenderX) * TILE_SIZE;
-                int y = (object.getY() - centetRenderY) * TILE_SIZE;
-                drawable.onRender(g, x, y);
-            }
-        }
+//        for (Iterator<GameObject> it = gameObjects.iterator(); it.hasNext();) {
+//            GameObject object = it.next();
+//            if ((startRenderX < object.getX() && object.getX() < finalRenderX) && (startRenderY < object.getY() && object.getY() < finalRenderY)) {
+//                Drawable drawable = object.getDrawable();
+//                int x = (object.getX() - centetRenderX) * TILE_SIZE;
+//                int y = (object.getY() - centetRenderY) * TILE_SIZE;
+//                drawable.onRender(g, x, y);
+//            }
+//        }
 
         g.dispose();
         bs.show(); //показать
