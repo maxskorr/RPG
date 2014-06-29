@@ -2,7 +2,6 @@ package game.level;
 
 import game.core.GameWorld;
 import game.level.model.Level;
-import game.util.LevelFactory;
 import game.util.MapFactory;
 
 /**

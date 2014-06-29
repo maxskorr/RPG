@@ -1,7 +1,5 @@
 package game.map.model;
 
-import game.graphics.Tile;
-
 import java.util.ArrayList;
 
 /**
@@ -27,14 +25,18 @@ public class LevelMap {
     }
 
     public Tile getTile(final int x, final int y) {
-        if (tiles.size() <= y || tiles.size() <= 0) {
-            throw new NullPointerException();
+        // TODO: invent diff. coordinate systems for tiles and gameobjects(?)
+        final int nx = Math.abs(x % WIDTH);
+        final int ny = Math.abs(y % HEIGHT);
+
+        if (tiles.size() <= ny || tiles.size() <= 0) {
+            throw new NullPointerException("x: " + x + "; y: " + y);
         }
 
-        if (tiles.get(0).size() <= x || tiles.size() <= 0) {
-            throw new NullPointerException();
+        if (tiles.get(0).size() <= nx || tiles.size() <= 0) {
+            throw new NullPointerException("x: " + x + "; y: " + y);
         }
 
-        return tiles.get(y).get(x);
+        return tiles.get(ny).get(nx);
     }
 }

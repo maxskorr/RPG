@@ -1,10 +1,9 @@
 package game.core;
 
+import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
-import game.graphics.Tile;
 import game.map.model.LevelMap;
-import game.model.GameObject;
-import game.util.GameOptions;
+import game.map.model.Tile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +22,10 @@ public class GameFrame extends JFrame {
 
     private GameObject player;
 
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
     public GameFrame(final Game game) {
         super(NAME);
         this.game = game;
@@ -31,10 +34,10 @@ public class GameFrame extends JFrame {
 
     void init() {
         canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        getCanvas().setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //выход из приложения по нажатию клавиши ESC
         setLayout(new BorderLayout());
-        add(canvas, BorderLayout.CENTER); //добавляем холст на наш фрейм
+        add(getCanvas(), BorderLayout.CENTER); //добавляем холст на наш фрейм
         pack();
         setResizable(false);
         setVisible(true);
@@ -52,12 +55,12 @@ public class GameFrame extends JFrame {
     public void render() {
         List<GameObject> gameObjects = gameWorld.getGameObjects();
         LevelMap map = gameWorld.getCurrentLevel().getLevelMap();
-        player = map.getTile(0, 0);
-        BufferStrategy bs = canvas.getBufferStrategy();
+        player = map.getTile(0, 0).getResident();
+        BufferStrategy bs = getCanvas().getBufferStrategy();
 
         if (bs == null) {
-            canvas.createBufferStrategy(2); //создаем BufferStrategy для нашего холста
-            canvas.requestFocus();
+            getCanvas().createBufferStrategy(2); //создаем BufferStrategy для нашего холста
+            getCanvas().requestFocus();
             return;
         }
 

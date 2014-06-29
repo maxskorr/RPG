@@ -1,6 +1,6 @@
 package game.skill.model;
 
-import game.model.GameObject;
+import game.gameobject.model.GameObject;
 
 /**
  * Created by Max on 6/27/2014.

@@ -1,4 +1,4 @@
-package game.model;
+package game.gameobject.model;
 
 import game.core.GameWorld;
 import game.graphics.AbstractSprite;
@@ -42,7 +42,9 @@ public abstract class GameObject {
         if (y != null) {
             this.y = y;
         }
-        gameWorld.getCurrentLevel().getLevelMap().getTile(getX(), getY()).trigger(this);
+
+        if (gameWorld != null)
+            gameWorld.getCurrentLevel().getLevelMap().getTile(getX(), getY()).trigger(this);
     }
 
     public Drawable getDrawable() {

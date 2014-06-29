@@ -17,11 +17,22 @@ public class Animation {
 
     private boolean isTimeDependent;
 
+    private boolean paused; // Находится ли анимация в состоянии паузы
+
     public Animation(final ImageSet frames) {
         this.frames = frames.getImages();
         setCurrentFrame(0);
         setFramesQuantity(this.frames.length);
         setTimeDependent(false);
+        setPaused(true);
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 
     public int getFramesQuantity() {
@@ -66,7 +77,7 @@ public class Animation {
 
     public Image next() {
         int currentFrame = getCurrentFrame();
-        final Image frame = frames[currentFrame++];
+        final Image frame = frames[paused ? currentFrame : currentFrame++];
 
         if (currentFrame >= framesQuantity) {
             currentFrame = 0;
@@ -74,6 +85,6 @@ public class Animation {
 
         setCurrentFrame(currentFrame);
 
-       return frame;
+        return frame;
     }
 }

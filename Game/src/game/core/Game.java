@@ -1,12 +1,11 @@
 package game.core;
 
-import game.graphics.Tile;
-import game.level.RandomLevel;
+import game.controller.KeyboardController;
+import game.gameobject.unit.Player;
+import game.graphics.AnimatedSprite;
 import game.level.StartMenu;
 import game.level.model.Level;
-import game.util.GameOptions;
 import game.util.Logger;
-import game.util.ResourceManager;
 
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,12 +39,18 @@ public class Game {
         init();
         frame = new GameFrame(this);
         frame.init();
+
+        final Player player = (Player) gameWorld.getCurrentLevel().getLevelMap().getTile(1, 1).getResident();
+        gameWorld.addGameObject(player);
+        final KeyboardController keyboardController = new KeyboardController(player);
+        frame.getCanvas().addKeyListener(keyboardController);
     }
 
     public void init() {
         gameWorld = new GameWorld();
         final Level level = new StartMenu(gameWorld);
         gameWorld.setCurrentLevel( level );
+        ((AnimatedSprite)level.getLevelMap().getTile(1, 1).getDrawable()).setPaused(false);
     }
 
     public void startRender() {

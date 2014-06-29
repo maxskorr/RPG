@@ -1,6 +1,7 @@
 package game.model;
 
 import game.core.GameWorld;
+import game.gameobject.model.GameObject;
 
 /**
  * Created by Max on 6/27/2014.

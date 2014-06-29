@@ -1,7 +1,7 @@
 package game.util;
 
 import game.core.GameWorld;
-import game.graphics.Tile;
+import game.map.model.Tile;
 import game.map.model.LevelMap;
 
 import java.io.*;
@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import static game.util.GameOptions.*;
 
 /**
  * Created by Max on 6/28/2014.
@@ -33,8 +35,8 @@ public class MapFactory {
             tiles.add(new ArrayList<Tile>(width));
 
             for (int j = 0; j < width; j++) {
-                final int x = j * GameOptions.TILE_SIZE;
-                final int y = i * GameOptions.TILE_SIZE;
+                final int x = j * TILE_SIZE;
+                final int y = i * TILE_SIZE;
 
                 final int tile_id;
 
@@ -43,12 +45,12 @@ public class MapFactory {
                     // Wall tile
                     tile_id = 0;
                 } else {
-                    tile_id = Math.abs(ResourceManager.random.nextInt() % GameOptions.TILE_FILENAMES.length);
+                    tile_id = Math.abs(ResourceManager.random.nextInt() % TILE_TYPE.values().length);
                 }
 
-                final String tile_filename = GameOptions.TILE_FILENAMES[tile_id];
+                final TILE_TYPE tile_type = TILE_TYPE.values()[tile_id];
 
-                tiles.get(i).add(new Tile(x, y, tile_filename, gameWorld));
+                tiles.get(i).add(TileFactory.make(x, y, tile_type, gameWorld));
             }
         }
 
@@ -59,7 +61,7 @@ public class MapFactory {
         final LevelMap levelMap;
         final ArrayList<ArrayList<Tile>> tiles_lists = new ArrayList<>();
 
-        final URL full_filepath = ResourceManager.getPath(GameOptions.ASSETS_MAPS_PATH + filename);
+        final URL full_filepath = ResourceManager.getPath(ASSETS_MAPS_PATH + filename);
         File map_file;
 
         try {
@@ -79,11 +81,12 @@ public class MapFactory {
 
                 for (int j = 0; sc_numbers.hasNextInt(); j++) {
                     final int val = sc_numbers.nextInt();
-                    final int y = i * GameOptions.TILE_SIZE;
-                    final int x = j * GameOptions.TILE_SIZE;
-                    final String tile_filename = GameOptions.TILE_FILENAMES[val];
+                    final int y = i * TILE_SIZE;
+                    final int x = j * TILE_SIZE;
+                    final TILE_TYPE tile_type = TILE_TYPE.values()[val];
+                    final Tile tile = TileFactory.make(x, y, tile_type, gameWorld);
 
-                    tiles_list.add(new Tile(x, y, tile_filename, gameWorld));
+                    tiles_list.add(tile);
                 }
             }
         } catch (IOException e) {

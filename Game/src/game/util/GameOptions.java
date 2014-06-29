@@ -4,21 +4,22 @@ package game.util;
  * Created by Max on 6/27/2014.
  */
 public class GameOptions {
-    public static int TILE_SIZE = 20;
-    public static int MAP_WIDTH = 100; // убрать, когда будут реализованы уровни
-    public static int MAP_HEIGHT = 100; //
-    public static String[] TILE_FILENAMES = {"tile_wall.png", "tile_floor.png", "player.png"};
-    public static String ASSETS_GRAPHICS_PATH = "assets/graphics/";
-    public static String ASSETS_MAPS_PATH = "assets/maps/";
+    public static final int TILE_SIZE = 20;
 
-    private static GameOptions ourInstance = new GameOptions();
+    public enum TILE_TYPE {WALL("tile_wall.png"), FLOOR("tile_floor.png"), PLAYER("player.png");
+        private final String filename;
 
-    public static GameOptions getInstance() {
-        return ourInstance;
+        TILE_TYPE(final String filename) {
+            this.filename = filename;
+        }
+
+        public String getFilename() {
+            return filename;
+        }
+
     }
 
-    private GameOptions() {
-    }
+    public static final String ASSETS_GRAPHICS_PATH = "assets/graphics/";
 
-
+    public static final String ASSETS_MAPS_PATH = "assets/maps/";
 }

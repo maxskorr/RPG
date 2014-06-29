@@ -1,6 +1,7 @@
-package game.model;
+package game.gameobject.unit.model;
 
 import game.core.GameWorld;
+import game.gameobject.model.GameObject;
 
 /**
  * Created by Max & Edik on 6/27/2014.
@@ -64,10 +65,6 @@ public class Unit extends GameObject {
     }
 
     public void changeHp(int diff) {
-        if ((diff + getHp() > Integer.MAX_VALUE) ||
-                (diff + getHp() < Integer.MIN_VALUE))
-            throw new IllegalStateException();
-
         setHp(getHp() + diff);
     }
 
@@ -92,6 +89,11 @@ public class Unit extends GameObject {
         }
     }
 
+    public void moveTo(final Integer x, final Integer y) {
+        // TODO: сделать перемещение резидента в тайн (x, y)
+        setXY(x, y);
+    }
+
     @Override
     public void update() {
         int vx = getSpeedX();
@@ -107,10 +109,12 @@ public class Unit extends GameObject {
                 dx = -1;
 
             while (vx != 0) {
-                if (canGo(getX() - dx, getY()))
-                    setXY(getX() - dx, null);
-                else
+                if (canGo(getX() - dx, getY())) {
+                    moveTo(getX() - dx, null);
+                } else {
                     setSpeedX(0);
+                }
+
                 vx += dx;
             }
 
@@ -121,10 +125,11 @@ public class Unit extends GameObject {
                 dy = -1;
 
             while (vy != 0) {
-                if (canGo(getX(), getY() + vy))
-                    setXY(null, getY() + vy);
-                else
+                if (canGo(getX(), getY() + vy)) {
+                    moveTo(null, getY() + vy);
+                } else {
                     setSpeedY(0);
+                }
 
                 vy += dy;
             }
