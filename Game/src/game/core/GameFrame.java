@@ -55,7 +55,7 @@ public class GameFrame extends JFrame {
     public void render() {
         List<GameObject> gameObjects = gameWorld.getGameObjects();
         LevelMap map = gameWorld.getCurrentLevel().getLevelMap();
-        player = map.getTile(0, 0).getResident();
+        player = map.getTile(0, 0).peekGameObject();
         BufferStrategy bs = getCanvas().getBufferStrategy();
 
         if (bs == null) {

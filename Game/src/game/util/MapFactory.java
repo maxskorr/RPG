@@ -49,8 +49,10 @@ public class MapFactory {
                 }
 
                 final TILE_TYPE tile_type = TILE_TYPE.values()[tile_id];
+                final Tile tile = TileFactory.make(x, y, tile_type, gameWorld);
 
-                tiles.get(i).add(TileFactory.make(x, y, tile_type, gameWorld));
+                tiles.get(i).add(tile);
+
             }
         }
 

@@ -2,6 +2,7 @@ package game.gameobject.unit.model;
 
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
+import game.map.model.Tile;
 
 /**
  * Created by Max & Edik on 6/27/2014.
@@ -91,7 +92,10 @@ public class Unit extends GameObject {
 
     public void moveTo(final Integer x, final Integer y) {
         // TODO: сделать перемещение резидента в тайн (x, y)
+        final GameObject gameObject = gameWorld.getCurrentLevel()
+                .getLevelMap().getTile(getX(), getY()).popGameObject();
         setXY(x, y);
+        gameWorld.getCurrentLevel().getLevelMap().getTile(getX(), getY()).pushGameObject(gameObject);
     }
 
     @Override

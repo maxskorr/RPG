@@ -5,12 +5,16 @@ import game.gameobject.unit.Player;
 import game.graphics.AnimatedSprite;
 import game.level.StartMenu;
 import game.level.model.Level;
+import game.util.GameObjectFactory;
+import game.util.GameOptions;
 import game.util.Logger;
 
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static game.util.GameOptions.TILE_TYPE.*;
 
 /**
  * Created by Max on 6/27/2014.
@@ -40,7 +44,7 @@ public class Game {
         frame = new GameFrame(this);
         frame.init();
 
-        final Player player = (Player) gameWorld.getCurrentLevel().getLevelMap().getTile(1, 1).getResident();
+        final Player player = (Player) gameWorld.getCurrentLevel().getLevelMap().getTile(1, 1).peekGameObject();
         gameWorld.addGameObject(player);
         final KeyboardController keyboardController = new KeyboardController(player);
         frame.getCanvas().addKeyListener(keyboardController);
@@ -50,6 +54,7 @@ public class Game {
         gameWorld = new GameWorld();
         final Level level = new StartMenu(gameWorld);
         gameWorld.setCurrentLevel( level );
+        level.getLevelMap().getTile(1, 1).pushGameObject(GameObjectFactory.make(1, 1, PLAYER, gameWorld));
         ((AnimatedSprite)level.getLevelMap().getTile(1, 1).getDrawable()).setPaused(false);
     }
 
