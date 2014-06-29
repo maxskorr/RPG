@@ -48,7 +48,7 @@ public class MapFactory {
                     // Wall tile
                     tile_id = 0;
                 } else {
-                    tile_id = Math.abs(ResourceManager.random.nextInt() % TILE_TYPE.values().length);
+                    tile_id = Math.abs(ResourceManager.random.nextInt() % (TILE_TYPE.values().length - 1));
                 }
 
                 final TILE_TYPE tile_type = TILE_TYPE.values()[tile_id];

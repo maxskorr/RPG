@@ -56,7 +56,7 @@ public abstract class GameObject {
     }
 
     public int getY() {
-        return x;
+        return y;
     }
 
     public List<AbstractSprite> getSprites() {

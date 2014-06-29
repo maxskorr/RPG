@@ -113,8 +113,10 @@ public class Unit extends GameObject {
                 dx = -1;
 
             while (vx != 0) {
-                if (canGo(getX() - dx, getY())) {
-                    moveTo(getX() - dx, null);
+                final int newX = getX() - dx;
+
+                if (canGo(newX, getY())) {
+                    moveTo(newX, null);
                 } else {
                     setSpeedX(0);
                 }
@@ -129,8 +131,10 @@ public class Unit extends GameObject {
                 dy = -1;
 
             while (vy != 0) {
-                if (canGo(getX(), getY() + vy)) {
-                    moveTo(null, getY() + vy);
+                final int newY = getY() + vy;
+
+                if (canGo(getX(), newY)) {
+                    moveTo(null, newY);
                 } else {
                     setSpeedY(0);
                 }
