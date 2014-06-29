@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created by Semyon Danilov on 27.06.2014.
@@ -93,14 +94,17 @@ public class GameFrame extends JFrame {
             finalRenderY = maxRenderY;
         }
 
-
         for (int x = startRenderX; x < finalRenderX; x++) {
             for (int y = startRenderY; y < finalRenderY; y++) {
                 Tile tile = gameWorld.getCurrentLevel().getLevelMap().getTile(x, y);
                 int xC = (x - centetRenderX) * TILE_SIZE;
                 int yC = (y - centetRenderY) * TILE_SIZE;
-                Drawable drawable = tile.getDrawable();
-                drawable.onRender(g, xC, yC);
+
+                final Stack<Drawable> drawables = tile.getDrawables();
+
+                for (Drawable drawable: drawables) {
+                    drawable.onRender(g, xC, yC);
+                }
             }
         }
 

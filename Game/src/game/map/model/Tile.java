@@ -21,6 +21,16 @@ public class Tile {
         return layers.peek().getDrawable();
     }
 
+    public Stack<Drawable> getDrawables() {
+        final Stack<Drawable> drawables = new Stack<>();
+
+        for (GameObject go: layers) {
+            drawables.push(go.getDrawable());
+        }
+
+        return drawables;
+    }
+
     public Tile(final GameObject resident, final boolean visitable, final GameWorld gameWorld) {
         setVisitable(visitable);
         layers = new Stack<>();
