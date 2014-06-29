@@ -43,16 +43,16 @@ public class KeyboardController implements Controller {
             }
             switch (keyCode) {
                 case UP:
-                    getUnitUnderControl().setSpeedY(-1);
+                    getUnitUnderControl().moveBy(0, -1);
                     break;
                 case RIGHT:
-                    getUnitUnderControl().setSpeedX(1);
+                    getUnitUnderControl().moveBy(1, 0);
                     break;
                 case DOWN:
-                    getUnitUnderControl().setSpeedY(1);
+                    getUnitUnderControl().moveBy(0, 1);
                     break;
                 case LEFT:
-                    getUnitUnderControl().setSpeedX(-1);
+                    getUnitUnderControl().moveBy(-1, 0);
                     break;
             }
         }

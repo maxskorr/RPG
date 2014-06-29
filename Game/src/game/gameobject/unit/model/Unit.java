@@ -2,7 +2,6 @@ package game.gameobject.unit.model;
 
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
-import game.map.model.Tile;
 
 /**
  * Created by Max & Edik on 6/27/2014.
@@ -91,57 +90,67 @@ public class Unit extends GameObject {
     }
 
     public void moveTo(final Integer x, final Integer y) {
-        // TODO: сделать перемещение резидента в тайн (x, y)
-        final GameObject gameObject = gameWorld.getCurrentLevel()
-                .getLevelMap().getTile(getX(), getY()).popGameObject();
-        setXY(x, y);
-        gameWorld.getCurrentLevel().getLevelMap().getTile(getX(), getY()).pushGameObject(gameObject);
+        //TODO: мб хранить текущий тайл, чтобы не получать его по 100 раз через 100 методов?
+        boolean removed = gameWorld.getCurrentLevel()
+                .getLevelMap().getTile(getX(), getY()).removeGameObject(this);
+        if (removed) { // мало ли
+            setXY(x, y);
+            gameWorld.getCurrentLevel().getLevelMap().getTile(getX(), getY()).pushGameObject(this);
+        }
+    }
+
+    public void moveBy(final Integer dx, final Integer dy) {
+        int newX = getX() + dx;
+        int newY = getY() + dy;
+        if (canGo(newX, newY)) {
+            moveTo(newX, newY);
+        }
     }
 
     @Override
     public void update() {
-        int vx = getSpeedX();
-        int vy = getSpeedY();
-
-        if (vx != 0 || vy != 0) {
-            int dx = 0;
-            int dy = 0;
-
-            if (vx < 0)
-                dx = 1;
-            else if (vx > 0)
-                dx = -1;
-
-            while (vx != 0) {
-                final int newX = getX() - dx;
-
-                if (canGo(newX, getY())) {
-                    moveTo(newX, null);
-                } else {
-                    setSpeedX(0);
-                }
-
-                vx += dx;
-            }
-
-            if (vy < 0)
-                dy = 1;
-            else
-            if (vy > 0)
-                dy = -1;
-
-            while (vy != 0) {
-                final int newY = getY() + vy;
-
-                if (canGo(getX(), newY)) {
-                    moveTo(null, newY);
-                } else {
-                    setSpeedY(0);
-                }
-
-                vy += dy;
-            }
-        }
+//        int vx = getSpeedX();
+//        int vy = getSpeedY();
+//
+//        if (vx != 0 || vy != 0) {
+//            int dx = 0;
+//            int dy = 0;
+//
+//            if (vx < 0)
+//                dx = 1;
+//            else if (vx > 0)
+//                dx = -1;
+//
+//            while (vx != 0) {
+//                final int newX = getX() - dx;
+//
+//                if (canGo(newX, getY())) {
+//                    moveTo(newX, null);
+//                } else {
+//                    setSpeedX(0);
+//                }
+//
+//                vx += dx;
+//            }
+//
+//            if (vy < 0)
+//                dy = 1;
+//            else
+//            if (vy > 0)
+//                dy = -1;
+//
+//            while (vy != 0) {
+//                final int newY = getY() + vy;
+//
+//                if (canGo(getX(), newY)) {
+//                    moveTo(null, newY);
+//                } else {
+//                    setSpeedY(0);
+//                }
+//
+//                vy += dy;
+//            }
+//        }
     }
 
     private boolean canGo(int x, int y) {

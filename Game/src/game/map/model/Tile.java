@@ -47,6 +47,15 @@ public class Tile {
         return layers.pop();
     }
 
+    public boolean removeGameObject(final GameObject gameObject) {
+        if (layers.size() <= 0 && layers.size() > MIN_DEPTH)
+            throw new NullPointerException();
+
+        if (layers.size() == MIN_DEPTH)
+            throw new ArrayIndexOutOfBoundsException();
+        return layers.remove(gameObject);
+    }
+
     public GameObject peekGameObject() {
         if (layers.size() <= 0)
             throw new NullPointerException();

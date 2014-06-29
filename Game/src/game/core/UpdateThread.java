@@ -2,6 +2,7 @@ package game.core;
 
 import game.controller.model.Controller;
 import game.gameobject.model.GameObject;
+import game.util.Logger;
 
 import java.util.List;
 
@@ -10,6 +11,8 @@ import java.util.List;
  */
 //TODO: add pause
 public class UpdateThread extends Thread {
+
+    private static final Logger LOGGER = Logger.getLogger(UpdateThread.class);
 
     private Game game;
     private GameWorld gameWorld;
@@ -23,9 +26,13 @@ public class UpdateThread extends Thread {
         this.renderLock = game.getRenderLock();
     }
 
+    private long timePassed = 0;
+    private long frames;
+
     @Override
     public void run() {
         while (true) {
+            long s = System.currentTimeMillis();
             renderLock.lock();
             try {
                 update();
@@ -34,6 +41,14 @@ public class UpdateThread extends Thread {
                 renderLock.waitUntilCanUpdate();
             } finally {
                 renderLock.unlock();
+            }
+            long e = System.currentTimeMillis();
+            timePassed += (e - s);
+            frames++;
+            if (timePassed >= 1000) {
+                timePassed = 0;
+                LOGGER.log(frames + " FPS");
+                frames = 0;
             }
         }
     }
