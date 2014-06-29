@@ -2,6 +2,7 @@ package game.controller.keyboard;
 
 import game.util.Pool;
 
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -10,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by Semyon Danilov on 28.06.2014.
  */
-public class KeyboardHandler {
+public class KeyboardHandler implements KeyListener {
 
     private Lock inputLock = new ReentrantLock();
 
@@ -65,6 +66,21 @@ public class KeyboardHandler {
             inputLock.unlock();
         }
         return keyEvents;
+    }
+
+    @Override
+    public void keyTyped(final java.awt.event.KeyEvent e) {
+        //нафиг надо
+    }
+
+    @Override
+    public void keyPressed(final java.awt.event.KeyEvent e) {
+        onKey(e);
+    }
+
+    @Override
+    public void keyReleased(final java.awt.event.KeyEvent e) {
+        onKey(e);
     }
 
 }

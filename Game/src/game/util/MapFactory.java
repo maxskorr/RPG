@@ -1,10 +1,13 @@
 package game.util;
 
 import game.core.GameWorld;
-import game.map.model.Tile;
 import game.map.model.LevelMap;
+import game.map.model.Tile;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -61,14 +64,14 @@ public class MapFactory {
         final LevelMap levelMap;
         final ArrayList<ArrayList<Tile>> tiles_lists = new ArrayList<>();
 
-        final URL full_filepath = ResourceManager.getPath(ASSETS_MAPS_PATH + filename);
+        final URL fullFilepath = ResourceManager.getPath(ASSETS_MAPS_PATH + filename);
         File map_file;
 
         try {
-            map_file = new File(full_filepath.toURI());
+            map_file = new File(fullFilepath.toURI());
         } catch (URISyntaxException e) {
             Logger.getLogger(MapFactory.class).error(e.getMessage());
-            map_file = new File(full_filepath.getPath());
+            map_file = new File(fullFilepath.getPath());
         }
 
         try(BufferedReader br_lines = new BufferedReader(new FileReader(map_file))) {
@@ -97,4 +100,5 @@ public class MapFactory {
 
         return levelMap;
     }
+
 }
