@@ -88,7 +88,7 @@ public class Tile {
         if (resident == null)
             throw new NullPointerException();
 
-        resident.update();
+        //resident.update();
     }
 
     public boolean isVisitable() {

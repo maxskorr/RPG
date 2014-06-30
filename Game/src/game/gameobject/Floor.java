@@ -8,7 +8,7 @@ import game.gameobject.model.GameObject;
  */
 public class Floor extends GameObject {
     @Override
-    public void update() {
+    public void update(long deltaTime) {
 
     }
 

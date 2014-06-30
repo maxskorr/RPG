@@ -2,12 +2,12 @@ package game.core;
 
 import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
-import game.map.model.LevelMap;
 import game.map.model.Tile;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -19,7 +19,6 @@ public class GameFrame extends JFrame {
     private Canvas canvas;
     private Game game;
     private GameWorld gameWorld;
-
     private GameObject player;
 
     public Canvas getCanvas() {
@@ -54,8 +53,7 @@ public class GameFrame extends JFrame {
 
     public void render() {
         List<GameObject> gameObjects = gameWorld.getGameObjects();
-        LevelMap map = gameWorld.getCurrentLevel().getLevelMap();
-        player = map.getTile(0, 0).peekGameObject();
+        player = gameWorld.getPlayer();
         BufferStrategy bs = getCanvas().getBufferStrategy();
 
         if (bs == null) {
@@ -68,8 +66,8 @@ public class GameFrame extends JFrame {
         g.setColor(Color.black); //выбрать цвет
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        int centetRenderX = player.getX()-(WINDOW_WIDTH/2/ TILE_SIZE);
-        int centetRenderY = player.getY()-(WINDOW_HEIGHT/2/ TILE_SIZE);
+        int centerRenderX = player.getX()-(WINDOW_WIDTH / 2 / TILE_SIZE);
+        int centerRenderY = player.getY()-(WINDOW_HEIGHT / 2 / TILE_SIZE);
 
         int startRenderX = player.getX() - RANGE;
         int startRenderY = player.getY() - RANGE;
@@ -96,8 +94,8 @@ public class GameFrame extends JFrame {
         for (int x = startRenderX; x < finalRenderX; x++) {
             for (int y = startRenderY; y < finalRenderY; y++) {
                 Tile tile = gameWorld.getCurrentLevel().getLevelMap().getTile(x, y);
-                int xC = (x - centetRenderX) * TILE_SIZE;
-                int yC = (y - centetRenderY) * TILE_SIZE;
+                int xC = (x - centerRenderX) * TILE_SIZE;
+                int yC = (y - centerRenderY) * TILE_SIZE;
 
                 final Stack<Drawable> drawables = tile.getDrawables();
 
@@ -107,15 +105,15 @@ public class GameFrame extends JFrame {
             }
         }
 
-//        for (Iterator<GameObject> it = gameObjects.iterator(); it.hasNext();) {
-//            GameObject object = it.next();
-//            if ((startRenderX < object.getX() && object.getX() < finalRenderX) && (startRenderY < object.getY() && object.getY() < finalRenderY)) {
-//                Drawable drawable = object.getDrawable();
-//                int x = (object.getX() - centetRenderX) * TILE_SIZE;
-//                int y = (object.getY() - centetRenderY) * TILE_SIZE;
-//                drawable.onRender(g, x, y);
-//            }
-//        }
+        for (Iterator<GameObject> it = gameObjects.iterator(); it.hasNext();) {
+            GameObject object = it.next();
+            if ((startRenderX < object.getX() && object.getX() < finalRenderX) && (startRenderY < object.getY() && object.getY() < finalRenderY)) {
+                Drawable drawable = object.getDrawable();
+                int x = (object.getX() - centerRenderX) * TILE_SIZE;
+                int y = (object.getY() - centerRenderY) * TILE_SIZE;
+                drawable.onRender(g, x, y);
+            }
+        }
 
         g.dispose();
         bs.show(); //показать

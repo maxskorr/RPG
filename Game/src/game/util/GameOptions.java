@@ -5,6 +5,7 @@ package game.util;
  */
 public class GameOptions {
     public static final int TILE_SIZE = 20;
+    public static final int PHYSICS_ITERATION = 500;
     public static final int ANIMATION_DELAY_MILLISECONDS = 400;
 
     public enum TILE_TYPE {WALL("tile_wall.png"), FLOOR("tile_floor.png"), PLAYER("player.png");

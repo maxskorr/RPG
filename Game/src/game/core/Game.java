@@ -4,11 +4,9 @@ import game.controller.KeyboardController;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
 import game.gameobject.unit.Player;
-import game.graphics.AnimatedSprite;
-import game.level.RandomLevel;
+import game.level.StartMenu;
 import game.level.model.Level;
 import game.util.GameObjectFactory;
-import game.util.GameOptions;
 import game.util.Logger;
 
 import javax.swing.*;
@@ -18,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static game.util.GameOptions.TILE_TYPE.*;
+import static game.util.GameOptions.TILE_TYPE.PLAYER;
 
 /**
  * Created by Max on 6/27/2014.
@@ -49,8 +47,10 @@ public class Game {
         frame = new GameFrame(this);
         frame.init();
 
-        final Player player = (Player) gameWorld.getCurrentLevel().getLevelMap().getTile(1, 1).peekGameObject();
+        final Player player = (Player) GameObjectFactory.make(1, 1, PLAYER, gameWorld);
         gameWorld.addGameObject(player);
+        gameWorld.setPlayer(player);
+
         KeyboardHandler keyboardHandler = new KeyboardHandler();
         final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);
         controllers.add(keyboardController);
@@ -59,11 +59,9 @@ public class Game {
 
     public void init() {
         gameWorld = new GameWorld();
-        final Level level = new RandomLevel(gameWorld);
-//        final Level level = new StartMenu(gameWorld);
+        // final Level level = new RandomLevel(gameWorld);
+        final Level level = new StartMenu(gameWorld);
         gameWorld.setCurrentLevel( level );
-        level.getLevelMap().getTile(1, 1).pushGameObject(GameObjectFactory.make(1, 1, PLAYER, gameWorld));
-        ((AnimatedSprite)level.getLevelMap().getTile(1, 1).getDrawable()).setPaused(false);
     }
 
     public void startRender() {

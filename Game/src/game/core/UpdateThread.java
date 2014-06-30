@@ -28,14 +28,17 @@ public class UpdateThread extends Thread {
 
     private long timePassed = 0;
     private long frames;
+    private long lastUpdate = System.currentTimeMillis();
 
     @Override
     public void run() {
         while (true) {
-            long s = System.currentTimeMillis();
+            final long s = System.currentTimeMillis();
             renderLock.lock();
+            final long deltaTime = s - lastUpdate;
+            lastUpdate = System.currentTimeMillis();
             try {
-                update();
+                update(deltaTime);
                 game.startRender();
                 renderLock.notifyCanDraw();
                 renderLock.waitUntilCanUpdate();
@@ -53,13 +56,13 @@ public class UpdateThread extends Thread {
         }
     }
 
-    private void update() {
+    private void update(final long deltaTime) {
         List<Controller> controllers = game.getControllers();
         for (Controller controller : controllers) {
             controller.update();
         }
         for (GameObject go : gameWorld.getGameObjects()) {
-            go.update();
+            go.update(deltaTime);
         }
     }
 

@@ -18,6 +18,7 @@ public abstract class GameObject {
     private List<AbstractSprite> sprites;
     private AbstractSprite currentSprite;
     private GameWorld gameWorld;
+    protected long deltaTime = 0; // Время с последнего апдейта
 
     public GameObject(final Integer x, final Integer y, final String spriteFileName, final GameWorld gameWorld) {
         this.x = x;
@@ -63,7 +64,17 @@ public abstract class GameObject {
         return sprites;
     }
 
-    public abstract void update();
+    public void update(final long deltaTime) {
+        this.deltaTime += deltaTime;
+    }
+
+    public void changeDeltaTime(final long dt) {
+        deltaTime += dt;
+    }
+
+    public long getDeltaTime() {
+        return deltaTime;
+    }
 
     public GameWorld getGameWorld() {
         return gameWorld;

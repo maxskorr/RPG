@@ -1,4 +1,4 @@
-package game.model;
+package game.gameobject;
 
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
@@ -15,7 +15,7 @@ public class SkillObject extends GameObject {
     }
 
     @Override
-    public void update() {
+    public void update(long deltaTime) {
         //
     }
 }

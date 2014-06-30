@@ -1,6 +1,7 @@
 package game.core;
 
 import game.gameobject.model.GameObject;
+import game.gameobject.unit.Player;
 import game.level.model.Level;
 
 import java.util.ArrayList;
@@ -14,6 +15,15 @@ public class GameWorld {
     private List<GameObject> gameObjects = null;
 
     private Level currentLevel;
+    private Player player;
+
+    public void setPlayer(final Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
 
     public GameWorld() {
         this.gameObjects = new ArrayList<>();
