@@ -14,6 +14,8 @@ public class GameWorld {
 
     private List<GameObject> gameObjects = null;
 
+    private List<GameObject> scheduledForDelete = null;
+
     private Level currentLevel;
     private Player player;
 
@@ -27,6 +29,7 @@ public class GameWorld {
 
     public GameWorld() {
         this.gameObjects = new ArrayList<>();
+        this.scheduledForDelete = new ArrayList<>();
     }
 
     public Level getCurrentLevel() {
@@ -51,6 +54,14 @@ public class GameWorld {
 
     public void removeGameObject(final GameObject gameObject) {
         gameObjects.remove(gameObject);
+    }
+
+    public void scheduleDelete(final GameObject gameObject) {
+        scheduledForDelete.add(gameObject);
+    }
+
+    public List<GameObject> getScheduledForDelete() {
+        return scheduledForDelete;
     }
 
     public boolean isOccupied(final int x, final int y) {

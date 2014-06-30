@@ -64,6 +64,11 @@ public class UpdateThread extends Thread {
         for (GameObject go : gameWorld.getGameObjects()) {
             go.update(deltaTime);
         }
+        List<GameObject> scheduledForDelete = gameWorld.getScheduledForDelete(); //иначе ConcurrentModificationException
+        for (GameObject gameObject : scheduledForDelete) {
+            gameWorld.removeGameObject(gameObject);
+        }
+        scheduledForDelete.clear();
     }
 
 }

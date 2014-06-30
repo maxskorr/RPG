@@ -2,6 +2,7 @@ package game.gameobject.unit.model;
 
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
+import game.gameobject.skill.model.Skill;
 import game.graphics.AnimatedSprite;
 import game.util.GameOptions;
 
@@ -25,20 +26,20 @@ public class Unit extends GameObject {
                 boolean alive, String name, int hp,
                 int speedX, int speedY, int maxSpeed, GameWorld gameWorld) {
         super(x, y, spriteFileName, gameWorld);
-        setGameWorld(gameWorld);
-        setAlive(alive);
-        setHp(hp);
-        setName(name);
-        setSpeedX(speedX);
-        setSpeedY(speedY);
-        setMaxSpeed(maxSpeed);
+        this.alive = alive;
+        this.maxHp = hp;
+        this.hp = hp;
+        this.name = name;
+        this.speedX = speedX;
+        this.speedY = speedY;
+        this.maxSpeed = maxSpeed;
     }
 
     public int getHp() {
         return hp;
     }
 
-    public void setHp(int hp) {
+    public void setHp(final int hp) {
         if (hp <= 0) {
             this.hp = 0;
             onDie();
@@ -46,8 +47,11 @@ public class Unit extends GameObject {
             return;
         }
 
-        if (hp > getMaxHp())
+        if (hp > getMaxHp()) {
             this.hp = getMaxHp();
+        } else {
+            this.hp = hp;
+        }
     }
 
     public int getMaxHp() {
@@ -89,6 +93,13 @@ public class Unit extends GameObject {
             setSpeedY(0);
             gameWorld.removeGameObject(this);
         }
+    }
+
+    public void cast(final Skill skill) {
+        gameWorld.addGameObject(skill);
+        skill.setGameWorld(getGameWorld());
+        skill.setXY(getX(), getY());
+        skill.act(this);
     }
 
     public void moveTo(final Integer x, final Integer y) {

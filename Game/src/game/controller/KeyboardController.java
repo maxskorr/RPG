@@ -3,6 +3,7 @@ package game.controller;
 import game.controller.keyboard.KeyEvent;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
+import game.gameobject.skill.Heal;
 import game.gameobject.unit.model.Unit;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class KeyboardController implements Controller {
     public static final int RIGHT = java.awt.event.KeyEvent.VK_RIGHT;
     public static final int DOWN = java.awt.event.KeyEvent.VK_DOWN;
     public static final int LEFT = java.awt.event.KeyEvent.VK_LEFT;
+    public static final int HEAL = java.awt.event.KeyEvent.VK_H;
 
     private final Unit unitUnderControl;
     private final KeyboardHandler keyboardHandler;
@@ -56,6 +58,11 @@ public class KeyboardController implements Controller {
                     case LEFT:
                         getUnitUnderControl().setSpeedX(0);
                         //getUnitUnderControl().moveBy(-1, 0);
+                        break;
+                    case HEAL:
+                        Unit unit = getUnitUnderControl();
+                        Heal heal = new Heal();
+                        unit.cast(heal);
                         break;
                 }
             } else if (type == KeyEvent.KEY_DOWN) {

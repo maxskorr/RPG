@@ -8,8 +8,13 @@ public class GameOptions {
     public static final int PHYSICS_ITERATION = 80;
     public static final int ANIMATION_DELAY_MILLISECONDS = 70;
 
-    public enum TILE_TYPE {WALL("tile_wall.png"), FLOOR("tile_floor.png"), PLAYER("player.png"),
-        SKILL_FIREBALL("skill_fireball.png");
+    public enum TILE_TYPE {
+
+        WALL("tile_wall.png"),
+        FLOOR("tile_floor.png"),
+        PLAYER("player.png"),
+        SKILL_FIREBALL("skill_fireball.png"),
+        SKILL_HEAL("skill_heal.png");
 
         private final String filename;
 

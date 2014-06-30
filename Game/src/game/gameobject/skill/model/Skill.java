@@ -1,17 +1,17 @@
 package game.gameobject.skill.model;
 
-import game.core.GameWorld;
 import game.gameobject.model.GameObject;
+import game.gameobject.unit.model.Unit;
 
 /**
  * Created by Max on 6/27/2014.
- *
+ * <p/>
  * Описывает скилл и его действие на игровой объект.
  */
 public abstract class Skill extends GameObject {
 
-    public Skill(final Integer x, final Integer y, final String spriteFileName, final GameWorld gameWorld) {
-        super(x, y, spriteFileName, gameWorld);
+    public Skill(final String spriteFileName) {
+        super(0, 0, spriteFileName, null);
     }
 
     @Override
@@ -19,5 +19,5 @@ public abstract class Skill extends GameObject {
         //
     }
 
-    public abstract void act(final GameObject go);
+    public abstract void act(final Unit go);
 }

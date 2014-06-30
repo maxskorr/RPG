@@ -48,6 +48,12 @@ public abstract class GameObject {
             gameWorld.getCurrentLevel().getLevelMap().getTile(getX(), getY()).trigger(this);
     }
 
+    public void removeSelf() {
+        if (gameWorld != null) {
+            gameWorld.scheduleDelete(this);
+        }
+    }
+
     public Drawable getDrawable() {
         return currentSprite;
     }

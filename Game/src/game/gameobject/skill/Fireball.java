@@ -1,19 +1,19 @@
 package game.gameobject.skill;
 
-import game.core.GameWorld;
-import game.gameobject.model.GameObject;
 import game.gameobject.skill.model.Skill;
+import game.gameobject.unit.model.Unit;
+import game.util.GameOptions;
 
 /**
  * Created by Max on 6/27/2014.
  */
 public class Fireball extends Skill {
-    public Fireball(Integer x, Integer y, String spriteFileName, GameWorld gameWorld) {
-        super(x, y, spriteFileName, gameWorld);
+    public Fireball() {
+        super(GameOptions.TILE_TYPE.SKILL_FIREBALL.getFilename());
     }
 
     @Override
-    public void act(GameObject go) {
+    public void act(final Unit go) {
         //
     }
 }
