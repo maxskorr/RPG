@@ -2,7 +2,6 @@ package game.gameobject.skill.model;
 
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
-import game.gameobject.unit.model.Unit;
 
 /**
  * Created by Max on 6/27/2014.
@@ -15,10 +14,5 @@ public abstract class Skill extends GameObject {
         super(x, y, spriteFileName, gameWorld);
     }
 
-    @Override
-    public void update(final long deltaTime) {
-        super.update(deltaTime);
-    }
-
-    public abstract void act(final Unit go);
+    public abstract void act(final GameObject go);
 }

@@ -5,6 +5,7 @@ import game.gameobject.Floor;
 import game.gameobject.Wall;
 import game.gameobject.model.GameObject;
 import game.gameobject.skill.Fireball;
+import game.gameobject.skill.Heal;
 import game.gameobject.unit.Player;
 
 /**
@@ -27,6 +28,9 @@ public class GameObjectFactory {
                 break;
             case SKILL_FIREBALL:
                 gameObject = new Fireball(x, y, tile_type.getFilename(), gameWorld);
+                break;
+            case SKILL_HEAL:
+                gameObject = new Heal(x, y, tile_type.getFilename(), gameWorld);
                 break;
             default:
                 gameObject = null;

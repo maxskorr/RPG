@@ -5,6 +5,7 @@ import game.gameobject.model.GameObject;
 import game.gameobject.skill.model.Skill;
 import game.gameobject.unit.model.Unit;
 import game.graphics.sprite.model.AbstractSprite;
+import game.util.Logger;
 import game.util.ResourceManager;
 
 import static game.util.GameOptions.DIRECTION;
@@ -56,22 +57,27 @@ public class Fireball extends Skill {
         if (!getGameWorld().isOccupied(x, y)) {
             setXY(x, y);
         } else {
-            act((Unit)getGameWorld().getCurrentLevel().getLevelMap().getTile(x, y).getLayers().peek());
+            final GameObject go = getGameWorld().getGameObjectByPos(x, y);
+
+            if (go != null)
+                act(go);
+
+            removeSelf();
         }
     }
 
     @Override
-    public void act(final Unit gameObject) {
+    public void act(final GameObject gameObject) {
         if (!(gameObject instanceof Unit))
             return;
 
         final Unit unit = (Unit) gameObject;
 
-        final int damage = BASE_DAMAGE + (ResourceManager.random.nextInt() % MAX_VARIABLE_DAMAGE)
+        final int damage = BASE_DAMAGE + Math.abs(ResourceManager.random.nextInt() % MAX_VARIABLE_DAMAGE)
                 - unit.getDef();
 
-        unit.changeHp(damage);
+        unit.changeHp(-damage);
 
-        getGameWorld().removeGameObject(this);
+        Logger.getLogger(this.getClass()).log("skill casted");
     }
 }

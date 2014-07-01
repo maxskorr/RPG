@@ -4,6 +4,7 @@ import game.controller.keyboard.KeyEvent;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
 import game.gameobject.skill.Fireball;
+import game.gameobject.skill.Heal;
 import game.gameobject.unit.model.Unit;
 import game.util.GameObjectFactory;
 import game.util.GameOptions;
@@ -23,7 +24,7 @@ public class KeyboardController implements Controller {
     public static final int DOWN = java.awt.event.KeyEvent.VK_DOWN;
     public static final int LEFT = java.awt.event.KeyEvent.VK_LEFT;
     public static final int FIRE = java.awt.event.KeyEvent.VK_SHIFT;
-    public static final int HEAL = java.awt.event.KeyEvent.VK_H;
+    public static final int HEAL = java.awt.event.KeyEvent.VK_CONTROL;
 
     private final Unit unitUnderControl;
     private final KeyboardHandler keyboardHandler;
@@ -59,8 +60,13 @@ public class KeyboardController implements Controller {
                         //getUnitUnderControl().moveBy(-1, 0);
                         break;
                     case HEAL:
-                        Unit unit = getUnitUnderControl();
-                        Heal heal = new Heal();
+                        final Unit unit = getUnitUnderControl();
+                        final int x = unit.getX();
+                        final int y = unit.getY();
+                        final Heal heal = (Heal) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_HEAL, unit.getGameWorld());
+                        //heal.setDirection(unit.getLookDirection());
+                        unit.getGameWorld().addGameObject(heal);
+                        Logger.getLogger(this.getClass()).log("heal");
                         unit.cast(heal);
                         break;
                 }

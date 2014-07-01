@@ -75,4 +75,14 @@ public class GameWorld {
         return !getCurrentLevel().getLevelMap().getTile(x, y).isVisitable();
     }
 
+
+    public GameObject getGameObjectByPos(final int x, final int y) {
+        for (final GameObject go: gameObjects) {
+            if (go.getX() == x && go.getY() == y) {
+                return go;
+            }
+        }
+
+        return null;
+    }
 }

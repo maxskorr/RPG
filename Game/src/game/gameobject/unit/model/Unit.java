@@ -2,11 +2,10 @@ package game.gameobject.unit.model;
 
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
+import game.gameobject.skill.model.Skill;
 import game.graphics.sprite.AnimatedSprite;
 import game.graphics.sprite.model.AbstractSprite;
-import game.gameobject.skill.model.Skill;
-import game.graphics.AnimatedSprite;
-import game.util.GameOptions;
+import game.util.Logger;
 
 import static game.util.GameOptions.DIRECTION;
 
@@ -120,6 +119,7 @@ public class Unit extends GameObject {
 
     public void changeHp(int diff) {
         setHp(getHp() + diff);
+        Logger.getLogger(this.getClass()).log("hp changed: " + hp);
     }
 
     public boolean isAlive() {
@@ -134,12 +134,13 @@ public class Unit extends GameObject {
         if (isAlive()) {
             setAlive(false);
 
-            if (getGameWorld() == null)
+            if (getGameWorld() == null) {
                 throw new NullPointerException(MSG_UNIT_DIED_IN_ASTRAL);
+            }
 
             setSpeedX(0);
             setSpeedY(0);
-            getGameWorld().removeGameObject(this);
+            getGameWorld().scheduleDelete(this);
         }
     }
 
@@ -158,61 +159,6 @@ public class Unit extends GameObject {
       return ( getSpeedX() != 0 || getSpeedY() != 0 );
     }
 
-    @Override
-    public void update(long deltaTime) {
-        super.update(deltaTime);
-
-        if (GameOptions.PHYSICS_ITERATION <= getDeltaTime()) {
-            changeDeltaTime(-GameOptions.PHYSICS_ITERATION);
-
-            if (isMoving()) {
-                //TODO: CurrentState (который enum) будет go
-                ((AnimatedSprite) getDrawable()).play();
-                int vx = getSpeedX();
-                int vy = getSpeedY();
-
-                int dx = 0;
-                int dy = 0;
-
-                if (vx < 0)
-                    dx = 1;
-                else if (vx > 0)
-                    dx = -1;
-
-                while (vx != 0) {
-                    final int newX = getX() - dx;
-
-                    if (canGo(newX, getY())) {
-                        moveTo(newX, null);
-                    } else {
-                        setSpeedX(0);
-                    }
-
-                    vx += dx;
-                }
-
-                if (vy < 0)
-                    dy = 1;
-                else if (vy > 0)
-                    dy = -1;
-
-                while (vy != 0) {
-                    final int newY = getY() + vy;
-
-                    if (canGo(getX(), newY)) {
-                        moveTo(null, newY);
-                    } else {
-                        setSpeedY(0);
-                    }
-
-                    vy += dy;
-                }
-            } else {
-                //TODO: CurrentState (который enum) будет idle
-                ((AnimatedSprite) getDrawable()).stop();
-            }
-        }
-    }
     private boolean canGo(int x, int y) {
         if (getGameWorld() == null)
             throw new NullPointerException(MSG_UNIT_DIED_IN_ASTRAL);
