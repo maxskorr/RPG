@@ -1,4 +1,6 @@
-package game.graphics;
+package game.graphics.sprite;
+
+import game.graphics.sprite.model.AbstractSprite;
 
 import java.awt.*;
 

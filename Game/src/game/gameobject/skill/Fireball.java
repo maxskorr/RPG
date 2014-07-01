@@ -4,6 +4,7 @@ import game.core.GameWorld;
 import game.gameobject.model.GameObject;
 import game.gameobject.skill.model.Skill;
 import game.gameobject.unit.model.Unit;
+import game.graphics.sprite.model.AbstractSprite;
 import game.util.ResourceManager;
 
 import static game.util.GameOptions.DIRECTION;
@@ -19,6 +20,10 @@ public class Fireball extends Skill {
     public Fireball(final Integer x, final Integer y,
                     final String spriteFileName, final GameWorld gameWorld) {
         super(x, y, spriteFileName, gameWorld);
+
+        final AbstractSprite sprite = ResourceManager.getSprite(spriteFileName, 0);
+        putSprite(sprite);
+        setCurrentSprite(sprite);
     }
 
     public void setDirection(DIRECTION direction) {

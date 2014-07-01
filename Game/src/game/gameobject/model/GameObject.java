@@ -1,10 +1,9 @@
 package game.gameobject.model;
 
 import game.core.GameWorld;
-import game.graphics.AbstractSprite;
 import game.graphics.Drawable;
+import game.graphics.sprite.model.AbstractSprite;
 import game.util.GameOptions;
-import game.util.ResourceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +25,19 @@ public abstract class GameObject {
         this.y = y;
         sprites = new ArrayList<>();
 
-        final int totalAnimations = ResourceManager.getAnimationsNumberByTitle(spriteFileName);
-
-        for (int i = 0; i < totalAnimations; i++) {
-            putSprite(ResourceManager.getSprite(spriteFileName, i));
-        }
-
-        currentSprite = sprites.get(0);
+//        final int totalAnimations = ResourceManager.getAnimationsNumberByTitle(spriteFileName);
+//
+//        for (int i = 0; i < totalAnimations; i++) {
+//            putSprite(ResourceManager.getSprite(spriteFileName, i));
+//        }
+//
+//        setCurrentSprite(sprites.get(0));
 
         setGameWorld(gameWorld);
+    }
+
+    public void setCurrentSprite(final AbstractSprite currentSprite) {
+        this.currentSprite = currentSprite;
     }
 
     public void setXY(Integer x, Integer y) {

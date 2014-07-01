@@ -2,7 +2,8 @@ package game.gameobject.unit.model;
 
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
-import game.graphics.AnimatedSprite;
+import game.graphics.sprite.AnimatedSprite;
+import game.graphics.sprite.model.AbstractSprite;
 
 import static game.util.GameOptions.DIRECTION;
 
@@ -42,6 +43,24 @@ public class Unit extends GameObject {
 
     public void setLookDirection(final DIRECTION lookDirection) {
         this.lookDirection = lookDirection;
+        AbstractSprite sprite = null;
+
+        switch (lookDirection) {
+            case UP:
+                sprite = getSprites().get(3);
+                break;
+            case RIGHT:
+                sprite = getSprites().get(2);
+                break;
+            case DOWN:
+                sprite = getSprites().get(0);
+                break;
+            case LEFT:
+                sprite = getSprites().get(1);
+                break;
+        }
+
+        setCurrentSprite(sprite);
     }
 
     public int getAtk() {

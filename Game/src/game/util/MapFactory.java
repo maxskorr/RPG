@@ -21,15 +21,6 @@ import static game.util.GameOptions.*;
  * Отвечает за загрузку карт и их создание.
  */
 public class MapFactory {
-    private final MapFactory instance;
-
-    public MapFactory getInstance() {
-        return instance;
-    }
-
-    private MapFactory() {
-        this.instance = this;
-    }
 
     public static LevelMap generateRandomMap(final int width, final int height, final GameWorld gameWorld) {
         final ArrayList<ArrayList<Tile>> tiles = new ArrayList<>(height);
