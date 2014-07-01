@@ -26,7 +26,7 @@ public class Fireball extends Skill {
         putSprite(sprite);
         setCurrentSprite(sprite);
     }
-
+уке
     public void setDirection(DIRECTION direction) {
         this.direction = direction;
     }
