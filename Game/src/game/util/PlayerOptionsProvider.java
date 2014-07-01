@@ -15,4 +15,8 @@ public class PlayerOptionsProvider {
     public static int getMaxSpeed() {
         return 5;
     }
+
+    public static int getDef() {
+        return 7;
+    }
 }

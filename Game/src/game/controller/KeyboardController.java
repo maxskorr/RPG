@@ -3,7 +3,11 @@ package game.controller;
 import game.controller.keyboard.KeyEvent;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
+import game.gameobject.skill.Fireball;
 import game.gameobject.unit.model.Unit;
+import game.util.GameObjectFactory;
+import game.util.GameOptions;
+import game.util.Logger;
 
 import java.util.List;
 
@@ -18,6 +22,7 @@ public class KeyboardController implements Controller {
     public static final int RIGHT = java.awt.event.KeyEvent.VK_RIGHT;
     public static final int DOWN = java.awt.event.KeyEvent.VK_DOWN;
     public static final int LEFT = java.awt.event.KeyEvent.VK_LEFT;
+    public static final int FIRE = java.awt.event.KeyEvent.VK_SHIFT;
 
     private final Unit unitUnderControl;
     private final KeyboardHandler keyboardHandler;
@@ -27,8 +32,8 @@ public class KeyboardController implements Controller {
     }
 
     public KeyboardController(final KeyboardHandler keyboardHandler, final Unit unitUnderControl) {
-        this.unitUnderControl = unitUnderControl;
         this.keyboardHandler = keyboardHandler;
+        this.unitUnderControl = unitUnderControl;
     }
 
     @Override
@@ -41,42 +46,43 @@ public class KeyboardController implements Controller {
                 switch (keyCode) {
                     case UP:
                         getUnitUnderControl().setSpeedY(0);
-                        //getUnitUnderControl().moveBy(0, -1);
                         break;
                     case RIGHT:
                         getUnitUnderControl().setSpeedX(0);
-
-                        //getUnitUnderControl().moveBy(1, 0);
                         break;
                     case DOWN:
                         getUnitUnderControl().setSpeedY(0);
-
-                        //getUnitUnderControl().moveBy(0, 1);
                         break;
                     case LEFT:
                         getUnitUnderControl().setSpeedX(0);
-                        //getUnitUnderControl().moveBy(-1, 0);
                         break;
                 }
             } else if (type == KeyEvent.KEY_DOWN) {
                 switch (keyCode) {
                     case UP:
                         getUnitUnderControl().setSpeedY(-1);
-                        //getUnitUnderControl().moveBy(0, -1);
+                        getUnitUnderControl().setLookDirection(GameOptions.DIRECTION.UP);
                         break;
                     case RIGHT:
                         getUnitUnderControl().setSpeedX(1);
-
-                        //getUnitUnderControl().moveBy(1, 0);
+                        getUnitUnderControl().setLookDirection(GameOptions.DIRECTION.RIGHT);
                         break;
                     case DOWN:
                         getUnitUnderControl().setSpeedY(1);
-
-                        //getUnitUnderControl().moveBy(0, 1);
+                        getUnitUnderControl().setLookDirection(GameOptions.DIRECTION.DOWN);
                         break;
                     case LEFT:
                         getUnitUnderControl().setSpeedX(-1);
-                        //getUnitUnderControl().moveBy(-1, 0);
+                        getUnitUnderControl().setLookDirection(GameOptions.DIRECTION.LEFT);
+                        break;
+                    case FIRE:
+                        final Unit unit = getUnitUnderControl();
+                        final int x = unit.getX();
+                        final int y = unit.getY();
+                        final Fireball fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
+                        fireball.setDirection(unit.getLookDirection());
+                        unit.getGameWorld().addGameObject(fireball);
+                        Logger.getLogger(this.getClass()).log("fireball");
                         break;
                 }
             }

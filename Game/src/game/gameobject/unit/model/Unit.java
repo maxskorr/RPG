@@ -3,7 +3,8 @@ package game.gameobject.unit.model;
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
 import game.graphics.AnimatedSprite;
-import game.util.GameOptions;
+
+import static game.util.GameOptions.DIRECTION;
 
 /**
  * Created by Max & Edik on 6/27/2014.
@@ -19,13 +20,14 @@ public class Unit extends GameObject {
     private int speedX;
     private int speedY;
     private int maxSpeed;
-    private GameWorld gameWorld;
+    private int def; // Защита персонажа
+    private int atk; // Атака персонажа
+    private DIRECTION lookDirection; // В какую сторону смотрит персонаж
 
     public Unit(final Integer x, final Integer y, final String spriteFileName,
                 boolean alive, String name, int hp,
                 int speedX, int speedY, int maxSpeed, GameWorld gameWorld) {
         super(x, y, spriteFileName, gameWorld);
-        setGameWorld(gameWorld);
         setAlive(alive);
         setHp(hp);
         setName(name);
@@ -34,11 +36,35 @@ public class Unit extends GameObject {
         setMaxSpeed(maxSpeed);
     }
 
+    public DIRECTION getLookDirection() {
+        return lookDirection;
+    }
+
+    public void setLookDirection(final DIRECTION lookDirection) {
+        this.lookDirection = lookDirection;
+    }
+
+    public int getAtk() {
+        return atk;
+    }
+
+    public void setAtk(final int atk) {
+        this.atk = atk;
+    }
+
+    public int getDef() {
+        return def;
+    }
+
+    public void setDef(final int def) {
+        this.def = def;
+    }
+
     public int getHp() {
         return hp;
     }
 
-    public void setHp(int hp) {
+    public void setHp(final int hp) {
         if (hp <= 0) {
             this.hp = 0;
             onDie();
@@ -54,7 +80,7 @@ public class Unit extends GameObject {
         return maxHp;
     }
 
-    public void setMaxHp(int maxHp) {
+    public void setMaxHp(final int maxHp) {
         this.maxHp = (maxHp < 0 ? maxHp : 0);
     }
 
@@ -62,7 +88,7 @@ public class Unit extends GameObject {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -82,12 +108,12 @@ public class Unit extends GameObject {
         if (isAlive()) {
             setAlive(false);
 
-            if (gameWorld == null)
+            if (getGameWorld() == null)
                 throw new NullPointerException(MSG_UNIT_DIED_IN_ASTRAL);
 
             setSpeedX(0);
             setSpeedY(0);
-            gameWorld.removeGameObject(this);
+            getGameWorld().removeGameObject(this);
         }
     }
 
@@ -99,66 +125,11 @@ public class Unit extends GameObject {
       return ( getSpeedX() != 0 || getSpeedY() != 0 );
     }
 
-    @Override
-    public void update(long deltaTime) {
-        super.update(deltaTime);
-
-        if (GameOptions.PHYSICS_ITERATION <= getDeltaTime()) {
-            changeDeltaTime(-GameOptions.PHYSICS_ITERATION);
-
-            if (isMoving()) {
-                //TODO: CurrentState (который enum) будет go
-                ((AnimatedSprite) getDrawable()).play();
-                int vx = getSpeedX();
-                int vy = getSpeedY();
-
-                int dx = 0;
-                int dy = 0;
-
-                if (vx < 0)
-                    dx = 1;
-                else if (vx > 0)
-                    dx = -1;
-
-                while (vx != 0) {
-                    final int newX = getX() - dx;
-
-                    if (canGo(newX, getY())) {
-                        moveTo(newX, null);
-                    } else {
-                        setSpeedX(0);
-                    }
-
-                    vx += dx;
-                }
-
-                if (vy < 0)
-                    dy = 1;
-                else if (vy > 0)
-                    dy = -1;
-
-                while (vy != 0) {
-                    final int newY = getY() + vy;
-
-                    if (canGo(getX(), newY)) {
-                        moveTo(null, newY);
-                    } else {
-                        setSpeedY(0);
-                    }
-
-                    vy += dy;
-                }
-            } else {
-                //TODO: CurrentState (который enum) будет idle
-                ((AnimatedSprite) getDrawable()).stop();
-            }
-        }
-    }
     private boolean canGo(int x, int y) {
-        if (gameWorld == null)
+        if (getGameWorld() == null)
             throw new NullPointerException(MSG_UNIT_DIED_IN_ASTRAL);
 
-        return !gameWorld.isOccupied(x, y);
+        return !getGameWorld().isOccupied(x, y);
     }
 
     public int getSpeedX() {
@@ -185,11 +156,53 @@ public class Unit extends GameObject {
         this.maxSpeed = maxSpeed;
     }
 
-    public GameWorld getGameWorld() {
-        return gameWorld;
-    }
+    @Override
+    public void updatePhysics() {
+        if (isMoving()) {
+            //TODO: CurrentState (который enum) будет go
+            ((AnimatedSprite) getDrawable()).play();
+            int vx = getSpeedX();
+            int vy = getSpeedY();
 
-    public void setGameWorld(GameWorld gameWorld) {
-        this.gameWorld = gameWorld;
+            int dx = 0;
+            int dy = 0;
+
+            if (vx < 0)
+                dx = 1;
+            else if (vx > 0)
+                dx = -1;
+
+            while (vx != 0) {
+                final int newX = getX() - dx;
+
+                if (canGo(newX, getY())) {
+                    moveTo(newX, null);
+                } else {
+                    setSpeedX(0);
+                }
+
+                vx += dx;
+            }
+
+            if (vy < 0)
+                dy = 1;
+            else if (vy > 0)
+                dy = -1;
+
+            while (vy != 0) {
+                final int newY = getY() + vy;
+
+                if (canGo(getX(), newY)) {
+                    moveTo(null, newY);
+                } else {
+                    setSpeedY(0);
+                }
+
+                vy += dy;
+            }
+        } else {
+            //TODO: CurrentState (который enum) будет idle
+            ((AnimatedSprite) getDrawable()).stop();
+        }
     }
 }

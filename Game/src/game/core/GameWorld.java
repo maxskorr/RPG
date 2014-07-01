@@ -15,6 +15,7 @@ public class GameWorld {
     private List<GameObject> gameObjects = null;
 
     private Level currentLevel;
+
     private Player player;
 
     public void setPlayer(final Player player) {

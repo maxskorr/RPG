@@ -16,8 +16,8 @@ public abstract class Skill extends GameObject {
 
     @Override
     public void update(final long deltaTime) {
-        //
+        super.update(deltaTime);
     }
 
-    public abstract void act(final GameObject go);
+    public abstract void act(final GameObject gameObject);
 }

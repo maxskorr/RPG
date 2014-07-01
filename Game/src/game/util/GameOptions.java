@@ -23,6 +23,8 @@ public class GameOptions {
 
     }
 
+    public enum DIRECTION {UP, RIGHT, DOWN, LEFT} // Направления движения
+
     public static final String ASSETS_GRAPHICS_PATH = "assets/graphics/";
 
     public static final String ASSETS_MAPS_PATH = "assets/maps/";

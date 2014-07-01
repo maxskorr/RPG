@@ -4,7 +4,6 @@ import game.core.GameWorld;
 import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
 
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -70,7 +69,7 @@ public class Tile {
         return layers.add(gameObject);
     }
 
-    public List<GameObject> getLayers() {
+    public Stack<GameObject> getLayers() {
         return layers;
     }
 

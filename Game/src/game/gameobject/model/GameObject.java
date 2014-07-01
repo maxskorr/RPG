@@ -3,6 +3,7 @@ package game.gameobject.model;
 import game.core.GameWorld;
 import game.graphics.AbstractSprite;
 import game.graphics.Drawable;
+import game.util.GameOptions;
 import game.util.ResourceManager;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public abstract class GameObject {
     private List<AbstractSprite> sprites;
     private AbstractSprite currentSprite;
     private GameWorld gameWorld;
-    protected long deltaTime = 0; // Время с последнего апдейта
+    private long timeBuffer = 0; // Буфер времени, позволяющий определить количество итераций физики
 
     public GameObject(final Integer x, final Integer y, final String spriteFileName, final GameWorld gameWorld) {
         this.x = x;
@@ -65,15 +66,12 @@ public abstract class GameObject {
     }
 
     public void update(final long deltaTime) {
-        this.deltaTime += deltaTime;
-    }
+        timeBuffer += deltaTime;
 
-    public void changeDeltaTime(final long dt) {
-        deltaTime += dt;
-    }
-
-    public long getDeltaTime() {
-        return deltaTime;
+        if (GameOptions.PHYSICS_ITERATION <= timeBuffer) {
+            updatePhysics();
+            timeBuffer -= GameOptions.PHYSICS_ITERATION;
+        }
     }
 
     public GameWorld getGameWorld() {
@@ -87,4 +85,9 @@ public abstract class GameObject {
     public void putSprite(AbstractSprite sprite) {
         sprites.add(sprite);
     }
+
+    /**
+     * Обработка физики объекта
+     */
+    public void updatePhysics() {};
 }
