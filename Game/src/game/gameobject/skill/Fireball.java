@@ -56,12 +56,12 @@ public class Fireball extends Skill {
         if (!getGameWorld().isOccupied(x, y)) {
             setXY(x, y);
         } else {
-            act(getGameWorld().getCurrentLevel().getLevelMap().getTile(x, y).getLayers().peek());
+            act((Unit)getGameWorld().getCurrentLevel().getLevelMap().getTile(x, y).getLayers().peek());
         }
     }
 
     @Override
-    public void act(final GameObject gameObject) {
+    public void act(final Unit gameObject) {
         if (!(gameObject instanceof Unit))
             return;
 

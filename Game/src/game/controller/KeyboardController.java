@@ -23,6 +23,7 @@ public class KeyboardController implements Controller {
     public static final int DOWN = java.awt.event.KeyEvent.VK_DOWN;
     public static final int LEFT = java.awt.event.KeyEvent.VK_LEFT;
     public static final int FIRE = java.awt.event.KeyEvent.VK_SHIFT;
+    public static final int HEAL = java.awt.event.KeyEvent.VK_H;
 
     private final Unit unitUnderControl;
     private final KeyboardHandler keyboardHandler;
@@ -32,8 +33,8 @@ public class KeyboardController implements Controller {
     }
 
     public KeyboardController(final KeyboardHandler keyboardHandler, final Unit unitUnderControl) {
-        this.keyboardHandler = keyboardHandler;
         this.unitUnderControl = unitUnderControl;
+        this.keyboardHandler = keyboardHandler;
     }
 
     @Override
@@ -55,6 +56,12 @@ public class KeyboardController implements Controller {
                         break;
                     case LEFT:
                         getUnitUnderControl().setSpeedX(0);
+                        //getUnitUnderControl().moveBy(-1, 0);
+                        break;
+                    case HEAL:
+                        Unit unit = getUnitUnderControl();
+                        Heal heal = new Heal();
+                        unit.cast(heal);
                         break;
                 }
             } else if (type == KeyEvent.KEY_DOWN) {

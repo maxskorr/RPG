@@ -13,7 +13,7 @@ public class Sword extends Skill {
     }
 
     @Override
-    public void act(final GameObject gameObject) {
+    public void act(final Unit go) {
         //
     }
 }

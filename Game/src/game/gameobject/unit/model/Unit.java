@@ -4,6 +4,9 @@ import game.core.GameWorld;
 import game.gameobject.model.GameObject;
 import game.graphics.sprite.AnimatedSprite;
 import game.graphics.sprite.model.AbstractSprite;
+import game.gameobject.skill.model.Skill;
+import game.graphics.AnimatedSprite;
+import game.util.GameOptions;
 
 import static game.util.GameOptions.DIRECTION;
 
@@ -29,12 +32,13 @@ public class Unit extends GameObject {
                 boolean alive, String name, int hp,
                 int speedX, int speedY, int maxSpeed, GameWorld gameWorld) {
         super(x, y, spriteFileName, gameWorld);
-        setAlive(alive);
-        setHp(hp);
-        setName(name);
-        setSpeedX(speedX);
-        setSpeedY(speedY);
-        setMaxSpeed(maxSpeed);
+        this.alive = alive;
+        this.maxHp = hp;
+        this.hp = hp;
+        this.name = name;
+        this.speedX = speedX;
+        this.speedY = speedY;
+        this.maxSpeed = maxSpeed;
     }
 
     public DIRECTION getLookDirection() {
@@ -91,8 +95,11 @@ public class Unit extends GameObject {
             return;
         }
 
-        if (hp > getMaxHp())
+        if (hp > getMaxHp()) {
             this.hp = getMaxHp();
+        } else {
+            this.hp = hp;
+        }
     }
 
     public int getMaxHp() {
@@ -136,6 +143,13 @@ public class Unit extends GameObject {
         }
     }
 
+    public void cast(final Skill skill) {
+        getGameWorld().addGameObject(skill);
+        skill.setGameWorld(getGameWorld());
+        skill.setXY(getX(), getY());
+        skill.act(this);
+    }
+
     public void moveTo(final Integer x, final Integer y) {
         setXY(x, y);
     }
@@ -144,6 +158,61 @@ public class Unit extends GameObject {
       return ( getSpeedX() != 0 || getSpeedY() != 0 );
     }
 
+    @Override
+    public void update(long deltaTime) {
+        super.update(deltaTime);
+
+        if (GameOptions.PHYSICS_ITERATION <= getDeltaTime()) {
+            changeDeltaTime(-GameOptions.PHYSICS_ITERATION);
+
+            if (isMoving()) {
+                //TODO: CurrentState (который enum) будет go
+                ((AnimatedSprite) getDrawable()).play();
+                int vx = getSpeedX();
+                int vy = getSpeedY();
+
+                int dx = 0;
+                int dy = 0;
+
+                if (vx < 0)
+                    dx = 1;
+                else if (vx > 0)
+                    dx = -1;
+
+                while (vx != 0) {
+                    final int newX = getX() - dx;
+
+                    if (canGo(newX, getY())) {
+                        moveTo(newX, null);
+                    } else {
+                        setSpeedX(0);
+                    }
+
+                    vx += dx;
+                }
+
+                if (vy < 0)
+                    dy = 1;
+                else if (vy > 0)
+                    dy = -1;
+
+                while (vy != 0) {
+                    final int newY = getY() + vy;
+
+                    if (canGo(getX(), newY)) {
+                        moveTo(null, newY);
+                    } else {
+                        setSpeedY(0);
+                    }
+
+                    vy += dy;
+                }
+            } else {
+                //TODO: CurrentState (который enum) будет idle
+                ((AnimatedSprite) getDrawable()).stop();
+            }
+        }
+    }
     private boolean canGo(int x, int y) {
         if (getGameWorld() == null)
             throw new NullPointerException(MSG_UNIT_DIED_IN_ASTRAL);
