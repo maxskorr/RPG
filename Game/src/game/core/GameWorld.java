@@ -3,6 +3,7 @@ package game.core;
 import game.gameobject.model.GameObject;
 import game.gameobject.unit.Player;
 import game.level.model.Level;
+import game.util.GameOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,7 @@ public class GameWorld {
 
     public boolean isOccupied(final int x, final int y) {
         for (final GameObject gameObject : gameObjects) {
-            if (gameObject.getX() == x && gameObject.getY() == y) {
+            if (gameObject.getTileX() == x && gameObject.getTileY() == y) {
                 return true;
             }
         }
@@ -78,7 +79,8 @@ public class GameWorld {
 
     public GameObject getGameObjectByPos(final int x, final int y) {
         for (final GameObject go: gameObjects) {
-            if (go.getX() == x && go.getY() == y) {
+            if ( (go.getTileX() <= x || (go.getTileX() + GameOptions.TILE_SIZE) >= x)
+                && ( (go.getTileY() <= y || (go.getTileY() + GameOptions.TILE_SIZE) >= y)) ) {
                 return go;
             }
         }

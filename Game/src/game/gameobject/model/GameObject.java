@@ -13,8 +13,8 @@ import java.util.List;
  */
 public abstract class GameObject {
 
-    private int x;
-    private int y;
+    private int x; // Реальная координата X, в пикселах
+    private int y; // Реальная координата Y, в пикселах
     private List<AbstractSprite> sprites;
     private AbstractSprite currentSprite;
     private GameWorld gameWorld;
@@ -25,31 +25,83 @@ public abstract class GameObject {
         this.y = y;
         sprites = new ArrayList<>();
 
-//        final int totalAnimations = ResourceManager.getAnimationsNumberByTitle(spriteFileName);
-//
-//        for (int i = 0; i < totalAnimations; i++) {
-//            putSprite(ResourceManager.getSprite(spriteFileName, i));
-//        }
-//
-//        setCurrentSprite(sprites.get(0));
-
         setGameWorld(gameWorld);
+    }
+
+    /**
+     * Смещение в пикселях по X относительно начала клетки при рендере
+     * @return
+     */
+    public int getDeltaRenderX() {
+        return x - (x / GameOptions.TILE_SIZE) * GameOptions.TILE_SIZE;
+    }
+
+    /**
+     * Смещение в пикселях по Y относительно начала клетки при рендере
+     * @return
+     */
+    public int getDeltaRenderY() {
+       return y - (y / GameOptions.TILE_SIZE) * GameOptions.TILE_SIZE;
     }
 
     public void setCurrentSprite(final AbstractSprite currentSprite) {
         this.currentSprite = currentSprite;
     }
 
+    /**
+     * Установка GameObject'а в начало какой-либо клетки
+     * @param x Тайл-координата X
+     * @param y Тайл-координата Y
+     */
+    @Deprecated
     public void setXY(Integer x, Integer y) {
         if (x != null) {
-            this.x = x;
-        }
-        if (y != null) {
-            this.y = y;
+            this.x = x * GameOptions.TILE_SIZE;
         }
 
-        if (gameWorld != null)
-            gameWorld.getCurrentLevel().getLevelMap().getTile(getX(), getY()).trigger(this);
+        if (y != null) {
+            this.y = y * GameOptions.TILE_SIZE;
+        }
+
+        if (gameWorld != null) {
+            gameWorld.getCurrentLevel().getLevelMap().getTile(getTileX(), getTileY()).trigger(this);
+        }
+    }
+
+    /**
+     * Координата X в пикселах
+     * @return
+     */
+    public int getRealX() {
+       return x;
+    }
+
+    /**
+     * Координата Y в пикселах
+     * @return
+     */
+    public int getRealY() {
+        return y;
+    }
+
+    /**
+     * Изменить координату Y на смещение dy
+     * @param dy Смещение по X
+     */
+    public void changeY(final Integer dy) {
+        if (dy != null) {
+            this.y += dy;
+        }
+    }
+
+    /**
+     * Изменить координату X на смещение dx
+     * @param dx Смещение по X
+     */
+    public void changeX(final Integer dx) {
+        if (dx != null) {
+            this.x += dx;
+        }
     }
 
     public void removeSelf() {
@@ -62,12 +114,20 @@ public abstract class GameObject {
         return currentSprite;
     }
 
-    public int getX() {
-        return x;
+    /**
+     * Позиция X тайла.
+     * @return Координата X
+     */
+    public int getTileX(){
+        return Math.floorDiv(x, GameOptions.TILE_SIZE);
     }
 
-    public int getY() {
-        return y;
+    /**
+     * Позиция Y тайла.
+     * @return Координата Y
+     */
+    public int getTileY() {
+        return Math.floorDiv(y, GameOptions.TILE_SIZE);
     }
 
     public List<AbstractSprite> getSprites() {
@@ -91,12 +151,15 @@ public abstract class GameObject {
         this.gameWorld = gameWorld;
     }
 
-    public void putSprite(AbstractSprite sprite) {
+    public void putSprite(final AbstractSprite sprite) {
         sprites.add(sprite);
+
+        if (currentSprite == null)
+            currentSprite = sprite;
     }
 
     /**
-     * Обработка физики объекта
+     * Обработка физики объекта.
      */
-    public void updatePhysics() {};
+    public void updatePhysics() {}
 }

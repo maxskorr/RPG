@@ -47,8 +47,7 @@ public class GameFrame extends JFrame {
     public static int CANVAS_HEIGHT = 300; //высота canvas
     public static int CANVAS_WIDTH = 300; //высота canvas
     public static int TILE_SIZE = 20; //размер тайла
-    public static int SPEED = 50; //миллисекунд на кадр
-    public static int RANGE = 10; //дальность обзора
+    public static int RANGE = 15; //дальность обзора
     public static String NAME = "Level 1";
 
     public void render() {
@@ -62,31 +61,33 @@ public class GameFrame extends JFrame {
             return;
         }
 
-        Graphics g = bs.getDrawGraphics(); //получаем Graphics из созданной нами BufferStrategy
-        g.setColor(Color.black); //выбрать цвет
+        Graphics g = bs.getDrawGraphics(); // Получаем Graphics из созданной нами BufferStrategy
+        g.setColor(Color.black); // Выбрать цвет
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        int centerRenderX = player.getX()-(WINDOW_WIDTH / 2 / TILE_SIZE);
-        int centerRenderY = player.getY()-(WINDOW_HEIGHT / 2 / TILE_SIZE);
+        int centerRenderX = player.getTileX() - (WINDOW_WIDTH / 2 / TILE_SIZE);
+        int centerRenderY = player.getTileY() - (WINDOW_HEIGHT / 2 / TILE_SIZE);
 
-        int startRenderX = player.getX() - RANGE;
-        int startRenderY = player.getY() - RANGE;
+        int startRenderX = player.getTileX() - RANGE + 1;
+        int startRenderY = player.getTileY() - RANGE + 1;
 
         if (startRenderX < 0) {
             startRenderX = 0;
         }
+
         if (startRenderY < 0) {
             startRenderY = 0;
         }
 
-        int finalRenderX = player.getX() + RANGE;
-        int finalRenderY = player.getY() + RANGE;
+        int finalRenderX = player.getTileX() + RANGE;
+        int finalRenderY = player.getTileY() + RANGE;
         final int maxRenderX = gameWorld.getCurrentLevel().getLevelMap().getWidth();
         final int maxRenderY = gameWorld.getCurrentLevel().getLevelMap().getHeight();
 
         if (finalRenderX > maxRenderX) {
             finalRenderX = maxRenderX;
         }
+
         if (finalRenderY > maxRenderY) {
             finalRenderY = maxRenderY;
         }
@@ -100,17 +101,17 @@ public class GameFrame extends JFrame {
                 final Stack<Drawable> drawables = tile.getDrawables();
 
                 for (Drawable drawable: drawables) {
-                    drawable.onRender(g, xC, yC);
+                    drawable.onRender(g, xC - player.getDeltaRenderX(), yC - player.getDeltaRenderY());
                 }
             }
         }
 
         for (Iterator<GameObject> it = gameObjects.iterator(); it.hasNext();) {
             GameObject object = it.next();
-            if ((startRenderX < object.getX() && object.getX() < finalRenderX) && (startRenderY < object.getY() && object.getY() < finalRenderY)) {
+            if ((startRenderX < object.getTileX() && object.getTileX() < finalRenderX) && (startRenderY < object.getTileY() && object.getTileY() < finalRenderY)) {
                 Drawable drawable = object.getDrawable();
-                int x = (object.getX() - centerRenderX) * TILE_SIZE;
-                int y = (object.getY() - centerRenderY) * TILE_SIZE;
+                int x = (object.getTileX() - centerRenderX) * TILE_SIZE;
+                int y = (object.getTileY() - centerRenderY) * TILE_SIZE;
                 drawable.onRender(g, x, y);
             }
         }

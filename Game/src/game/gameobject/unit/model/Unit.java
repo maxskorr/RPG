@@ -5,6 +5,7 @@ import game.gameobject.model.GameObject;
 import game.gameobject.skill.model.Skill;
 import game.graphics.sprite.AnimatedSprite;
 import game.graphics.sprite.model.AbstractSprite;
+import game.util.GameOptions;
 import game.util.Logger;
 
 import static game.util.GameOptions.DIRECTION;
@@ -117,7 +118,7 @@ public class Unit extends GameObject {
         this.name = name;
     }
 
-    public void changeHp(int diff) {
+    public void changeHp(final int diff) {
         setHp(getHp() + diff);
         Logger.getLogger(this.getClass()).log("hp changed: " + hp);
     }
@@ -147,7 +148,7 @@ public class Unit extends GameObject {
     public void cast(final Skill skill) {
         getGameWorld().addGameObject(skill);
         skill.setGameWorld(getGameWorld());
-        skill.setXY(getX(), getY());
+        skill.setXY(getTileX(), getTileY());
         skill.act(this);
     }
 
@@ -201,35 +202,43 @@ public class Unit extends GameObject {
             int dx = 0;
             int dy = 0;
 
-            if (vx < 0)
+            if (vx < 0) {
                 dx = 1;
-            else if (vx > 0)
+               setLookDirection(DIRECTION.LEFT);
+            }else if (vx > 0) {
                 dx = -1;
+                setLookDirection(DIRECTION.RIGHT);
+            }
 
             while (vx != 0) {
-                final int newX = getX() - dx;
+                final int newX = getTileX() - dx;
 
-                if (canGo(newX, getY())) {
-                    moveTo(newX, null);
+                if (canGo(newX, getTileY()) || (getDeltaRenderX() != 0 && getDeltaRenderX() != GameOptions.TILE_SIZE)) {
+                    changeX(-dx);
                 } else {
                     setSpeedX(0);
+                    break;
                 }
 
                 vx += dx;
             }
 
-            if (vy < 0)
+            if (vy < 0) {
                 dy = 1;
-            else if (vy > 0)
+                setLookDirection(DIRECTION.UP);
+            } else if (vy > 0) {
                 dy = -1;
+                setLookDirection(DIRECTION.DOWN);
+            }
 
             while (vy != 0) {
-                final int newY = getY() + vy;
+                final int newY =  getTileY() - dy;
 
-                if (canGo(getX(), newY)) {
-                    moveTo(null, newY);
+                if (canGo(getTileX(), newY) || (getDeltaRenderY() != 0 && getDeltaRenderY() != GameOptions.TILE_SIZE)) {
+                    changeY(-dy);
                 } else {
                     setSpeedY(0);
+                    break;
                 }
 
                 vy += dy;

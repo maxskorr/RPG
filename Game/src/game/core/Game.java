@@ -47,7 +47,8 @@ public class Game {
         frame = new GameFrame(this);
         frame.init();
 
-        final Player player = (Player) GameObjectFactory.make(1, 1, PLAYER, gameWorld);
+        // При создании игрока используем реальные координаты(в пикселах)!
+        final Player player = (Player) GameObjectFactory.make(20, 20, PLAYER, gameWorld);
         gameWorld.addGameObject(player);
         gameWorld.setPlayer(player);
 

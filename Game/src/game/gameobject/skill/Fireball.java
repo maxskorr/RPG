@@ -51,8 +51,8 @@ public class Fireball extends Skill {
                 break;
         }
 
-        final int x = getX() + dx;
-        final int y = getY() + dy;
+        final int x = getTileX() + dx;
+        final int y = getTileY() + dy;
 
         if (!getGameWorld().isOccupied(x, y)) {
             setXY(x, y);
