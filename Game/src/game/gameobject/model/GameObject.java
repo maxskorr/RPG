@@ -119,7 +119,7 @@ public abstract class GameObject {
      * @return Координата X
      */
     public int getTileX(){
-        return Math.floorDiv(x, GameOptions.TILE_SIZE);
+        return x / GameOptions.TILE_SIZE;
     }
 
     /**
@@ -127,7 +127,7 @@ public abstract class GameObject {
      * @return Координата Y
      */
     public int getTileY() {
-        return Math.floorDiv(y, GameOptions.TILE_SIZE);
+        return y / GameOptions.TILE_SIZE;
     }
 
     public List<AbstractSprite> getSprites() {
