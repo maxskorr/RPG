@@ -8,7 +8,6 @@ import game.gameobject.skill.Heal;
 import game.gameobject.unit.model.Unit;
 import game.util.GameObjectFactory;
 import game.util.GameOptions;
-import game.util.Logger;
 
 import java.util.List;
 
@@ -57,45 +56,37 @@ public class KeyboardController implements Controller {
                         break;
                     case LEFT:
                         getUnitUnderControl().setSpeedX(0);
-                        //getUnitUnderControl().moveBy(-1, 0);
                         break;
                     case HEAL:
                         final Unit unit = getUnitUnderControl();
-                        final int x = unit.getX();
-                        final int y = unit.getY();
+                        final int x = unit.getRealX();
+                        final int y = unit.getRealY();
                         final Heal heal = (Heal) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_HEAL, unit.getGameWorld());
-                        //heal.setDirection(unit.getLookDirection());
                         unit.getGameWorld().addGameObject(heal);
-                        Logger.getLogger(this.getClass()).log("heal");
                         unit.cast(heal);
                         break;
                 }
             } else if (type == KeyEvent.KEY_DOWN) {
                 switch (keyCode) {
                     case UP:
-                        getUnitUnderControl().setSpeedY(-1);
-                        getUnitUnderControl().setLookDirection(GameOptions.DIRECTION.UP);
+                        getUnitUnderControl().setSpeedY(-10);
                         break;
                     case RIGHT:
-                        getUnitUnderControl().setSpeedX(1);
-                        getUnitUnderControl().setLookDirection(GameOptions.DIRECTION.RIGHT);
+                        getUnitUnderControl().setSpeedX(10);
                         break;
                     case DOWN:
-                        getUnitUnderControl().setSpeedY(1);
-                        getUnitUnderControl().setLookDirection(GameOptions.DIRECTION.DOWN);
+                        getUnitUnderControl().setSpeedY(10);
                         break;
                     case LEFT:
-                        getUnitUnderControl().setSpeedX(-1);
-                        getUnitUnderControl().setLookDirection(GameOptions.DIRECTION.LEFT);
+                        getUnitUnderControl().setSpeedX(-10);
                         break;
                     case FIRE:
                         final Unit unit = getUnitUnderControl();
-                        final int x = unit.getX();
-                        final int y = unit.getY();
+                        final int x = unit.getRealX();
+                        final int y = unit.getRealY();
                         final Fireball fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
                         fireball.setDirection(unit.getLookDirection());
                         unit.getGameWorld().addGameObject(fireball);
-                        Logger.getLogger(this.getClass()).log("fireball");
                         break;
                 }
             }
