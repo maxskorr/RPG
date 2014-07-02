@@ -1,6 +1,7 @@
 package game.core;
 
 import game.controller.KeyboardController;
+import game.controller.KeyboardController2;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
 import game.core.camera.Camera;
@@ -51,15 +52,24 @@ public class Game {
         final Player player = (Player) GameObjectFactory.make(20, 20, PLAYER, gameWorld);
         gameWorld.addGameObject(player);
         gameWorld.setPlayer(player);
-        final Player player2 = (Player) GameObjectFactory.make(40, 60, PLAYER, gameWorld);
-        gameWorld.addGameObject(player2);
 
         KeyboardHandler keyboardHandler = new KeyboardHandler();
         final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);
         controllers.add(keyboardController);
+
+
         frame = new GameFrame(this);
         frame.init();
         frame.getCanvas().addKeyListener(keyboardHandler);
+
+        //Добавление 2 игрока
+        final Player player2 = (Player) GameObjectFactory.make(40, 60, PLAYER, gameWorld);
+        gameWorld.addGameObject(player2);
+        KeyboardHandler keyboardHandler2 = new KeyboardHandler();
+        final KeyboardController2 keyboardController2 = new KeyboardController2(keyboardHandler2, player2);
+        controllers.add(keyboardController2);
+        frame.getCanvas().addKeyListener(keyboardHandler2);
+
         getCamera().smoothAnimTo(Point.newPoint(200l, 200l));
     }
 
