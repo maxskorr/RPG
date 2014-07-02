@@ -3,6 +3,8 @@ package game.core;
 import game.controller.KeyboardController;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
+import game.core.camera.Camera;
+import game.core.model.Point;
 import game.gameobject.unit.Player;
 import game.level.StartMenu;
 import game.level.model.Level;
@@ -44,8 +46,6 @@ public class Game {
 
     public Game() {
         init();
-        frame = new GameFrame(this);
-        frame.init();
 
         // При создании игрока используем реальные координаты(в пикселах)!
         final Player player = (Player) GameObjectFactory.make(20, 20, PLAYER, gameWorld);
@@ -55,7 +55,10 @@ public class Game {
         KeyboardHandler keyboardHandler = new KeyboardHandler();
         final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);
         controllers.add(keyboardController);
+        frame = new GameFrame(this);
+        frame.init();
         frame.getCanvas().addKeyListener(keyboardHandler);
+        getCamera().smoothAnimTo(new Point(200l, 200l));
     }
 
     public void init() {
@@ -67,6 +70,10 @@ public class Game {
 
     public void startRender() {
         SwingUtilities.invokeLater(renderRunnable);
+    }
+
+    public Camera getCamera() {
+        return frame.getCamera();
     }
 
     private Runnable renderRunnable = new Runnable() {

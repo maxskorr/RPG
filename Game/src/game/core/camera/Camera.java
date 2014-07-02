@@ -12,6 +12,8 @@ public interface Camera {
 
     Point getBottomRightBound();
 
+    Point getCenter();
+
     void setResolution(final int width, final int height);
 
     void attachTo(final GameObject gameObject);
@@ -20,6 +22,7 @@ public interface Camera {
 
     void setBottomRightBound(final Point point);
 
-    void update();
+    void smoothAnimTo(final Point newCenter);
 
+    void update(final long deltaTime);
 }

@@ -124,4 +124,8 @@ public class GameFrame extends JFrame {
         bs.show(); //показать
     }
 
+    public Camera getCamera() {
+        return camera;
+    }
+
 }
