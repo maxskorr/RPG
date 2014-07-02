@@ -79,8 +79,8 @@ public class GameWorld {
 
     public GameObject getGameObjectByPos(final int x, final int y) {
         for (final GameObject go: gameObjects) {
-            if ( (go.getTileX() <= x || (go.getTileX() + GameOptions.TILE_SIZE) >= x)
-                && ( (go.getTileY() <= y || (go.getTileY() + GameOptions.TILE_SIZE) >= y)) ) {
+            if ((go.getTileX() <= x && (go.getTileX() + GameOptions.TILE_SIZE) >= x)
+                    && ((go.getTileY() <= y && (go.getTileY() + GameOptions.TILE_SIZE) >= y))) {
                 return go;
             }
         }

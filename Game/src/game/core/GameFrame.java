@@ -115,6 +115,7 @@ public class GameFrame extends JFrame {
             p2.recycle();
             p.recycle();
         }
+        center.recycle();
         g.dispose();
         bs.show(); //показать
     }
