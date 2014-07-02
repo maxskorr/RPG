@@ -70,19 +70,20 @@ public class GameFrame extends JFrame {
         g.setColor(Color.black); // Выбрать цвет
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        Point center = camera.getTopLeftBound();
-        int centerRenderX = (int) (center.x);
-        int centerRenderY = (int) (center.y);
+        Point center = camera.getCenter();
+        int centerRenderX = (int) (center.getX() - (camera.getWidth() / 2));
+        int centerRenderY = (int) (center.getY() - (camera.getHeight() / 2));
         List<List<Tile>> tiles = gameWorld.getCurrentLevel().getLevelMap().getTiles();
 
-        for (int x = 0; x < tiles.size(); x++) {
-            List<Tile> columns = tiles.get(x);
-            for (int y = 0; y < columns.size(); y++) {
-                Tile tile = columns.get(y);
+        for (int y = 0; y < tiles.size(); y++) {
+            List<Tile> row = tiles.get(y);
+            for (int x = 0; x < row.size(); x++) {
+                Tile tile = row.get(x);
                 int xC = x * TILE_SIZE;
                 int yC = y * TILE_SIZE;
-                Point p = new Point(xC, yC);
-                if (camera.isInBounds(p)) {
+                Point p = Point.newPoint(xC, yC);
+                Point p2 = p.add(TILE_SIZE, TILE_SIZE);
+                if (camera.intersects(p, p2)) {
                     xC -= centerRenderX;
                     yC -= centerRenderY;
 
@@ -90,8 +91,11 @@ public class GameFrame extends JFrame {
 
                     for (Drawable drawable: drawables) {
                         drawable.onRender(g, xC, yC);
+                        drawable.afterRender(g, xC, yC);
                     }
                 }
+                p.recycle();
+                p2.recycle();
             }
         }
 
@@ -99,15 +103,18 @@ public class GameFrame extends JFrame {
             GameObject object = it.next();
             int xC = object.getRealX();
             int yC = object.getRealY();
-            Point p = new Point(xC, yC);
-            if (camera.isInBounds(p)) {
+            Point p = Point.newPoint(xC, yC);
+            Point p2 = p.add(TILE_SIZE, TILE_SIZE);
+            if (camera.intersects(p, p2)) {
                 xC -= centerRenderX;
                 yC -= centerRenderY;
                 Drawable drawable = object.getDrawable();
                 drawable.onRender(g, xC, yC);
+                drawable.afterRender(g, xC, yC);
             }
+            p2.recycle();
+            p.recycle();
         }
-
         g.dispose();
         bs.show(); //показать
     }

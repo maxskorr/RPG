@@ -51,6 +51,8 @@ public class Game {
         final Player player = (Player) GameObjectFactory.make(20, 20, PLAYER, gameWorld);
         gameWorld.addGameObject(player);
         gameWorld.setPlayer(player);
+        final Player player2 = (Player) GameObjectFactory.make(40, 60, PLAYER, gameWorld);
+        gameWorld.addGameObject(player2);
 
         KeyboardHandler keyboardHandler = new KeyboardHandler();
         final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);
@@ -58,14 +60,14 @@ public class Game {
         frame = new GameFrame(this);
         frame.init();
         frame.getCanvas().addKeyListener(keyboardHandler);
-        getCamera().smoothAnimTo(new Point(200l, 200l));
+        getCamera().smoothAnimTo(Point.newPoint(200l, 200l));
     }
 
     public void init() {
         gameWorld = new GameWorld();
         // final Level level = new RandomLevel(gameWorld);
         final Level level = new StartMenu(gameWorld);
-        gameWorld.setCurrentLevel( level );
+        gameWorld.setCurrentLevel(level);
     }
 
     public void startRender() {
@@ -110,7 +112,7 @@ public class Game {
         private Condition renderCondition = newCondition();
 
         public void waitUntilCanUpdate() {
-            while(!canUpdate.get()) {
+            while (!canUpdate.get()) {
                 try {
                     renderCondition.await();
                 } catch (final InterruptedException e) {
