@@ -244,4 +244,16 @@ public class Unit extends GameObject {
             ((AnimatedSprite) getDrawable()).stop();
         }
     }
+
+
+    @Override
+    public void updateAttributes() {
+        if(isAlive()) {
+            if(getHp() < getMaxHp()) {
+            setHp((int) (getHp() + Math.ceil(getMaxHp() * 0.01)));
+            }
+            //TODO:Тут проверка на ману
+            //TODO:Тут пробег по всем эффектам
+        }
+    }
 }

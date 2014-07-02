@@ -140,9 +140,11 @@ public abstract class GameObject {
 
         if (GameOptions.PHYSICS_ITERATION <= timeBuffer) {
             updatePhysics();
+            updateAttributes();
             timeBuffer -= GameOptions.PHYSICS_ITERATION;
         }
     }
+
 
     public GameWorld getGameWorld() {
         return gameWorld;
@@ -163,4 +165,9 @@ public abstract class GameObject {
      * Обработка физики объекта.
      */
     public void updatePhysics() {}
+
+    /**
+     * Обновление характеристик объекта (здоровье, мана)
+     */
+    public void updateAttributes() {}
 }
