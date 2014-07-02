@@ -1,6 +1,7 @@
 package game.core;
 
 import game.controller.KeyboardController;
+import game.controller.KeyboardController2;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
 import game.gameobject.unit.Player;
@@ -52,10 +53,20 @@ public class Game {
         gameWorld.addGameObject(player);
         gameWorld.setPlayer(player);
 
+
         KeyboardHandler keyboardHandler = new KeyboardHandler();
         final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);
         controllers.add(keyboardController);
+
+        final Player player2 = (Player) GameObjectFactory.make(60, 60, PLAYER, gameWorld);
+        gameWorld.addGameObject(player2);
+
+        KeyboardHandler keyboardHandler2 = new KeyboardHandler();
+        final KeyboardController2 keyboardController2 = new KeyboardController2(keyboardHandler2, player2);
+        controllers.add(keyboardController2);
+
         frame.getCanvas().addKeyListener(keyboardHandler);
+        frame.getCanvas().addKeyListener(keyboardHandler2);
     }
 
     public void init() {

@@ -38,7 +38,8 @@ public class Fireball extends Skill {
         final int tileY = getTileY() + direction.getY();
 
         if (!getGameWorld().isOccupied(tileX, tileY)) {
-            setXY(tileX, tileY);
+            changeX(direction.getX());
+            changeY(direction.getY());
         } else {
             final GameObject go = getGameWorld().getGameObjectByPosition(x, y);
 

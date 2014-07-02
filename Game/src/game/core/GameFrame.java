@@ -110,8 +110,14 @@ public class GameFrame extends JFrame {
             GameObject object = it.next();
             if ((startRenderX < object.getTileX() && object.getTileX() < finalRenderX) && (startRenderY < object.getTileY() && object.getTileY() < finalRenderY)) {
                 Drawable drawable = object.getDrawable();
-                int x = (object.getTileX() - centerRenderX) * TILE_SIZE;
-                int y = (object.getTileY() - centerRenderY) * TILE_SIZE;
+                final int x,y;
+                if(object!=player) {
+                     x = (object.getTileX() - centerRenderX) * TILE_SIZE + object.getDeltaRenderX() - player.getDeltaRenderX();
+                     y = (object.getTileY() - centerRenderY) * TILE_SIZE + object.getDeltaRenderY() - player.getDeltaRenderY();
+                }else{
+                     x = (object.getTileX() - centerRenderX) * TILE_SIZE;
+                     y = (object.getTileY() - centerRenderY) * TILE_SIZE;
+                }
                 drawable.onRender(g, x, y);
             }
         }
