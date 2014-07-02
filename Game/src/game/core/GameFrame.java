@@ -70,8 +70,9 @@ public class GameFrame extends JFrame {
         g.setColor(Color.black); // Выбрать цвет
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        int centerRenderX = (int) (camera.getCenter().x);
-        int centerRenderY = (int) (camera.getCenter().y);
+        Point center = camera.getCenter();
+        int centerRenderX = (int) (center.x);
+        int centerRenderY = (int) (center.y);
 
         List<List<Tile>> tiles = gameWorld.getCurrentLevel().getLevelMap().getTiles();
 

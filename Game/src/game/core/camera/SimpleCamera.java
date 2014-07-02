@@ -20,8 +20,8 @@ public class SimpleCamera implements Camera {
     private Point animateTo;
 
     private GameObject observedObject;
-    private Integer observedLastX;
-    private Integer observedLastY;
+    private long observedLastX;
+    private long observedLastY;
 
     public SimpleCamera(final GameObject observedObject, final int width, final int height) {
         this.observedObject = observedObject;
@@ -42,8 +42,8 @@ public class SimpleCamera implements Camera {
 
     @Override
     public Point getCenter() {
-        long y = bottomRight.y - topLeft.y;
-        long x = bottomRight.x - topLeft.x;
+        long y = topLeft.y + (((bottomRight.y - topLeft.y)) / 2);
+        long x = topLeft.x + (((bottomRight.x - topLeft.x)) / 2);
         return new Point(x, y);
     }
 
@@ -142,6 +142,8 @@ public class SimpleCamera implements Camera {
         long botRightY = y + halfHeight;
         topLeft = new Point(topLeftX, topLeftY);
         bottomRight = new Point(botRightX, botRightY);
+        observedLastX = x;
+        observedLastY = y;
     }
 
 }

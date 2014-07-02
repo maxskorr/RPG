@@ -14,7 +14,7 @@ public class TileFactory {
         final GameObject gameObject = GameObjectFactory.make(x, y, tile_type, gameWorld);
         final boolean visitable;
 
-        switch (GameOptions.TILE_TYPE.values()[tile_type.ordinal()]) {
+        switch (tile_type) {
             case WALL:
                 visitable = false;
                 break;
@@ -28,7 +28,7 @@ public class TileFactory {
                 visitable = false;
         }
 
-        final Tile tile = new Tile(gameObject, visitable, gameWorld);
+        final Tile tile = new Tile(gameObject, visitable, gameWorld, tile_type);
 
         return tile;
     }
