@@ -19,6 +19,8 @@ public class Unit extends GameObject {
     private static final String MSG_UNIT_DIED_IN_ASTRAL = "Смерть юнита в междумирье.";
     private int hp;
     private int maxHp;
+    private int mp;
+    private int maxMp;
     private boolean alive;
     private String name;
     private int speedX;
