@@ -1,6 +1,7 @@
 package game.map.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Max on 6/28/2014.
@@ -8,14 +9,13 @@ import java.util.ArrayList;
 public class LevelMap {
     private final int HEIGHT;
     private final int WIDTH;
-    private final ArrayList<ArrayList<Tile>> tiles;
+    private final List<List<Tile>> tiles = new ArrayList<>();
 
-    public LevelMap(ArrayList<ArrayList<Tile>> tiles) {
+    public LevelMap(List<? extends List<Tile>> tiles) {
         HEIGHT = tiles.size();
         WIDTH = tiles.get(0).size();
-        this.tiles = tiles;
+        this.tiles.addAll(tiles);
     }
-
     public int getHeight() {
         return HEIGHT;
     }
@@ -39,4 +39,9 @@ public class LevelMap {
 
         return tiles.get(ny).get(nx);
     }
+
+    public List<List<Tile>> getTiles() {
+        return tiles;
+    }
+
 }

@@ -2,6 +2,7 @@ package game.core;
 
 import game.core.camera.Camera;
 import game.core.camera.SimpleCamera;
+import game.core.model.Point;
 import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
 import game.map.model.Tile;
@@ -69,54 +70,41 @@ public class GameFrame extends JFrame {
         g.setColor(Color.black); // Выбрать цвет
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        int centerRenderX = player.getTileX() - (WINDOW_WIDTH / 2 / TILE_SIZE);
-        int centerRenderY = player.getTileY() - (WINDOW_HEIGHT / 2 / TILE_SIZE);
+        int centerRenderX = (int) (camera.getCenter().x);
+        int centerRenderY = (int) (camera.getCenter().y);
 
-        int startRenderX = player.getTileX() - RANGE + 1;
-        int startRenderY = player.getTileY() - RANGE + 1;
+        List<List<Tile>> tiles = gameWorld.getCurrentLevel().getLevelMap().getTiles();
 
-        if (startRenderX < 0) {
-            startRenderX = 0;
-        }
+        for (int x = 0; x < tiles.size(); x++) {
+            List<Tile> columns = tiles.get(x);
+            for (int y = 0; y < columns.size(); y++) {
+                Tile tile = columns.get(y);
+                int xC = x * TILE_SIZE;
+                int yC = y * TILE_SIZE;
+                Point p = new Point(xC, yC);
+                if (camera.isInBounds(p)) {
+                    xC -= centerRenderX;
+                    yC -= centerRenderY;
 
-        if (startRenderY < 0) {
-            startRenderY = 0;
-        }
+                    final Stack<Drawable> drawables = tile.getDrawables();
 
-        int finalRenderX = player.getTileX() + RANGE;
-        int finalRenderY = player.getTileY() + RANGE;
-        final int maxRenderX = gameWorld.getCurrentLevel().getLevelMap().getWidth();
-        final int maxRenderY = gameWorld.getCurrentLevel().getLevelMap().getHeight();
-
-        if (finalRenderX > maxRenderX) {
-            finalRenderX = maxRenderX;
-        }
-
-        if (finalRenderY > maxRenderY) {
-            finalRenderY = maxRenderY;
-        }
-
-        for (int x = startRenderX; x < finalRenderX; x++) {
-            for (int y = startRenderY; y < finalRenderY; y++) {
-                Tile tile = gameWorld.getCurrentLevel().getLevelMap().getTile(x, y);
-                int xC = (x - centerRenderX) * TILE_SIZE;
-                int yC = (y - centerRenderY) * TILE_SIZE;
-
-                final Stack<Drawable> drawables = tile.getDrawables();
-
-                for (Drawable drawable: drawables) {
-                    drawable.onRender(g, xC - player.getDeltaRenderX(), yC - player.getDeltaRenderY());
+                    for (Drawable drawable: drawables) {
+                        drawable.onRender(g, xC, yC);
+                    }
                 }
             }
         }
 
         for (Iterator<GameObject> it = gameObjects.iterator(); it.hasNext();) {
             GameObject object = it.next();
-            if ((startRenderX < object.getTileX() && object.getTileX() < finalRenderX) && (startRenderY < object.getTileY() && object.getTileY() < finalRenderY)) {
+            int xC = object.getTileX() * TILE_SIZE;
+            int yC = object.getTileY() * TILE_SIZE;
+            Point p = new Point(xC, yC);
+            if (camera.isInBounds(p)) {
+                xC -= centerRenderX;
+                yC -= centerRenderY;
                 Drawable drawable = object.getDrawable();
-                int x = (object.getTileX() - centerRenderX) * TILE_SIZE;
-                int y = (object.getTileY() - centerRenderY) * TILE_SIZE;
-                drawable.onRender(g, x, y);
+                drawable.onRender(g, xC, yC);
             }
         }
 

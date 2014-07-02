@@ -22,6 +22,8 @@ public interface Camera {
 
     void setBottomRightBound(final Point point);
 
+    boolean isInBounds(final Point point);
+
     void smoothAnimTo(final Point newCenter);
 
     void update(final long deltaTime);

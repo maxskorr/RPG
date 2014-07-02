@@ -5,23 +5,23 @@ package game.core.model;
  */
 public class Point {
 
-    public final Long x;
-    public final Long y;
+    public final long x;
+    public final long y;
 
-    public Point(final Long x, final Long y) {
+    public Point(final long x, final long y) {
         this.x = x;
         this.y = y;
     }
 
-    public Point addX(final Long x) {
+    public Point addX(final long x) {
         return new Point(this.x + x, y);
     }
 
-    public Point addY(final Long y) {
+    public Point addY(final long y) {
         return new Point(x, this.y + y);
     }
 
-    public Point add(final Long x, final Long y) {
+    public Point add(final long x, final long y) {
         return new Point(this.x + x, this.y + y);
     }
 

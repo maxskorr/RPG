@@ -70,6 +70,11 @@ public class SimpleCamera implements Camera {
     }
 
     @Override
+    public boolean isInBounds(final Point point) {
+        return (point.x <= bottomRight.x) && (point.x >= topLeft.x) && (point.y >= topLeft.y) && (point.y <= bottomRight.y);
+    }
+
+    @Override
     public void smoothAnimTo(final Point newCenter) {
         this.isAnimating = true;
         this.animateTo = newCenter;
