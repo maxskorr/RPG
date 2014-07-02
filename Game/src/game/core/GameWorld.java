@@ -76,19 +76,11 @@ public class GameWorld {
         return !getCurrentLevel().getLevelMap().getTile(x, y).isVisitable();
     }
 
-    public GameObject getGameObjectByTile(final int x, final int y) {
-        for (final GameObject go: gameObjects) {
-            if (go.getTileX() == x  && go.getTileY() == y ) {
-                return go;
-            }
-        }
-        return null;
-    }
 
-    public GameObject getGameObjectByPosition(final int x, final int y) {
+    public GameObject getGameObjectByPos(final int x, final int y) {
         for (final GameObject go: gameObjects) {
-            if ( (go.getRealX() <= x && (go.getRealX() + GameOptions.TILE_SIZE) >= x)
-                && ( (go.getRealY() <= y && (go.getRealY() + GameOptions.TILE_SIZE) >= y)) ) {
+            if ((go.getTileX() <= x && (go.getTileX() + GameOptions.TILE_SIZE) >= x)
+                    && ((go.getTileY() <= y && (go.getTileY() + GameOptions.TILE_SIZE) >= y))) {
                 return go;
             }
         }

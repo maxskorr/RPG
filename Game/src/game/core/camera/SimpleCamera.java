@@ -9,7 +9,7 @@ import game.gameobject.model.GameObject;
 //следящая камера
 public class SimpleCamera implements Camera {
 
-    private static final long BASIC_ANIM_SPEED = 40; //px/s, keep it positive
+    private static final long BASIC_ANIM_SPEED = 400; //px/s, keep it positive
 
     private Point topLeft;
     private Point bottomRight;
@@ -20,8 +20,8 @@ public class SimpleCamera implements Camera {
     private Point animateTo;
 
     private GameObject observedObject;
-    private Integer observedLastX;
-    private Integer observedLastY;
+    private long observedLastX;
+    private long observedLastY;
 
     public SimpleCamera(final GameObject observedObject, final int width, final int height) {
         this.observedObject = observedObject;
@@ -42,9 +42,9 @@ public class SimpleCamera implements Camera {
 
     @Override
     public Point getCenter() {
-        long y = bottomRight.y - topLeft.y;
-        long x = bottomRight.x - topLeft.x;
-        return new Point(x, y);
+        long y = topLeft.getY() + (((bottomRight.getY() - topLeft.getY())) / 2);
+        long x = topLeft.getX() + (((bottomRight.getX() - topLeft.getX())) / 2);
+        return Point.newPoint(x, y);
     }
 
     @Override
@@ -70,6 +70,24 @@ public class SimpleCamera implements Camera {
     }
 
     @Override
+    public boolean isInBounds(final Point point) {
+        return (point.getX() <= bottomRight.getX()) && (point.getX() >= topLeft.getX()) && (point.getY() >= topLeft.getY()) && (point.getY() <= bottomRight.getY());
+    }
+
+    @Override
+    public boolean intersects(final Point left, final Point right) {
+        long lx1 = topLeft.getX();
+        long ly1 = topLeft.getY();
+        long rx1 = bottomRight.getX();
+        long ry1 = bottomRight.getY();
+        long lx2 = left.getX();
+        long ly2 = left.getY();
+        long rx2 = right.getX();
+        long ry2 = right.getY();
+        return !(lx1 > rx2 || lx2 > rx1 || ly1 > ry2 || ly2 > ry1);
+    }
+
+    @Override
     public void smoothAnimTo(final Point newCenter) {
         this.isAnimating = true;
         this.animateTo = newCenter;
@@ -85,19 +103,29 @@ public class SimpleCamera implements Camera {
         }
     }
 
+    @Override
+    public long getHeight() {
+        return height;
+    }
+
+    @Override
+    public long getWidth() {
+        return width;
+    }
+
     private void animate(final long deltaTime) {
-        float timeF  = deltaTime / 1000;
+        double timeF = (double) (((double) deltaTime) / 1000d);
         Point curCenter = getCenter();
-        long curX = curCenter.x;
-        long curY = curCenter.y;
-        long destX = animateTo.x;
-        long destY = animateTo.y;
+        long curX = curCenter.getX();
+        long curY = curCenter.getY();
+        long destX = animateTo.getX();
+        long destY = animateTo.getY();
 
         long betweenX = Math.abs(destX - curX);
         long betweenY = Math.abs(destY - curY);
 
         long dx = (long) (BASIC_ANIM_SPEED * timeF);
-        long dy =(long) (BASIC_ANIM_SPEED * timeF);
+        long dy = (long) (BASIC_ANIM_SPEED * timeF);
 
         if (dx > betweenX) {
             dx = betweenX;
@@ -110,8 +138,12 @@ public class SimpleCamera implements Camera {
 
         curX = curX + dx;
         curY = curY + dy;
+        Point old = topLeft;
         topLeft = topLeft.add(dx, dy);
+        old.recycle();
+        old = bottomRight;
         bottomRight = bottomRight.add(dx, dy);
+        old.recycle();
         if (curX == destX && curY == destY) {
             stopAnimation();
         }
@@ -123,7 +155,7 @@ public class SimpleCamera implements Camera {
     }
 
     private boolean shouldRecalculate() {
-        return !isAnimating && observedObject.getRealX() != observedLastX && observedObject.getRealY() != observedLastY;
+        return !isAnimating && (observedObject.getRealX() != observedLastX || observedObject.getRealY() != observedLastY);
     }
 
     private void recalculateBounds() {
@@ -135,8 +167,16 @@ public class SimpleCamera implements Camera {
         long topLeftY = y - halfHeight;
         long botRightX = x + halfWidth;
         long botRightY = y + halfHeight;
-        topLeft = new Point(topLeftX, topLeftY);
-        bottomRight = new Point(botRightX, botRightY);
+        if (topLeft != null) {
+            topLeft.recycle();
+        }
+        topLeft = Point.newPoint(topLeftX, topLeftY);
+        if (bottomRight != null) {
+            bottomRight.recycle();
+        }
+        bottomRight = Point.newPoint(botRightX, botRightY);
+        observedLastX = x;
+        observedLastY = y;
     }
 
 }

@@ -1,28 +1,64 @@
 package game.core.model;
 
+import game.util.Pool;
+
 /**
  * Created by Semyon Danilov on 02.07.2014.
  */
-public class Point {
+public class Point implements Pool.Poolable<Point> {
 
-    public final Long x;
-    public final Long y;
+    private static final Pool<Point> pool = new Pool<Point>(50, new Pool.Factory<Point>() {
+        @Override
+        public Point newInstance() {
+            return new Point();
+        }
+    });
 
-    public Point(final Long x, final Long y) {
+    private long x;
+    private long y;
+
+    public static Point newPoint(final long x, final long y) {
+        Point p = pool.get();
+        p.setX(x);
+        p.setY(y);
+        return p;
+    }
+
+    public void recycle() {
+        pool.free(this);
+    }
+
+    public long getX() {
+        return x;
+    }
+
+    private void setX(final long x) {
         this.x = x;
+    }
+
+    public long getY() {
+        return y;
+    }
+
+    private void setY(final long y) {
         this.y = y;
     }
 
-    public Point addX(final Long x) {
-        return new Point(this.x + x, y);
+    public Point addX(final long x) {
+        return newPoint(this.x + x, y);
     }
 
-    public Point addY(final Long y) {
-        return new Point(x, this.y + y);
+    public Point addY(final long y) {
+        return newPoint(x, this.y + y);
     }
 
-    public Point add(final Long x, final Long y) {
-        return new Point(this.x + x, this.y + y);
+    public Point add(final long x, final long y) {
+        return newPoint(this.x + x, this.y + y);
+    }
+
+    @Override
+    public void clear() {
+
     }
 
 }

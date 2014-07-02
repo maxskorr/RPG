@@ -22,7 +22,16 @@ public interface Camera {
 
     void setBottomRightBound(final Point point);
 
+    boolean isInBounds(final Point point);
+
+    boolean intersects(final Point left, final Point right);
+
     void smoothAnimTo(final Point newCenter);
 
     void update(final long deltaTime);
+
+    long getHeight();
+
+    long getWidth();
+
 }

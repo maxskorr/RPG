@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static game.util.GameOptions.*;
@@ -23,7 +24,7 @@ import static game.util.GameOptions.*;
 public class MapFactory {
 
     public static LevelMap generateRandomMap(final int width, final int height, final GameWorld gameWorld) {
-        final ArrayList<ArrayList<Tile>> tiles = new ArrayList<>(height);
+        final List<List<Tile>> tiles = new ArrayList<>(height);
 
         for (int i = 0; i < height; i++) {
             tiles.add(new ArrayList<Tile>(width));

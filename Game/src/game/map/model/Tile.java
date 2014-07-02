@@ -3,6 +3,7 @@ package game.map.model;
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
+import game.util.GameOptions;
 
 import java.util.Stack;
 
@@ -11,6 +12,7 @@ import java.util.Stack;
  */
 public class Tile {
 
+    private GameOptions.TILE_TYPE type;
     private boolean visitable;
     private final Stack<GameObject> layers; // Слои тайла
     public final int MAX_DEPTH = 3; // Максимальное количество слоёв
@@ -30,10 +32,11 @@ public class Tile {
         return drawables;
     }
 
-    public Tile(final GameObject resident, final boolean visitable, final GameWorld gameWorld) {
+    public Tile(final GameObject resident, final boolean visitable, final GameWorld gameWorld, final GameOptions.TILE_TYPE type) {
         setVisitable(visitable);
         layers = new Stack<>();
         layers.add(resident);
+        this.type = type;
     }
 
     public GameObject popGameObject() {

@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public interface Drawable {
 
-    public void beforeRender();
+    public void afterRender(final Graphics graphics, final int x, final int y);
 
     public void onRender(final Graphics graphics, final int x, final int y);
 

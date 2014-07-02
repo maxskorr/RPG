@@ -3,6 +3,7 @@ package game.util;
 import game.graphics.Animation;
 import game.graphics.ImageSet;
 import game.graphics.sprite.AnimatedSprite;
+import game.graphics.sprite.DebugSprite;
 import game.graphics.sprite.Sprite;
 import game.graphics.sprite.model.AbstractSprite;
 
@@ -150,7 +151,7 @@ public class ResourceManager {
         } else {
             sprite = new Sprite(imageSet.getImage(0));
         }
-        return sprite;
+        return Build.DEBUG ? new DebugSprite(sprite) : sprite;
     }
 
     /**
@@ -183,12 +184,13 @@ public class ResourceManager {
 
         final AbstractSprite sprite;
 
-        if (cols == 1)
+        if (cols == 1) {
             sprite = new Sprite(complexImage.get(y).getImage(x));
-        else
+        } else {
             sprite = new AnimatedSprite(new Animation(new ImageSet(complexImage.get(y).getImages(x, cols))));
+        }
 
-        return sprite;
+        return Build.DEBUG ? new DebugSprite(sprite) : sprite;
     }
 
     public static int getAnimationsNumberByTitle(final String title) {

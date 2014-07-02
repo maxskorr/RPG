@@ -2,6 +2,7 @@ package game.core;
 
 import game.core.camera.Camera;
 import game.core.camera.SimpleCamera;
+import game.core.model.Point;
 import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
 import game.map.model.Tile;
@@ -69,63 +70,52 @@ public class GameFrame extends JFrame {
         g.setColor(Color.black); // Выбрать цвет
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        int centerRenderX = player.getTileX() - (WINDOW_WIDTH / 2 / TILE_SIZE);
-        int centerRenderY = player.getTileY() - (WINDOW_HEIGHT / 2 / TILE_SIZE);
+        Point center = camera.getCenter();
+        int centerRenderX = (int) (center.getX() - (camera.getWidth() / 2));
+        int centerRenderY = (int) (center.getY() - (camera.getHeight() / 2));
+        List<List<Tile>> tiles = gameWorld.getCurrentLevel().getLevelMap().getTiles();
 
-        int startRenderX = player.getTileX() - RANGE + 1;
-        int startRenderY = player.getTileY() - RANGE + 1;
+        for (int y = 0; y < tiles.size(); y++) {
+            List<Tile> row = tiles.get(y);
+            for (int x = 0; x < row.size(); x++) {
+                Tile tile = row.get(x);
+                int xC = x * TILE_SIZE;
+                int yC = y * TILE_SIZE;
+                Point p = Point.newPoint(xC, yC);
+                Point p2 = p.add(TILE_SIZE, TILE_SIZE);
+                if (camera.intersects(p, p2)) {
+                    xC -= centerRenderX;
+                    yC -= centerRenderY;
 
-        if (startRenderX < 0) {
-            startRenderX = 0;
-        }
+                    final Stack<Drawable> drawables = tile.getDrawables();
 
-        if (startRenderY < 0) {
-            startRenderY = 0;
-        }
-
-        int finalRenderX = player.getTileX() + RANGE;
-        int finalRenderY = player.getTileY() + RANGE;
-        final int maxRenderX = gameWorld.getCurrentLevel().getLevelMap().getWidth();
-        final int maxRenderY = gameWorld.getCurrentLevel().getLevelMap().getHeight();
-
-        if (finalRenderX > maxRenderX) {
-            finalRenderX = maxRenderX;
-        }
-
-        if (finalRenderY > maxRenderY) {
-            finalRenderY = maxRenderY;
-        }
-
-        for (int x = startRenderX; x < finalRenderX; x++) {
-            for (int y = startRenderY; y < finalRenderY; y++) {
-                Tile tile = gameWorld.getCurrentLevel().getLevelMap().getTile(x, y);
-                int xC = (x - centerRenderX) * TILE_SIZE;
-                int yC = (y - centerRenderY) * TILE_SIZE;
-
-                final Stack<Drawable> drawables = tile.getDrawables();
-
-                for (Drawable drawable: drawables) {
-                    drawable.onRender(g, xC - player.getDeltaRenderX(), yC - player.getDeltaRenderY());
+                    for (Drawable drawable: drawables) {
+                        drawable.onRender(g, xC, yC);
+                        drawable.afterRender(g, xC, yC);
+                    }
                 }
+                p.recycle();
+                p2.recycle();
             }
         }
 
         for (Iterator<GameObject> it = gameObjects.iterator(); it.hasNext();) {
             GameObject object = it.next();
-            if ((startRenderX < object.getTileX() && object.getTileX() < finalRenderX) && (startRenderY < object.getTileY() && object.getTileY() < finalRenderY)) {
+            int xC = object.getRealX();
+            int yC = object.getRealY();
+            Point p = Point.newPoint(xC, yC);
+            Point p2 = p.add(TILE_SIZE, TILE_SIZE);
+            if (camera.intersects(p, p2)) {
+                xC -= centerRenderX;
+                yC -= centerRenderY;
                 Drawable drawable = object.getDrawable();
-                final int x,y;
-                if(object!=player) {
-                     x = (object.getTileX() - centerRenderX) * TILE_SIZE + object.getDeltaRenderX() - player.getDeltaRenderX();
-                     y = (object.getTileY() - centerRenderY) * TILE_SIZE + object.getDeltaRenderY() - player.getDeltaRenderY();
-                }else{
-                     x = (object.getTileX() - centerRenderX) * TILE_SIZE;
-                     y = (object.getTileY() - centerRenderY) * TILE_SIZE;
-                }
-                drawable.onRender(g, x, y);
+                drawable.onRender(g, xC, yC);
+                drawable.afterRender(g, xC, yC);
             }
+            p2.recycle();
+            p.recycle();
         }
-
+        center.recycle();
         g.dispose();
         bs.show(); //показать
     }

@@ -16,8 +16,6 @@ import java.util.List;
  */
 public class KeyboardController implements Controller {
 
-    private final int[] keys = {};
-
     public static final int UP = java.awt.event.KeyEvent.VK_UP;
     public static final int RIGHT = java.awt.event.KeyEvent.VK_RIGHT;
     public static final int DOWN = java.awt.event.KeyEvent.VK_DOWN;
@@ -69,21 +67,21 @@ public class KeyboardController implements Controller {
             } else if (type == KeyEvent.KEY_DOWN) {
                 switch (keyCode) {
                     case UP:
-                        getUnitUnderControl().setSpeedY(-1);
+                        getUnitUnderControl().setSpeedY(-8);
                         break;
                     case RIGHT:
-                        getUnitUnderControl().setSpeedX(1);
+                        getUnitUnderControl().setSpeedX(8);
                         break;
                     case DOWN:
-                        getUnitUnderControl().setSpeedY(1);
+                        getUnitUnderControl().setSpeedY(8);
                         break;
                     case LEFT:
-                        getUnitUnderControl().setSpeedX(-1);
+                        getUnitUnderControl().setSpeedX(-8);
                         break;
                     case FIRE:
                         final Unit unit = getUnitUnderControl();
-                        final int x = unit.getRealX() + GameOptions.TILE_SIZE * unit.getLookDirection().getX();
-                        final int y = unit.getRealY() + GameOptions.TILE_SIZE * unit.getLookDirection().getY();
+                        final int x = unit.getRealX();
+                        final int y = unit.getRealY();
                         final Fireball fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
                         fireball.setDirection(unit.getLookDirection());
                         unit.getGameWorld().addGameObject(fireball);

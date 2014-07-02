@@ -24,7 +24,7 @@ public class Sprite extends AbstractSprite {
     }
 
     @Override
-    public void beforeRender() {
+    public void afterRender(final Graphics graphics, final int x, final int y) {
 
     }
 

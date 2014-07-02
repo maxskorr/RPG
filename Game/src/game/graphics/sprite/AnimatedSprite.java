@@ -24,8 +24,13 @@ public class AnimatedSprite extends AbstractSprite {
         this.animation = animation;
     }
 
+    protected AnimatedSprite() {
+        this.animation = null;
+    }
+
     @Override
-    public void beforeRender() {
+    public void afterRender(final Graphics graphics, final int x, final int y) {
+
     }
 
     @Override
