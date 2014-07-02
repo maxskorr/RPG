@@ -37,6 +37,10 @@ public class Unit extends GameObject {
         this.alive = alive;
         this.maxHp = hp;
         this.hp = hp;
+
+        this.maxHp = mp;
+        this.hp = this.maxHp;
+
         this.name = name;
         this.speedX = speedX;
         this.speedY = speedY;
@@ -110,6 +114,32 @@ public class Unit extends GameObject {
 
     public void setMaxHp(final int maxHp) {
         this.maxHp = (maxHp < 0 ? maxHp : 0);
+    }
+
+    public int getMp() {
+        return mp;
+    }
+
+    public void setMp(final int mp) {
+        if (mp <= 0) {
+            this.mp = 0;
+
+            return;
+        }
+
+        if (hp > getMaxMp()) {
+            this.mp = getMaxMp();
+        } else {
+            this.mp = mp;
+        }
+    }
+
+    public int getMaxMp() {
+        return maxMp;
+    }
+
+    public void setMaxMp(final int maxMp) {
+        this.maxMp = (maxMp < 0 ? maxMp : 0);
     }
 
     public String getName() {
@@ -252,9 +282,11 @@ public class Unit extends GameObject {
     public void updateAttributes() {
         if(isAlive()) {
             if(getHp() < getMaxHp()) {
-            setHp((int) (getHp() + Math.ceil(getMaxHp() * 0.01)));
+                setHp((int) (getHp() + Math.ceil(getMaxHp() * 0.01)));
             }
-            //TODO:Тут проверка на ману
+            if(getMp() < getMaxMp()) {
+                setMp((int) (getMp() + Math.ceil(getMaxMp() * 0.01)));
+            }
             //TODO:Тут пробег по всем эффектам
         }
     }
