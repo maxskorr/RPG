@@ -4,6 +4,7 @@ import game.core.GameWorld;
 import game.graphics.Drawable;
 import game.graphics.sprite.model.AbstractSprite;
 import game.util.GameOptions;
+import game.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +120,7 @@ public abstract class GameObject {
      * @return Координата X
      */
     public int getTileX(){
-        return Math.floorDiv(x, GameOptions.TILE_SIZE);
+        return Utils.floorDiv(x, GameOptions.TILE_SIZE);
     }
 
     /**
@@ -127,7 +128,7 @@ public abstract class GameObject {
      * @return Координата Y
      */
     public int getTileY() {
-        return Math.floorDiv(y, GameOptions.TILE_SIZE);
+        return Utils.floorDiv(y, GameOptions.TILE_SIZE);
     }
 
     public List<AbstractSprite> getSprites() {
