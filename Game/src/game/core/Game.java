@@ -7,7 +7,7 @@ import game.controller.model.Controller;
 import game.core.camera.Camera;
 import game.core.model.Point;
 import game.gameobject.unit.Player;
-import game.level.StartMenu;
+import game.level.RandomLevel;
 import game.level.model.Level;
 import game.util.GameObjectFactory;
 import game.util.Logger;
@@ -75,8 +75,8 @@ public class Game {
 
     public void init() {
         gameWorld = new GameWorld();
-        // final Level level = new RandomLevel(gameWorld);
-        final Level level = new StartMenu(gameWorld);
+        final Level level = new RandomLevel(gameWorld);
+        //final Level level = new StartMenu(gameWorld);
         gameWorld.setCurrentLevel(level);
     }
 

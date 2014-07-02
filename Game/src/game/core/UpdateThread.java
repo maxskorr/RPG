@@ -71,6 +71,13 @@ public class UpdateThread extends Thread {
 
     private void update(final long deltaTime) {
         List<Controller> controllers = game.getControllers();
+
+
+        for (GameObject gameObject : gameWorld.getScheduledForAdd()) {
+            gameWorld.addGameObject(gameObject);
+        }
+        gameWorld.getScheduledForAdd().clear();
+
         for (Controller controller : controllers) {
             controller.update();
         }
@@ -78,11 +85,12 @@ public class UpdateThread extends Thread {
             go.update(deltaTime);
         }
         game.getCamera().update(deltaTime);
-        List<GameObject> scheduledForDelete = gameWorld.getScheduledForDelete(); //иначе ConcurrentModificationException
-        for (GameObject gameObject : scheduledForDelete) {
+        //List<GameObject> scheduledForDelete = gameWorld.getScheduledForDelete(); //иначе ConcurrentModificationException
+        //Мы типа меняем другой список с чего исключение?
+        for (GameObject gameObject : gameWorld.getScheduledForDelete()) {
             gameWorld.removeGameObject(gameObject);
         }
-        scheduledForDelete.clear();
+        gameWorld.getScheduledForDelete().clear();
     }
 
 }

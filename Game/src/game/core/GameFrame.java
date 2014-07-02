@@ -82,6 +82,7 @@ public class GameFrame extends JFrame {
                 int xC = x * TILE_SIZE;
                 int yC = y * TILE_SIZE;
                 Point p = Point.newPoint(xC, yC);
+                //TODO:Убрать тут это адовое создание точек
                 Point p2 = p.add(TILE_SIZE, TILE_SIZE);
                 if (camera.intersects(p, p2)) {
                     xC -= centerRenderX;

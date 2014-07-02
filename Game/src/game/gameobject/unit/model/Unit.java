@@ -271,6 +271,8 @@ public class Unit extends GameObject {
 
                 vy += dy;
             }
+
+          getGameWorld().getCurrentLevel().getLevelMap().getTile(getTileX(), getTileY()).trigger(this);
         } else {
             //TODO: CurrentState (который enum) будет idle
             ((AnimatedSprite) getDrawable()).stop();

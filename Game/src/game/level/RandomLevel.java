@@ -9,6 +9,6 @@ import game.util.MapFactory;
  */
 public class RandomLevel extends Level {
     public RandomLevel(final GameWorld gameWorld) {
-        super( MapFactory.generateRandomMap(10, 10, gameWorld) );
+        super( MapFactory.generateRandomMap(40, 40, gameWorld) );
     }
 }
