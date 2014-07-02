@@ -4,6 +4,7 @@ import game.controller.KeyboardController;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
 import game.core.camera.Camera;
+import game.core.model.Point;
 import game.gameobject.unit.Player;
 import game.level.StartMenu;
 import game.level.model.Level;
@@ -57,7 +58,7 @@ public class Game {
         frame = new GameFrame(this);
         frame.init();
         frame.getCanvas().addKeyListener(keyboardHandler);
-//        getCamera().smoothAnimTo(new Point(200l, 200l));
+        getCamera().smoothAnimTo(new Point(200l, 200l));
     }
 
     public void init() {

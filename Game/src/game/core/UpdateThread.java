@@ -30,12 +30,25 @@ public class UpdateThread extends Thread {
     private long frames;
     private long lastUpdate = System.currentTimeMillis();
 
+    private static final int ENGINE_MAX_FPS = 60;
+
+    private static final int ENGINE_MIN_DELAY = 1000 / ENGINE_MAX_FPS;
+
     @Override
     public void run() {
         while (true) {
             final long s = System.currentTimeMillis();
             renderLock.lock();
-            final long deltaTime = s - lastUpdate;
+            long deltaTime = s - lastUpdate;
+            while (deltaTime < ENGINE_MIN_DELAY) {
+                try {
+                    sleep(ENGINE_MIN_DELAY - deltaTime);
+                } catch (InterruptedException e) {
+                    LOGGER.error(e.getMessage());
+                } finally {
+                    deltaTime = System.currentTimeMillis() - lastUpdate;
+                }
+            }
             lastUpdate = System.currentTimeMillis();
             try {
                 update(deltaTime);

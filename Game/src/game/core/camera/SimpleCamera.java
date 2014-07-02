@@ -9,7 +9,7 @@ import game.gameobject.model.GameObject;
 //следящая камера
 public class SimpleCamera implements Camera {
 
-    private static final long BASIC_ANIM_SPEED = 40; //px/s, keep it positive
+    private static final long BASIC_ANIM_SPEED = 400; //px/s, keep it positive
 
     private Point topLeft;
     private Point bottomRight;
@@ -91,7 +91,7 @@ public class SimpleCamera implements Camera {
     }
 
     private void animate(final long deltaTime) {
-        float timeF  = deltaTime / 1000;
+        double timeF  = (double) (((double) deltaTime) / 1000d);
         Point curCenter = getCenter();
         long curX = curCenter.x;
         long curY = curCenter.y;
@@ -128,7 +128,7 @@ public class SimpleCamera implements Camera {
     }
 
     private boolean shouldRecalculate() {
-        return !isAnimating && observedObject.getRealX() != observedLastX && observedObject.getRealY() != observedLastY;
+        return !isAnimating && (observedObject.getRealX() != observedLastX || observedObject.getRealY() != observedLastY);
     }
 
     private void recalculateBounds() {
