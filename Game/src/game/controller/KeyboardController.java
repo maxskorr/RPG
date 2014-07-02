@@ -82,8 +82,8 @@ public class KeyboardController implements Controller {
                         break;
                     case FIRE:
                         final Unit unit = getUnitUnderControl();
-                        final int x = unit.getRealX();
-                        final int y = unit.getRealY();
+                        final int x = unit.getRealX() + (GameOptions.TILE_SIZE + 1 ) * unit.getLookDirection().getX();
+                        final int y = unit.getRealY() + (GameOptions.TILE_SIZE + 1 ) * unit.getLookDirection().getY();
                         final Fireball fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
                         fireball.setDirection(unit.getLookDirection());
                         unit.getGameWorld().addGameObject(fireball);

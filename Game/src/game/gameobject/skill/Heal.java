@@ -14,7 +14,7 @@ import game.util.ResourceManager;
 public class Heal extends Skill {
 
     private static final int MAX_TIME = 1000;
-    private static final int MAX_ITERATIONS = 6;
+    private static final int MAX_ITERATIONS = 2;
     private static final int ITERATION_TIME = MAX_TIME / MAX_ITERATIONS;
     private int curTime = 0;
     private int curIteration = 1;
@@ -25,7 +25,7 @@ public class Heal extends Skill {
                 final String spriteFileName, final GameWorld gameWorld) {
         super(x, y, spriteFileName, gameWorld);
 
-        final AbstractSprite sprite = ResourceManager.getSprite(spriteFileName, 0);
+        final AbstractSprite sprite  = ResourceManager.getSprite(spriteFileName, 0);
         putSprite(sprite);
         setCurrentSprite(sprite);
     }

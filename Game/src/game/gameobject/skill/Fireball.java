@@ -26,40 +26,23 @@ public class Fireball extends Skill {
         putSprite(sprite);
         setCurrentSprite(sprite);
     }
-уке
     public void setDirection(DIRECTION direction) {
         this.direction = direction;
     }
 
     @Override
     public void updatePhysics() {
-        int dx = 0;
-        int dy = 0;
+        final int x = getRealX() + direction.getX();
+        final int y = getRealY() + direction.getY();
+        final int tileX = getTileX() + direction.getX();
+        final int tileY = getTileY() + direction.getY();
 
-        switch (direction) {
-            case UP:
-                dy = -1;
-                break;
-            case RIGHT:
-                dx = 1;
-                break;
-            case DOWN:
-                dy = 1;
-                break;
-            case LEFT:
-                dx = -1;
-                break;
-        }
-
-        final int x = getTileX() + dx;
-        final int y = getTileY() + dy;
-
-        if (!getGameWorld().isOccupied(x, y)) {
-            setXY(x, y);
+        if (!getGameWorld().isOccupied(tileX, tileY)) {
+            setXY(tileX, tileY);
         } else {
-            final GameObject go = getGameWorld().getGameObjectByPos(x, y);
+            final GameObject go = getGameWorld().getGameObjectByPosition(x, y);
 
-            if (go != null)
+            if (go != this && go != null)
                 act(go);
 
             removeSelf();
