@@ -152,10 +152,6 @@ public class Unit extends GameObject {
         skill.act(this);
     }
 
-    public void moveTo(final Integer x, final Integer y) {
-        setXY(x, y);
-    }
-
     public boolean isMoving() {
       return ( getSpeedX() != 0 || getSpeedY() != 0 );
     }

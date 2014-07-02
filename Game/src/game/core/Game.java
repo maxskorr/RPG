@@ -1,9 +1,10 @@
 package game.core;
 
 import game.controller.KeyboardController;
-import game.controller.KeyboardController2;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
+import game.core.camera.Camera;
+import game.core.model.Point;
 import game.gameobject.unit.Player;
 import game.level.StartMenu;
 import game.level.model.Level;
@@ -45,28 +46,19 @@ public class Game {
 
     public Game() {
         init();
-        frame = new GameFrame(this);
-        frame.init();
 
         // При создании игрока используем реальные координаты(в пикселах)!
         final Player player = (Player) GameObjectFactory.make(20, 20, PLAYER, gameWorld);
         gameWorld.addGameObject(player);
         gameWorld.setPlayer(player);
 
-
         KeyboardHandler keyboardHandler = new KeyboardHandler();
         final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);
         controllers.add(keyboardController);
-
-        final Player player2 = (Player) GameObjectFactory.make(60, 60, PLAYER, gameWorld);
-        gameWorld.addGameObject(player2);
-
-        KeyboardHandler keyboardHandler2 = new KeyboardHandler();
-        final KeyboardController2 keyboardController2 = new KeyboardController2(keyboardHandler2, player2);
-        controllers.add(keyboardController2);
-
+        frame = new GameFrame(this);
+        frame.init();
         frame.getCanvas().addKeyListener(keyboardHandler);
-        frame.getCanvas().addKeyListener(keyboardHandler2);
+        getCamera().smoothAnimTo(new Point(200l, 200l));
     }
 
     public void init() {
@@ -78,6 +70,10 @@ public class Game {
 
     public void startRender() {
         SwingUtilities.invokeLater(renderRunnable);
+    }
+
+    public Camera getCamera() {
+        return frame.getCamera();
     }
 
     private Runnable renderRunnable = new Runnable() {
