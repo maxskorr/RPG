@@ -1,5 +1,7 @@
 package game.core;
 
+import game.core.camera.Camera;
+import game.core.camera.SimpleCamera;
 import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
 import game.map.model.Tile;
@@ -20,6 +22,7 @@ public class GameFrame extends JFrame {
     private Game game;
     private GameWorld gameWorld;
     private GameObject player;
+    private Camera camera;
 
     public Canvas getCanvas() {
         return canvas;
@@ -32,8 +35,10 @@ public class GameFrame extends JFrame {
     }
 
     void init() {
+        player = gameWorld.getPlayer();
         canvas = new Canvas();
-        getCanvas().setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        canvas.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        camera = new SimpleCamera(player, WINDOW_WIDTH, WINDOW_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //выход из приложения по нажатию клавиши ESC
         setLayout(new BorderLayout());
         add(getCanvas(), BorderLayout.CENTER); //добавляем холст на наш фрейм
@@ -52,7 +57,6 @@ public class GameFrame extends JFrame {
 
     public void render() {
         List<GameObject> gameObjects = gameWorld.getGameObjects();
-        player = gameWorld.getPlayer();
         BufferStrategy bs = getCanvas().getBufferStrategy();
 
         if (bs == null) {
