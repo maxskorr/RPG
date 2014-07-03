@@ -65,6 +65,6 @@ public class Fireball extends Skill {
         Logger.getLogger(this.getClass()).log("unitHp: " + unit.getHp() + "; damage: " + damage);
         unit.changeHp(-damage);
 
-        getGameWorld().scheduledForAddDrawable(new DamageTaken(getRealX(), getRealY(), -damage, getGameWorld()));
+        getGameWorld().scheduledForAddHUD(new DamageTaken(getRealX(), getRealY(), -damage, getGameWorld()));
     }
 }

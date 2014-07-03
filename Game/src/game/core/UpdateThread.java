@@ -3,7 +3,7 @@ package game.core;
 import game.controller.model.Controller;
 import game.core.camera.Camera;
 import game.gameobject.model.GameObject;
-import game.graphics.Drawable;
+import game.graphics.sprite.hud.model.Hud;
 import game.util.Logger;
 
 import java.util.Set;
@@ -79,12 +79,12 @@ public class UpdateThread extends Thread {
             gameWorld.addGameObject(gameObject);
         }
 
-        for (Drawable drawable: gameWorld.getScheduledForAddDrawables()) {
-            gameWorld.addDrawable(drawable);
+        for (Hud hud: gameWorld.getScheduledForAddHUDs()) {
+            gameWorld.addHUD(hud);
         }
 
         gameWorld.getScheduledForAddGameObjects().clear();
-        gameWorld.getScheduledForAddDrawables().clear();
+        gameWorld.getScheduledForAddHUDs().clear();
         // **
 
         game.getKeyboardHandler().getKeyEvents();
@@ -109,12 +109,12 @@ public class UpdateThread extends Thread {
             gameWorld.removeGameObject(gameObject);
         }
 
-        for (Drawable drawable: gameWorld.getScheduledForDeleteDrawables()) {
-            gameWorld.removeDrawable(drawable);
+        for (Hud hud: gameWorld.getScheduledForDeleteHUDs()) {
+            gameWorld.removeHUD(hud);
         }
 
         gameWorld.getScheduledForDeleteGameObjects().clear();
-        gameWorld.getScheduledForDeleteDrawables().clear();
+        gameWorld.getScheduledForDeleteHUDs().clear();
         // **
     }
 

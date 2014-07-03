@@ -2,7 +2,7 @@ package game.core;
 
 import game.gameobject.model.GameObject;
 import game.gameobject.unit.Player;
-import game.graphics.Drawable;
+import game.graphics.sprite.hud.model.Hud;
 import game.level.model.Level;
 import game.map.model.LevelMap;
 import game.util.GameOptions;
@@ -22,12 +22,11 @@ public class GameWorld {
 
     private Set<GameObject> scheduledForAddGameObjects;
 
-        private Set<Drawable> drawables = null;
+    private Set<Hud> HUDs = null;
 
-        private Set<Drawable> scheduledForDeleteDrawables = null;
+    private Set<Hud> scheduledForDeleteHUDs = null;
 
-
-        private Set<Drawable> scheduledForAddDrawables = null;
+    private Set<Hud> scheduledForAddHUDs = null;
 
     private Level currentLevel;
 
@@ -40,9 +39,9 @@ public class GameWorld {
         this.scheduledForDeleteGameObjects = new LinkedHashSet<>();
         this.scheduledForAddGameObjects = new LinkedHashSet<>();
 
-        this.drawables = new LinkedHashSet<>();
-        this.scheduledForDeleteDrawables = new LinkedHashSet<>();
-        this.scheduledForAddDrawables = new LinkedHashSet<>();
+        this.HUDs = new LinkedHashSet<>();
+        this.scheduledForDeleteHUDs = new LinkedHashSet<>();
+        this.scheduledForAddHUDs = new LinkedHashSet<>();
     }
 
     public void setPlayer(final Player player) {
@@ -176,40 +175,40 @@ public class GameWorld {
         scheduledForAddGameObjects.add(gameObject);
     }
 
-    public void scheduledForAddDrawable(final Drawable drawable) {
-        if (scheduledForAddDrawables == null)
+    public void scheduledForAddHUD(final Hud hud) {
+        if (scheduledForAddHUDs == null)
             throw new NullPointerException();
 
-        scheduledForAddDrawables.add(drawable);
+        scheduledForAddHUDs.add(hud);
     }
 
-    public void scheduledForDeleteDrawable(final Drawable drawable) {
-        scheduledForDeleteDrawables.add(drawable);
+    public void scheduledForDeleteHUD(final Hud hud) {
+        scheduledForDeleteHUDs.add(hud);
     }
 
-    public Set<Drawable> getScheduledForDeleteDrawables() {
-        return scheduledForDeleteDrawables;
+    public Set<Hud> getScheduledForDeleteHUDs() {
+        return scheduledForDeleteHUDs;
     }
 
-    public void removeDrawable(final Drawable drawable) {
-        if (drawables == null)
+    public void removeHUD(final Hud hud) {
+        if (HUDs == null)
             throw new NullPointerException();
 
-        drawables.remove(drawable);
+        HUDs.remove(hud);
     }
 
-    public Set<Drawable> getDrawables() {
-        return drawables;
+    public Set<Hud> getHUDs() {
+        return HUDs;
     }
 
-    public Set<Drawable> getScheduledForAddDrawables() {
-        return scheduledForAddDrawables;
+    public Set<Hud> getScheduledForAddHUDs() {
+        return scheduledForAddHUDs;
     }
 
-    public void addDrawable(final Drawable drawable) {
-        if (drawables == null)
+    public void addHUD(final Hud hud) {
+        if (HUDs == null)
             throw new NullPointerException();
 
-        drawables.add(drawable);
+        HUDs.add(hud);
     }
 }

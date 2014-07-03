@@ -2,7 +2,6 @@ package game.core;
 
 import game.controller.BotController;
 import game.controller.KeyboardController;
-import game.controller.KeyboardController2;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
 import game.core.camera.Camera;
@@ -55,18 +54,20 @@ public class Game {
 
         // При создании игрока используем реальные координаты(в пикселах)!
         final Player player = (Player) GameObjectFactory.make(20, 20, PLAYER, gameWorld);
+        gameWorld.addGameObject(player);
         gameWorld.setPlayer(player);
-        gameWorld.addUnit(player, controllers, new KeyboardController(keyboardHandler, player));
 
-
+        final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);
+        controllers.add(keyboardController);
 
         //Добавление 2 игрока
         final Player player2 = (Player) GameObjectFactory.make(40, 60, PLAYER, gameWorld);
+        gameWorld.addGameObject(player2);
         gameWorld.setSecondPlayer(player2);
-        gameWorld.addUnit(player2, controllers, new KeyboardController2(keyboardHandler, player2));
-
-        final Player bot = (Player) GameObjectFactory.make(80, 80, PLAYER, gameWorld);
-        gameWorld.addUnit(bot, controllers, new BotController(bot));
+        BotController botController = new BotController(player2);
+        controllers.add(botController);
+//        final KeyboardController2 keyboardController2 = new KeyboardController2(keyboardHandler, player2);
+//        controllers.add(keyboardController2);
 
         frame = new GameFrame(this);
         frame.init();

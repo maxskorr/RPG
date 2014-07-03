@@ -5,7 +5,7 @@ import game.core.GameWorld;
 import game.core.model.Point;
 import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
-import game.graphics.sprite.hud.DamageTaken;
+import game.graphics.sprite.hud.model.Hud;
 import game.map.model.Tile;
 import game.util.Build;
 import game.util.GameOptions;
@@ -218,10 +218,9 @@ public abstract class BaseCamera implements Camera {
             p.recycle();
         }
 
-        for (Drawable drawable: gameWorld.getDrawables()) {
-            DamageTaken damageTaken = (DamageTaken)drawable;
-            int xC = damageTaken.getX();
-            int yC = damageTaken.getY();
+        for (Hud hud: gameWorld.getHUDs()) {
+            int xC = hud.getX();
+            int yC = hud.getY();
 
             Point p = Point.newPoint(xC, yC);
             Point p2 = p.add(TILE_SIZE, TILE_SIZE);
@@ -230,8 +229,8 @@ public abstract class BaseCamera implements Camera {
                 xC -= cameraOffsetX;
                 yC -= centerRenderY;
 
-                drawable.onRender(g, xC, yC);
-                drawable.afterRender(g, xC, yC);
+                hud.onRender(g, xC, yC);
+                hud.afterRender(g, xC, yC);
             }
 
             p2.recycle();
