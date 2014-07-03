@@ -15,6 +15,7 @@ public class Player extends Unit {
         super(x, y, spriteFileName, true, PlayerOptionsProvider.getName(),
                 PlayerOptionsProvider.getMaxHp(), 0, 0, PlayerOptionsProvider.getMaxSpeed(), gameWorld);
         setDef(PlayerOptionsProvider.getDef());
+        setFraction(1);
 
         for (int i = 0; i < 4; i++) {
             final AbstractSprite sprite
