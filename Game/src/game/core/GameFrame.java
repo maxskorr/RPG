@@ -6,6 +6,7 @@ import game.core.model.Point;
 import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
 import game.map.model.Tile;
+import game.util.Build;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,8 +39,8 @@ public class GameFrame extends JFrame {
     void init() {
         player = gameWorld.getPlayer();
         canvas = new Canvas();
-        canvas.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
-        camera = new SimpleCamera(player, WINDOW_WIDTH, WINDOW_HEIGHT);
+        canvas.setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+        camera = new SimpleCamera(player, CANVAS_WIDTH, CANVAS_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //выход из приложения по нажатию клавиши ESC
         setLayout(new BorderLayout());
         add(getCanvas(), BorderLayout.CENTER); //добавляем холст на наш фрейм
@@ -50,8 +51,8 @@ public class GameFrame extends JFrame {
 
     public static int WINDOW_WIDTH = 400; //ширина
     public static int WINDOW_HEIGHT = 300; //высота
-    public static int CANVAS_HEIGHT = 300; //высота canvas
-    public static int CANVAS_WIDTH = 300; //высота canvas
+    public static int CANVAS_HEIGHT = 320; //высота canvas
+    public static int CANVAS_WIDTH = 420; //высота canvas
     public static int TILE_SIZE = 20; //размер тайла
     public static int RANGE = 15; //дальность обзора
     public static String NAME = "Level 1";
@@ -70,9 +71,9 @@ public class GameFrame extends JFrame {
         g.setColor(Color.black); // Выбрать цвет
         g.fillRect(0, 0, getWidth(), getHeight());
 
-        Point center = camera.getCenter();
-        int centerRenderX = (int) (center.getX() - (camera.getWidth() / 2));
-        int centerRenderY = (int) (center.getY() - (camera.getHeight() / 2));
+        Point cameraOffsetPoint = camera.getTopLeftBound();
+        int cameraOffsetX = (int) cameraOffsetPoint.getX();
+        int centerRenderY = (int) cameraOffsetPoint.getY();
         List<List<Tile>> tiles = gameWorld.getCurrentLevel().getLevelMap().getTiles();
 
         for (int y = 0; y < tiles.size(); y++) {
@@ -85,7 +86,7 @@ public class GameFrame extends JFrame {
                 //TODO:Убрать тут это адовое создание точек
                 Point p2 = p.add(TILE_SIZE, TILE_SIZE);
                 if (camera.intersects(p, p2)) {
-                    xC -= centerRenderX;
+                    xC -= cameraOffsetX;
                     yC -= centerRenderY;
 
                     final Stack<Drawable> drawables = tile.getDrawables();
@@ -107,7 +108,7 @@ public class GameFrame extends JFrame {
             Point p = Point.newPoint(xC, yC);
             Point p2 = p.add(TILE_SIZE, TILE_SIZE);
             if (camera.intersects(p, p2)) {
-                xC -= centerRenderX;
+                xC -= cameraOffsetX;
                 yC -= centerRenderY;
                 Drawable drawable = object.getDrawable();
                 drawable.onRender(g, xC, yC);
@@ -116,7 +117,19 @@ public class GameFrame extends JFrame {
             p2.recycle();
             p.recycle();
         }
-        center.recycle();
+        if (Build.DEBUG) {
+            int xSz = CANVAS_WIDTH / TILE_SIZE;
+            int ySz = CANVAS_HEIGHT / TILE_SIZE;
+            g.setColor(Color.red);
+            for (int i = 0; i < xSz; i++) {
+                int x = i * TILE_SIZE;
+                g.drawLine(x, 0, x, CANVAS_HEIGHT);
+            }
+            for (int i = 0; i < ySz; i++) {
+                int y = i * TILE_SIZE;
+                g.drawLine(0, y, CANVAS_WIDTH, y);
+            }
+        }
         g.dispose();
         bs.show(); //показать
     }
