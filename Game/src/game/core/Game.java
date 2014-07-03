@@ -12,6 +12,8 @@ import game.util.GameObjectFactory;
 import game.util.Logger;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -68,7 +70,15 @@ public class Game {
 
         frame = new GameFrame(this);
         frame.init();
-        frame.getCanvas().addKeyListener(keyboardHandler);
+
+        KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        manager.addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(final KeyEvent e) {
+                keyboardHandler.onKey(e);
+                return false;
+            }
+        });
 
         //getCamera().smoothAnimTo(Point.newPoint(200l, 200l));
     }

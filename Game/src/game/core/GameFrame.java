@@ -34,9 +34,9 @@ public class GameFrame extends JFrame {
     void init() {
         player = gameWorld.getPlayer();
         canvas = new Canvas();
-        canvas.setSize(new Dimension(WINDOW_WIDTH / 2, WINDOW_HEIGHT));
+        canvas.setSize(new Dimension((WINDOW_WIDTH / 2) - 20, WINDOW_HEIGHT));
         Canvas canvas1 = new Canvas();
-        canvas1.setSize(new Dimension(WINDOW_WIDTH / 2, WINDOW_HEIGHT));
+        canvas1.setSize(new Dimension((WINDOW_WIDTH / 2) - 20, WINDOW_HEIGHT));
         Camera fpCamera = new SimpleCamera(game, canvas, player, CAMERA_WIDTH, CAMERA_HEIGHT);
         GameObject secondPlayer = gameWorld.getSecondPlayer();
         Camera spCamera = new SimpleCamera(game, canvas1, secondPlayer, CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -45,14 +45,18 @@ public class GameFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //выход из приложения по нажатию клавиши ESC
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.LINE_START); //добавляем холст на наш фрейм
+        JPanel p = new JPanel();
+        p.setPreferredSize(new Dimension(40, WINDOW_HEIGHT));
+        p.setBackground(Color.gray);
+        add(p, BorderLayout.CENTER);
         add(canvas1, BorderLayout.LINE_END); //добавляем холст на наш фрейм
         pack();
         setResizable(false);
         setVisible(true);
-        canvas.requestFocus();
+        requestFocus();
     }
 
-    public static int WINDOW_WIDTH = 800; //ширина
+    public static int WINDOW_WIDTH = 840; //ширина
     public static int WINDOW_HEIGHT = 300; //высота
     public static int CAMERA_HEIGHT = 320; //высота canvas
     public static int CAMERA_WIDTH = 420; //высота canvas

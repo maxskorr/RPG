@@ -16,7 +16,7 @@ import static game.util.GameOptions.DIRECTION;
 public class Fireball extends Skill {
     private static final int BASE_DAMAGE = 10;
     private static final int MAX_VARIABLE_DAMAGE = 10;
-    private static final int SPEED = 3;
+    private static final int SPEED = 7;
     private DIRECTION direction;
 
     public Fireball(final Integer x, final Integer y,
@@ -33,12 +33,14 @@ public class Fireball extends Skill {
 
     @Override
     public void updatePhysics() {
-        final int x = getRealX() + direction.getX() * SPEED;
-        final int y = getRealY() + direction.getY() * SPEED;
+        int dx = direction.getX() * SPEED;
+        int dy = direction.getY() * SPEED;
+        final int x = getRealX() + dx;
+        final int y = getRealY() + dy;
 
         if (!getGameWorld().isOccupiedByRealPos(this, x, y)) {
-            changeX(direction.getX());
-            changeY(direction.getY());
+            changeX(dx);
+            changeY(dy);
         } else {
             final GameObject go = getGameWorld().getGameObjectByRealPos(x, y);
 
