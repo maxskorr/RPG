@@ -1,7 +1,9 @@
 package game.core;
 
+import game.controller.model.Controller;
 import game.gameobject.model.GameObject;
 import game.gameobject.unit.Player;
+import game.gameobject.unit.model.Unit;
 import game.level.model.Level;
 import game.map.model.LevelMap;
 import game.util.GameOptions;
@@ -160,5 +162,10 @@ public class GameWorld {
             throw new NullPointerException();
 
         scheduledForAdd.add(gameObject);
+    }
+
+    public void addUnit(Unit unit, List<Controller> controllers, Controller keyboardController) {
+        addGameObject(unit);
+        controllers.add(keyboardController);
     }
 }

@@ -84,7 +84,7 @@ public class BotController implements Controller {
 
             }
             } else {
-
+            //TODO: Тут нужно установить удаление контроллера
             }
         }
 
