@@ -16,12 +16,12 @@ import java.util.List;
  */
 public class KeyboardController implements Controller {
 
-    public static final int UP = java.awt.event.KeyEvent.VK_UP;
-    public static final int RIGHT = java.awt.event.KeyEvent.VK_RIGHT;
-    public static final int DOWN = java.awt.event.KeyEvent.VK_DOWN;
-    public static final int LEFT = java.awt.event.KeyEvent.VK_LEFT;
-    public static final int FIRE = java.awt.event.KeyEvent.VK_SHIFT;
-    public static final int HEAL = java.awt.event.KeyEvent.VK_CONTROL;
+    public static final int UP = java.awt.event.KeyEvent.VK_W;
+    public static final int RIGHT = java.awt.event.KeyEvent.VK_D;
+    public static final int DOWN = java.awt.event.KeyEvent.VK_S;
+    public static final int LEFT = java.awt.event.KeyEvent.VK_A;
+    public static final int FIRE = java.awt.event.KeyEvent.VK_Q;
+    public static final int HEAL = java.awt.event.KeyEvent.VK_E;
 
     private final Unit unitUnderControl;
     private final KeyboardHandler keyboardHandler;

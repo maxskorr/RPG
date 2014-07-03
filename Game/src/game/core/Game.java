@@ -1,7 +1,7 @@
 package game.core;
 
-import game.controller.BotController;
 import game.controller.KeyboardController;
+import game.controller.KeyboardController2;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
 import game.core.camera.Camera;
@@ -61,10 +61,10 @@ public class Game {
         final Player player2 = (Player) GameObjectFactory.make(40, 60, PLAYER, gameWorld);
         gameWorld.addGameObject(player2);
         gameWorld.setSecondPlayer(player2);
-        BotController botController = new BotController(player2);
-        controllers.add(botController);
-//        final KeyboardController2 keyboardController2 = new KeyboardController2(keyboardHandler, player2);
-//        controllers.add(keyboardController2);
+//        BotController botController = new BotController(player2);
+//        controllers.add(botController);
+        final KeyboardController2 keyboardController2 = new KeyboardController2(keyboardHandler, player2);
+        controllers.add(keyboardController2);
 
         frame = new GameFrame(this);
         frame.init();
