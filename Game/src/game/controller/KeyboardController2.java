@@ -69,16 +69,16 @@ public class KeyboardController2 implements Controller {
             } else if (type == KeyEvent.KEY_DOWN) {
                 switch (keyCode) {
                     case UP:
-                        getUnitUnderControl().setSpeedY(-1);
+                        getUnitUnderControl().setSpeedY(-5);
                         break;
                     case RIGHT:
-                        getUnitUnderControl().setSpeedX(1);
+                        getUnitUnderControl().setSpeedX(5);
                         break;
                     case DOWN:
-                        getUnitUnderControl().setSpeedY(1);
+                        getUnitUnderControl().setSpeedY(5);
                         break;
                     case LEFT:
-                        getUnitUnderControl().setSpeedX(-1);
+                        getUnitUnderControl().setSpeedX(-5);
                         break;
                     case FIRE:
                         final Unit unit = getUnitUnderControl();

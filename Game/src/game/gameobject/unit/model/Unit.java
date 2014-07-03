@@ -27,6 +27,7 @@ public class Unit extends GameObject {
     private int maxSpeed;
     private int def; // Защита персонажа
     private int atk; // Атака персонажа
+    private int fraction;
     private DIRECTION lookDirection; // В какую сторону смотрит персонаж
 
     public Unit(final Integer x, final Integer y, final String spriteFileName,
@@ -176,10 +177,13 @@ public class Unit extends GameObject {
         }
     }
 
+    public void setFraction(int fraction) {
+        this.fraction = fraction;
+    }
+
     public void cast(final Skill skill) {
         getGameWorld().addGameObject(skill);
         skill.setGameWorld(getGameWorld());
-        skill.setXY(getTileX(), getTileY());
         skill.act(this);
     }
 

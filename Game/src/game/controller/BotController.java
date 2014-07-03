@@ -4,6 +4,7 @@ import game.controller.model.Controller;
 import game.core.GameWorld;
 import game.gameobject.unit.model.Unit;
 import game.util.GameOptions;
+import game.util.Logger;
 
 /**
  * Created by Эдуард on 03.07.2014.
@@ -11,6 +12,9 @@ import game.util.GameOptions;
 public class BotController implements Controller {
     private final GameWorld gameWorld;
     private final Unit unitUnderControl;
+
+    private static final Logger LOGGER = Logger.getLogger(BotController.class);
+    private static final String TAG = "AI Thoughts";
 
     private boolean movingToPoint = false;
     private int targetX = -1;
@@ -31,9 +35,9 @@ public class BotController implements Controller {
     public void update() {
         if(System.currentTimeMillis()>=nextAiTime){
             nextAiTime=System.currentTimeMillis()+ GameOptions.AI_DELAY_MILLISECONDS;
-            System.out.println("Думаю");
+            LOGGER.log(TAG, "Думаю");
             if(getUnitUnderControl().isAlive()){
-                System.out.println("Я живой!");
+                LOGGER.log(TAG, "Я живой!");
             //Трупы не думают
              if(inBattle){
                   updateEmemy();
@@ -52,7 +56,7 @@ public class BotController implements Controller {
                           }
                       }else{
                           //TODO: FIRE!
-                          System.out.println("Атакуем типа: "+((x - getX()) * (x - getX()) + (y - getY()) * (y - getY())));
+                          LOGGER.log(TAG, "Атакуем типа: "+((x - getX()) * (x - getX()) + (y - getY()) * (y - getY())));
                       }
                   }
              }else if (bellicosity == 1){
@@ -60,7 +64,7 @@ public class BotController implements Controller {
              }
              if(movingToPoint){
                 //TODO:ну тут должен быть крутой алгоритм поиска пути
-                 System.out.println("Иду до точки!");
+                 LOGGER.log(TAG, "Иду до точки!");
                 if(getX() < (targetX - fault)) {
                     getUnitUnderControl().setSpeedX(1);
                 } else if (getUnitUnderControl().getRealX() > (targetX + fault)) {
@@ -96,7 +100,7 @@ public class BotController implements Controller {
     }
 
     private void findEmemy() {
-        System.out.println("Поиск врага!");
+        LOGGER.log(TAG, "Поиск врага!");
         inBattle = true;
         enemy =  gameWorld.getPlayer();
     }

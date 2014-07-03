@@ -49,6 +49,7 @@ public class GameFrame extends JFrame {
         pack();
         setResizable(false);
         setVisible(true);
+        canvas.requestFocus();
     }
 
     public static int WINDOW_WIDTH = 800; //ширина

@@ -13,7 +13,7 @@ public class GameOptions {
 
         WALL("tile_wall.png"),
         FLOOR("tile_floor.png"),
-        GUN("player.png"),
+        GUN("tile_gun.png"),
         PLAYER("players.png"),
         SKILL_FIREBALL("skill_fireball.png"),
         SKILL_HEAL("skill_heal.png");
