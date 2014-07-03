@@ -32,10 +32,10 @@ public class KeyboardHandler implements KeyListener {
         int id = event.getID();
         int keyCode = event.getKeyCode();
         char keyChar = event.getKeyChar();
+        inputLock.lock();
         KeyEvent keyEvent = keyEventPool.get();
         keyEvent.keyCode = keyCode;
         keyEvent.keyChar = keyChar;
-        inputLock.lock();
         try {
             keyEventsBuffer.add(keyEvent);
             switch (id) {
@@ -54,6 +54,9 @@ public class KeyboardHandler implements KeyListener {
     }
 
     public List<KeyEvent> getKeyEvents() {
+        if (!canUpdate) {
+            return keyEvents;
+        }
         inputLock.lock();
         try {
             for (KeyEvent event : keyEvents) {
@@ -66,6 +69,12 @@ public class KeyboardHandler implements KeyListener {
             inputLock.unlock();
         }
         return keyEvents;
+    }
+
+    private boolean canUpdate = false;
+
+    public void setCanUpdate(final boolean canUpdate) {
+        this.canUpdate = canUpdate;
     }
 
     @Override

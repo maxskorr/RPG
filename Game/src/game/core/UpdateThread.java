@@ -1,6 +1,7 @@
 package game.core;
 
 import game.controller.model.Controller;
+import game.core.camera.Camera;
 import game.gameobject.model.GameObject;
 import game.util.Logger;
 
@@ -76,14 +77,18 @@ public class UpdateThread extends Thread {
             gameWorld.addGameObject(gameObject);
         }
         gameWorld.getScheduledForAdd().clear();
-
+        game.getKeyboardHandler().getKeyEvents();
+        game.getKeyboardHandler().setCanUpdate(false);
         for (Controller controller : controllers) {
             controller.update();
         }
+        game.getKeyboardHandler().setCanUpdate(true);
         for (GameObject go : gameWorld.getGameObjects()) {
             go.update(deltaTime);
         }
-        game.getCamera().update(deltaTime);
+        for (Camera camera : game.getCameras()) {
+            camera.update(deltaTime);
+        }
         //List<GameObject> scheduledForDelete = gameWorld.getScheduledForDelete(); //иначе ConcurrentModificationException
         //Мы типа меняем другой список с чего исключение?
         for (GameObject gameObject : gameWorld.getScheduledForDelete()) {
