@@ -16,6 +16,7 @@ import static game.util.GameOptions.DIRECTION;
 public class Fireball extends Skill {
     private static final int BASE_DAMAGE = 10;
     private static final int MAX_VARIABLE_DAMAGE = 10;
+    private static final int SPEED = 3;
     private DIRECTION direction;
 
     public Fireball(final Integer x, final Integer y,
@@ -26,40 +27,22 @@ public class Fireball extends Skill {
         putSprite(sprite);
         setCurrentSprite(sprite);
     }
-
     public void setDirection(DIRECTION direction) {
         this.direction = direction;
     }
 
     @Override
     public void updatePhysics() {
-        int dx = 0;
-        int dy = 0;
+        final int x = getRealX() + direction.getX() * SPEED;
+        final int y = getRealY() + direction.getY() * SPEED;
 
-        switch (direction) {
-            case UP:
-                dy = -1;
-                break;
-            case RIGHT:
-                dx = 1;
-                break;
-            case DOWN:
-                dy = 1;
-                break;
-            case LEFT:
-                dx = -1;
-                break;
-        }
-
-        final int x = getTileX() + dx;
-        final int y = getTileY() + dy;
-
-        if (!getGameWorld().isOccupied(x, y)) {
-            setXY(x, y);
+        if (!getGameWorld().isOccupiedByRealPos(this, x, y)) {
+            changeX(direction.getX());
+            changeY(direction.getY());
         } else {
-            final GameObject go = getGameWorld().getGameObjectByPos(x, y);
+            final GameObject go = getGameWorld().getGameObjectByRealPos(x, y);
 
-            if (go != null)
+            if (go != this && go != null)
                 act(go);
 
             removeSelf();
@@ -76,8 +59,7 @@ public class Fireball extends Skill {
         final int damage = BASE_DAMAGE + Math.abs(ResourceManager.random.nextInt() % MAX_VARIABLE_DAMAGE)
                 - unit.getDef();
 
+        Logger.getLogger(this.getClass()).log("unitHp: " + unit.getHp() + "; damage: " + damage);
         unit.changeHp(-damage);
-
-        Logger.getLogger(this.getClass()).log("skill casted");
     }
 }

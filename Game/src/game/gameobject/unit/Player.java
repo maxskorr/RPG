@@ -18,7 +18,7 @@ public class Player extends Unit {
 
         for (int i = 0; i < 4; i++) {
             final AbstractSprite sprite
-                    = ResourceManager.getSpriteFromComplexImage(spriteFileName, 0, i, 1, 3);
+                    = ResourceManager.getSpriteFromComplexImage(spriteFileName, 3, i, 1, 3);
             putSprite(sprite);
         }
 

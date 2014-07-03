@@ -1,12 +1,12 @@
 package game.core;
 
 import game.controller.KeyboardController;
+import game.controller.KeyboardController2;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
 import game.core.camera.Camera;
-import game.core.model.Point;
 import game.gameobject.unit.Player;
-import game.level.StartMenu;
+import game.level.RandomLevel;
 import game.level.model.Level;
 import game.util.GameObjectFactory;
 import game.util.Logger;
@@ -33,6 +33,8 @@ public class Game {
 
     private GameEngineLock renderLock = new GameEngineLock();
 
+    private KeyboardHandler keyboardHandler = new KeyboardHandler();
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -51,32 +53,41 @@ public class Game {
         final Player player = (Player) GameObjectFactory.make(20, 20, PLAYER, gameWorld);
         gameWorld.addGameObject(player);
         gameWorld.setPlayer(player);
+
+        final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);
+        controllers.add(keyboardController);
+
+        //Добавление 2 игрока
         final Player player2 = (Player) GameObjectFactory.make(40, 60, PLAYER, gameWorld);
         gameWorld.addGameObject(player2);
         gameWorld.setSecondPlayer(player2);
+        final KeyboardController2 keyboardController2 = new KeyboardController2(keyboardHandler, player2);
+        controllers.add(keyboardController2);
 
-        KeyboardHandler keyboardHandler = new KeyboardHandler();
-        final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);
-        controllers.add(keyboardController);
         frame = new GameFrame(this);
         frame.init();
         frame.getCanvas().addKeyListener(keyboardHandler);
-        getCamera().smoothAnimTo(Point.newPoint(200l, 200l));
+
+        //getCamera().smoothAnimTo(Point.newPoint(200l, 200l));
     }
 
     public void init() {
         gameWorld = new GameWorld();
-        // final Level level = new RandomLevel(gameWorld);
-        final Level level = new StartMenu(gameWorld);
+        final Level level = new RandomLevel(gameWorld);
+        //final Level level = new StartMenu(gameWorld);
         gameWorld.setCurrentLevel(level);
+    }
+
+    public KeyboardHandler getKeyboardHandler() {
+        return keyboardHandler;
     }
 
     public void startRender() {
         SwingUtilities.invokeLater(renderRunnable);
     }
 
-    public Camera getCamera() {
-        return frame.getCamera();
+    public List<Camera> getCameras() {
+        return frame.getCameras();
     }
 
     private Runnable renderRunnable = new Runnable() {

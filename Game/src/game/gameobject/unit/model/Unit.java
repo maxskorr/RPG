@@ -5,7 +5,6 @@ import game.gameobject.model.GameObject;
 import game.gameobject.skill.model.Skill;
 import game.graphics.sprite.AnimatedSprite;
 import game.graphics.sprite.model.AbstractSprite;
-import game.util.GameOptions;
 import game.util.Logger;
 
 import static game.util.GameOptions.DIRECTION;
@@ -19,6 +18,8 @@ public class Unit extends GameObject {
     private static final String MSG_UNIT_DIED_IN_ASTRAL = "Смерть юнита в междумирье.";
     private int hp;
     private int maxHp;
+    private int mp;
+    private int maxMp;
     private boolean alive;
     private String name;
     private int speedX;
@@ -35,6 +36,10 @@ public class Unit extends GameObject {
         this.alive = alive;
         this.maxHp = hp;
         this.hp = hp;
+
+        this.hp = this.hp;
+        this.maxHp = this.hp;
+
         this.name = name;
         this.speedX = speedX;
         this.speedY = speedY;
@@ -110,6 +115,32 @@ public class Unit extends GameObject {
         this.maxHp = (maxHp < 0 ? maxHp : 0);
     }
 
+    public int getMp() {
+        return mp;
+    }
+
+    public void setMp(final int mp) {
+        if (mp <= 0) {
+            this.mp = 0;
+
+            return;
+        }
+
+        if (hp > getMaxMp()) {
+            this.mp = getMaxMp();
+        } else {
+            this.mp = mp;
+        }
+    }
+
+    public int getMaxMp() {
+        return maxMp;
+    }
+
+    public void setMaxMp(final int maxMp) {
+        this.maxMp = (maxMp < 0 ? maxMp : 0);
+    }
+
     public String getName() {
         return name;
     }
@@ -160,7 +191,7 @@ public class Unit extends GameObject {
         if (getGameWorld() == null)
             throw new NullPointerException(MSG_UNIT_DIED_IN_ASTRAL);
 
-        return !getGameWorld().isOccupied(x, y);
+        return !getGameWorld().isOccupiedByRealPos(this, x, y);
     }
 
     public int getSpeedX() {
@@ -200,16 +231,16 @@ public class Unit extends GameObject {
 
             if (vx < 0) {
                 dx = 1;
-               setLookDirection(DIRECTION.LEFT);
+                setLookDirection(DIRECTION.LEFT);
             }else if (vx > 0) {
                 dx = -1;
                 setLookDirection(DIRECTION.RIGHT);
             }
 
             while (vx != 0) {
-                final int newX = getTileX() - dx;
+                final int newX = getRealX() - dx;
 
-                if (canGo(newX, getTileY()) || (getDeltaRenderX() != 0 && getDeltaRenderX() != GameOptions.TILE_SIZE)) {
+                if (canGo(newX, getRealY()) ) {
                     changeX(-dx);
                 } else {
                     setSpeedX(0);
@@ -228,9 +259,9 @@ public class Unit extends GameObject {
             }
 
             while (vy != 0) {
-                final int newY =  getTileY() - dy;
+                final int newY =  getRealY() - dy;
 
-                if (canGo(getTileX(), newY) || (getDeltaRenderY() != 0 && getDeltaRenderY() != GameOptions.TILE_SIZE)) {
+                if (canGo(getRealX(), newY) ) {
                     changeY(-dy);
                 } else {
                     setSpeedY(0);
@@ -242,6 +273,20 @@ public class Unit extends GameObject {
         } else {
             //TODO: CurrentState (который enum) будет idle
             ((AnimatedSprite) getDrawable()).stop();
+        }
+    }
+
+
+    @Override
+    public void updateAttributes() {
+        if(isAlive()) {
+            if(getHp() < getMaxHp()) {
+                setHp((int) (getHp() + Math.ceil(getMaxHp() * 0.01)));
+            }
+            if(getMp() < getMaxMp()) {
+                setMp((int) (getMp() + Math.ceil(getMaxMp() * 0.01)));
+            }
+            //TODO:Тут пробег по всем эффектам
         }
     }
 }

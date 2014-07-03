@@ -3,6 +3,7 @@ package game.core;
 import game.gameobject.model.GameObject;
 import game.gameobject.unit.Player;
 import game.level.model.Level;
+import game.map.model.LevelMap;
 import game.util.GameOptions;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class GameWorld {
     private Level currentLevel;
 
     private Player player;
+    private List<GameObject> scheduledForAdd;
 
     private Player secondPlayer;
 
@@ -42,6 +44,7 @@ public class GameWorld {
     public GameWorld() {
         this.gameObjects = new ArrayList<>();
         this.scheduledForDelete = new ArrayList<>();
+        this.scheduledForAdd = new ArrayList<>();
     }
 
     public Level getCurrentLevel() {
@@ -76,25 +79,86 @@ public class GameWorld {
         return scheduledForDelete;
     }
 
-    public boolean isOccupied(final int x, final int y) {
+    public boolean isOccupiedByTilePos(final int x, final int y) {
         for (final GameObject gameObject : gameObjects) {
-            if (gameObject.getTileX() == x && gameObject.getTileY() == y) {
+            if ((gameObject.getTileX() == x && gameObject.getTileY() == y)) {
                 return true;
             }
         }
 
-        return !getCurrentLevel().getLevelMap().getTile(x, y).isVisitable();
+        return !getCurrentLevel().getLevelMap().getTileByTilePos(x, y).isVisitable();
+    }
+
+    public boolean isOccupiedByRealPos(final GameObject go, final int x, final int y) {
+        for (final GameObject gameObject : gameObjects) {
+            if (go == gameObject)
+                continue;
+
+            final int OLX = x;
+            final int OTY = y;
+            final int ORX = OLX + GameOptions.TILE_SIZE;
+            final int OBY = OTY + GameOptions.TILE_SIZE;
+            final int GLX = gameObject.getRealX();
+            final int GTY = gameObject.getRealY();
+            final int GRX = GLX + GameOptions.TILE_SIZE;
+            final int GBY = GTY + GameOptions.TILE_SIZE;
+
+            boolean xCollision = false;
+            boolean yCollision = false;
+
+            if ((ORX > GLX) && (OLX < GRX)) {
+                xCollision = true;
+            }
+
+            if ((OBY > GTY) && (OTY < GBY)) {
+                yCollision = true;
+            }
+
+            if (xCollision && yCollision) {
+                return true;
+            }
+        }
+
+        final LevelMap levelMap = getCurrentLevel().getLevelMap();
+
+        return !levelMap.getTileByRealPos(x, y).isVisitable() ||
+               !levelMap.getTileByRealPos(x + GameOptions.TILE_SIZE - 1, y + GameOptions.TILE_SIZE - 1).isVisitable() ||
+               !levelMap.getTileByRealPos(x, y + GameOptions.TILE_SIZE - 1).isVisitable() ||
+               !levelMap.getTileByRealPos(x + GameOptions.TILE_SIZE - 1, y).isVisitable();
+        // -1 - магическое число, может измениться если переписать обработку физики юнита
     }
 
 
-    public GameObject getGameObjectByPos(final int x, final int y) {
+    public GameObject getGameObjectByTilePos(final int x, final int y) {
         for (final GameObject go: gameObjects) {
-            if ((go.getTileX() <= x && (go.getTileX() + GameOptions.TILE_SIZE) >= x)
-                    && ((go.getTileY() <= y && (go.getTileY() + GameOptions.TILE_SIZE) >= y))) {
+            if ((go.getTileX() <= x && (go.getTileX() + 1) >= x)
+                    && ((go.getTileY() <= y && (go.getTileY() + 1) >= y))) {
                 return go;
             }
         }
 
         return null;
+    }
+
+    public GameObject getGameObjectByRealPos(final int x, final int y) {
+        for (final GameObject go: gameObjects) {
+            if ((go.getRealX() <= x && (go.getRealX() + GameOptions.TILE_SIZE) >= x)
+                    && ((go.getRealY() <= y && (go.getRealY() + GameOptions.TILE_SIZE) >= y))) {
+                return go;
+            }
+        }
+
+        return null;
+    }
+
+    public List<GameObject> getScheduledForAdd() {
+        return scheduledForAdd;
+    }
+
+    public void scheduleAdd(final GameObject gameObject) {
+        if (scheduledForAdd == null)
+            throw new NullPointerException();
+
+        scheduledForAdd.add(gameObject);
     }
 }

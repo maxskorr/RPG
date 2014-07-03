@@ -17,6 +17,13 @@ public class UpdateThread extends Thread {
     private Game game;
     private GameWorld gameWorld;
 
+    private long timePassed = 0;
+    private long frames;
+    private long lastUpdate = System.currentTimeMillis();
+
+    private static final int ENGINE_MAX_FPS = 60;
+
+    private static final int ENGINE_MIN_DELAY = 1000 / ENGINE_MAX_FPS;
 
     private final Game.GameEngineLock renderLock;
 
@@ -25,14 +32,6 @@ public class UpdateThread extends Thread {
         this.gameWorld = game.getGameWorld();
         this.renderLock = game.getRenderLock();
     }
-
-    private long timePassed = 0;
-    private long frames;
-    private long lastUpdate = System.currentTimeMillis();
-
-    private static final int ENGINE_MAX_FPS = 60;
-
-    private static final int ENGINE_MIN_DELAY = 1000 / ENGINE_MAX_FPS;
 
     @Override
     public void run() {
@@ -71,6 +70,13 @@ public class UpdateThread extends Thread {
 
     private void update(final long deltaTime) {
         List<Controller> controllers = game.getControllers();
+
+
+        for (GameObject gameObject : gameWorld.getScheduledForAdd()) {
+            gameWorld.addGameObject(gameObject);
+        }
+        gameWorld.getScheduledForAdd().clear();
+
         for (Controller controller : controllers) {
             controller.update();
         }
@@ -78,11 +84,12 @@ public class UpdateThread extends Thread {
             go.update(deltaTime);
         }
         game.getCamera().update(deltaTime);
-        List<GameObject> scheduledForDelete = gameWorld.getScheduledForDelete(); //иначе ConcurrentModificationException
-        for (GameObject gameObject : scheduledForDelete) {
+        //List<GameObject> scheduledForDelete = gameWorld.getScheduledForDelete(); //иначе ConcurrentModificationException
+        //Мы типа меняем другой список с чего исключение?
+        for (GameObject gameObject : gameWorld.getScheduledForDelete()) {
             gameWorld.removeGameObject(gameObject);
         }
-        scheduledForDelete.clear();
+        gameWorld.getScheduledForDelete().clear();
     }
 
 }

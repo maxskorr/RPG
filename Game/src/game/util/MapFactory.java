@@ -33,14 +33,17 @@ public class MapFactory {
                 final int x = j * TILE_SIZE;
                 final int y = i * TILE_SIZE;
 
-                final int tile_id;
-
+                int tile_id = 1;
                 if ((i == 0) || (i == (height - 1))
                         || (j == 0) || (j == (width - 1))) {
                     // Wall tile
                     tile_id = 0;
                 } else {
-                    tile_id = Math.abs(ResourceManager.random.nextInt() % (TILE_TYPE.values().length - 1));
+                    if(ResourceManager.random.nextInt() % 23 == 0){
+                        tile_id = 0; //Стена
+                    } else if (ResourceManager.random.nextInt() % 24 == 0){
+                        tile_id = 2; //Пушка
+                    }
                 }
 
                 final TILE_TYPE tile_type = TILE_TYPE.values()[tile_id];

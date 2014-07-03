@@ -12,6 +12,7 @@ public class GameOptions {
 
         WALL("tile_wall.png"),
         FLOOR("tile_floor.png"),
+        GUN("player.png"),
         PLAYER("players.png"),
         SKILL_FIREBALL("skill_fireball.png"),
         SKILL_HEAL("skill_heal.png");
@@ -25,10 +26,23 @@ public class GameOptions {
         public String getFilename() {
             return filename;
         }
-
     }
 
-    public enum DIRECTION {UP, RIGHT, DOWN, LEFT} // Направления движения
+    public enum DIRECTION {
+        UP(0, -1),
+        RIGHT(1, 0),
+        DOWN(0, 1),
+        LEFT(-1, 0);
+
+        private final int x, y;
+        public int getX(){return x;}
+        public int getY(){return y;}
+
+        DIRECTION(final int x, final int y) {
+            this.x = x;
+            this.y = y;
+        }
+    } // Направления движения
 
     public static final String ASSETS_GRAPHICS_PATH = "assets/graphics/";
 

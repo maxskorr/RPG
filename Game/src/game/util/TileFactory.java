@@ -3,6 +3,7 @@ package game.util;
 import game.core.GameWorld;
 import game.gameobject.model.GameObject;
 import game.map.model.Tile;
+import game.map.model.TileGun;
 
 /**
  * Created by Max on 6/29/2014.
@@ -21,9 +22,9 @@ public class TileFactory {
             case FLOOR:
                 visitable = true;
                 break;
-            case PLAYER:
-                visitable = false;
-                break;
+            case GUN:
+                visitable = true;
+                return new TileGun(gameObject, visitable, gameWorld, tile_type);
             default:
                 visitable = false;
         }

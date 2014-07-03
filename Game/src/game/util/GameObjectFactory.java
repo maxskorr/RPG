@@ -2,6 +2,7 @@ package game.util;
 
 import game.core.GameWorld;
 import game.gameobject.Floor;
+import game.gameobject.Gun;
 import game.gameobject.Wall;
 import game.gameobject.model.GameObject;
 import game.gameobject.skill.Fireball;
@@ -22,6 +23,9 @@ public class GameObjectFactory {
                 break;
             case FLOOR:
                 gameObject = new Floor(x, y, tile_type.getFilename(), gameWorld);
+                break;
+            case GUN:
+                gameObject = new Gun(x, y, tile_type.getFilename(), gameWorld);
                 break;
             case PLAYER:
                 gameObject = new Player(x, y, tile_type.getFilename(), gameWorld);

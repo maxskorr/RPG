@@ -68,4 +68,7 @@ public class GameFrame extends JFrame {
         return cameras.get(0);
     }
 
+    public List<Camera> getCameras() {
+        return cameras;
+    }
 }

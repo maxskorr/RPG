@@ -14,14 +14,16 @@ import java.util.List;
 /**
  * Created by Max on 6/27/2014.
  */
-public class KeyboardController implements Controller {
+public class KeyboardController2 implements Controller {
 
-    public static final int UP = java.awt.event.KeyEvent.VK_UP;
-    public static final int RIGHT = java.awt.event.KeyEvent.VK_RIGHT;
-    public static final int DOWN = java.awt.event.KeyEvent.VK_DOWN;
-    public static final int LEFT = java.awt.event.KeyEvent.VK_LEFT;
-    public static final int FIRE = java.awt.event.KeyEvent.VK_SHIFT;
-    public static final int HEAL = java.awt.event.KeyEvent.VK_CONTROL;
+    private final int[] keys = {};
+
+    public static final int UP = java.awt.event.KeyEvent.VK_W;
+    public static final int RIGHT = java.awt.event.KeyEvent.VK_D;
+    public static final int DOWN = java.awt.event.KeyEvent.VK_S;
+    public static final int LEFT = java.awt.event.KeyEvent.VK_A;
+    public static final int FIRE = java.awt.event.KeyEvent.VK_Q;
+    public static final int HEAL = java.awt.event.KeyEvent.VK_E;
 
     private final Unit unitUnderControl;
     private final KeyboardHandler keyboardHandler;
@@ -30,7 +32,7 @@ public class KeyboardController implements Controller {
         return unitUnderControl;
     }
 
-    public KeyboardController(final KeyboardHandler keyboardHandler, final Unit unitUnderControl) {
+    public KeyboardController2(final KeyboardHandler keyboardHandler, final Unit unitUnderControl) {
         this.unitUnderControl = unitUnderControl;
         this.keyboardHandler = keyboardHandler;
     }
@@ -57,9 +59,6 @@ public class KeyboardController implements Controller {
                         break;
                     case HEAL:
                         final Unit unit = getUnitUnderControl();
-                        if (!unit.isAlive()) {
-                            return;
-                        }
                         final int x = unit.getRealX();
                         final int y = unit.getRealY();
                         final Heal heal = (Heal) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_HEAL, unit.getGameWorld());
@@ -70,26 +69,22 @@ public class KeyboardController implements Controller {
             } else if (type == KeyEvent.KEY_DOWN) {
                 switch (keyCode) {
                     case UP:
-                        getUnitUnderControl().setSpeedY(-5);
+                        getUnitUnderControl().setSpeedY(-1);
                         break;
                     case RIGHT:
-                        getUnitUnderControl().setSpeedX(5);
+                        getUnitUnderControl().setSpeedX(1);
                         break;
                     case DOWN:
-                        getUnitUnderControl().setSpeedY(5);
+                        getUnitUnderControl().setSpeedY(1);
                         break;
                     case LEFT:
-                        getUnitUnderControl().setSpeedX(-5);
+                        getUnitUnderControl().setSpeedX(-1);
                         break;
                     case FIRE:
                         final Unit unit = getUnitUnderControl();
-                        if (!unit.isAlive()) {
-                            return;
-                        }
-                        final int x = unit.getRealX();
-                        final int y = unit.getRealY();
-                        final Fireball fireball = (Fireball) GameObjectFactory.make(x + unit.getLookDirection().getX() * GameOptions.TILE_SIZE,
-                                y + unit.getLookDirection().getY() * GameOptions.TILE_SIZE, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
+                        final int x = unit.getRealX() + (GameOptions.TILE_SIZE + 1 ) * unit.getLookDirection().getX();
+                        final int y = unit.getRealY() + (GameOptions.TILE_SIZE + 1 ) * unit.getLookDirection().getY();
+                        final Fireball fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
                         fireball.setDirection(unit.getLookDirection());
                         unit.getGameWorld().addGameObject(fireball);
                         break;
