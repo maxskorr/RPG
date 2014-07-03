@@ -54,7 +54,6 @@ public abstract class GameObject {
      * @param x Тайл-координата X
      * @param y Тайл-координата Y
      */
-    @Deprecated
     public void setXY(Integer x, Integer y) {
         if (x != null) {
             this.x = x * GameOptions.TILE_SIZE;
@@ -65,7 +64,7 @@ public abstract class GameObject {
         }
 
         if (gameWorld != null) {
-            gameWorld.getCurrentLevel().getLevelMap().getTile(getTileX(), getTileY()).trigger(this);
+            gameWorld.getCurrentLevel().getLevelMap().getTileByTilePos(getTileX(), getTileY()).trigger(this);
         }
     }
 

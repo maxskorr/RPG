@@ -5,7 +5,6 @@ import game.controller.KeyboardController2;
 import game.controller.keyboard.KeyboardHandler;
 import game.controller.model.Controller;
 import game.core.camera.Camera;
-import game.core.model.Point;
 import game.gameobject.unit.Player;
 import game.level.RandomLevel;
 import game.level.model.Level;
@@ -70,7 +69,7 @@ public class Game {
         controllers.add(keyboardController2);
         frame.getCanvas().addKeyListener(keyboardHandler2);
 
-        getCamera().smoothAnimTo(Point.newPoint(200l, 200l));
+        //getCamera().smoothAnimTo(Point.newPoint(200l, 200l));
     }
 
     public void init() {

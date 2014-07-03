@@ -16,6 +16,7 @@ import static game.util.GameOptions.DIRECTION;
 public class Fireball extends Skill {
     private static final int BASE_DAMAGE = 10;
     private static final int MAX_VARIABLE_DAMAGE = 10;
+    private static final int SPEED = 3;
     private DIRECTION direction;
 
     public Fireball(final Integer x, final Integer y,
@@ -32,16 +33,14 @@ public class Fireball extends Skill {
 
     @Override
     public void updatePhysics() {
-        final int x = getRealX() + direction.getX();
-        final int y = getRealY() + direction.getY();
-        final int tileX = getTileX() + direction.getX();
-        final int tileY = getTileY() + direction.getY();
+        final int x = getRealX() + direction.getX() * SPEED;
+        final int y = getRealY() + direction.getY() * SPEED;
 
-        if (!getGameWorld().isOccupied(tileX, tileY)) {
+        if (!getGameWorld().isOccupiedByRealPos(this, x, y)) {
             changeX(direction.getX());
             changeY(direction.getY());
         } else {
-            final GameObject go = getGameWorld().getGameObjectByPos(x, y);
+            final GameObject go = getGameWorld().getGameObjectByRealPos(x, y);
 
             if (go != this && go != null)
                 act(go);
@@ -60,8 +59,7 @@ public class Fireball extends Skill {
         final int damage = BASE_DAMAGE + Math.abs(ResourceManager.random.nextInt() % MAX_VARIABLE_DAMAGE)
                 - unit.getDef();
 
+        Logger.getLogger(this.getClass()).log("unitHp: " + unit.getHp() + "; damage: " + damage);
         unit.changeHp(-damage);
-
-        Logger.getLogger(this.getClass()).log("skill casted");
     }
 }

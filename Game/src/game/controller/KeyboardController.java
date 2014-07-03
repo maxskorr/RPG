@@ -57,6 +57,9 @@ public class KeyboardController implements Controller {
                         break;
                     case HEAL:
                         final Unit unit = getUnitUnderControl();
+                        if (!unit.isAlive()) {
+                            return;
+                        }
                         final int x = unit.getRealX();
                         final int y = unit.getRealY();
                         final Heal heal = (Heal) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_HEAL, unit.getGameWorld());
@@ -67,22 +70,26 @@ public class KeyboardController implements Controller {
             } else if (type == KeyEvent.KEY_DOWN) {
                 switch (keyCode) {
                     case UP:
-                        getUnitUnderControl().setSpeedY(-8);
+                        getUnitUnderControl().setSpeedY(-5);
                         break;
                     case RIGHT:
-                        getUnitUnderControl().setSpeedX(8);
+                        getUnitUnderControl().setSpeedX(5);
                         break;
                     case DOWN:
-                        getUnitUnderControl().setSpeedY(8);
+                        getUnitUnderControl().setSpeedY(5);
                         break;
                     case LEFT:
-                        getUnitUnderControl().setSpeedX(-8);
+                        getUnitUnderControl().setSpeedX(-5);
                         break;
                     case FIRE:
                         final Unit unit = getUnitUnderControl();
+                        if (!unit.isAlive()) {
+                            return;
+                        }
                         final int x = unit.getRealX();
                         final int y = unit.getRealY();
-                        final Fireball fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
+                        final Fireball fireball = (Fireball) GameObjectFactory.make(x + unit.getLookDirection().getX() * GameOptions.TILE_SIZE,
+                                y + unit.getLookDirection().getY() * GameOptions.TILE_SIZE, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
                         fireball.setDirection(unit.getLookDirection());
                         unit.getGameWorld().addGameObject(fireball);
                         break;

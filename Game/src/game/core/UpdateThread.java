@@ -17,6 +17,13 @@ public class UpdateThread extends Thread {
     private Game game;
     private GameWorld gameWorld;
 
+    private long timePassed = 0;
+    private long frames;
+    private long lastUpdate = System.currentTimeMillis();
+
+    private static final int ENGINE_MAX_FPS = 60;
+
+    private static final int ENGINE_MIN_DELAY = 1000 / ENGINE_MAX_FPS;
 
     private final Game.GameEngineLock renderLock;
 
@@ -25,14 +32,6 @@ public class UpdateThread extends Thread {
         this.gameWorld = game.getGameWorld();
         this.renderLock = game.getRenderLock();
     }
-
-    private long timePassed = 0;
-    private long frames;
-    private long lastUpdate = System.currentTimeMillis();
-
-    private static final int ENGINE_MAX_FPS = 60;
-
-    private static final int ENGINE_MIN_DELAY = 1000 / ENGINE_MAX_FPS;
 
     @Override
     public void run() {
