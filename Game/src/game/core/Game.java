@@ -53,6 +53,7 @@ public class Game {
         gameWorld.setPlayer(player);
         final Player player2 = (Player) GameObjectFactory.make(40, 60, PLAYER, gameWorld);
         gameWorld.addGameObject(player2);
+        gameWorld.setSecondPlayer(player2);
 
         KeyboardHandler keyboardHandler = new KeyboardHandler();
         final KeyboardController keyboardController = new KeyboardController(keyboardHandler, player);

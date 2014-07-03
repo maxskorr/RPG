@@ -21,12 +21,22 @@ public class GameWorld {
 
     private Player player;
 
+    private Player secondPlayer;
+
     public void setPlayer(final Player player) {
         this.player = player;
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public Player getSecondPlayer() {
+        return secondPlayer;
+    }
+
+    public void setSecondPlayer(final Player secondPlayer) {
+        this.secondPlayer = secondPlayer;
     }
 
     public GameWorld() {
