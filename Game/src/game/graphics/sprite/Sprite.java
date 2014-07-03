@@ -19,7 +19,7 @@ public class Sprite extends AbstractSprite {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(final Image image) {
         this.image = image;
     }
 

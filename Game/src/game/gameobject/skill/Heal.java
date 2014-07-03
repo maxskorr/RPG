@@ -52,7 +52,7 @@ public class Heal extends Skill {
     }
 
     @Override
-    public void act(final GameObject go) {
+    public void cast(final GameObject go) {
         if (!(go instanceof Unit)) {
             return;
         }

@@ -14,5 +14,11 @@ public abstract class Skill extends GameObject {
         super(x, y, spriteFileName, gameWorld);
     }
 
-    public abstract void act(final GameObject go);
+    /**
+     * Использует умение на объект игрового мира.
+     * Проверка на то, жив ли юнит(если предполагается на юнит),
+     * выполняется непосредственно в реализации этого метода.
+     * @param go Объект, над которым происходит действие
+     */
+    public abstract void cast(final GameObject go);
 }

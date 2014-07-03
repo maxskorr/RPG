@@ -15,8 +15,9 @@ import game.util.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -32,7 +33,7 @@ public class Game {
 
     private GameFrame frame;
     private GameWorld gameWorld;
-    private List<Controller> controllers = new ArrayList<>();
+    private Set<Controller> controllers = new LinkedHashSet<>();
 
     private GameEngineLock renderLock = new GameEngineLock();
 
@@ -125,7 +126,7 @@ public class Game {
         return renderLock;
     }
 
-    public List<Controller> getControllers() {
+    public Set<Controller> getControllers() {
         return controllers;
     }
 

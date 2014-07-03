@@ -3,9 +3,10 @@ package game.core;
 import game.controller.model.Controller;
 import game.core.camera.Camera;
 import game.gameobject.model.GameObject;
+import game.graphics.Drawable;
 import game.util.Logger;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Semyon Danilov on 27.06.2014.
@@ -70,31 +71,51 @@ public class UpdateThread extends Thread {
     }
 
     private void update(final long deltaTime) {
-        List<Controller> controllers = game.getControllers();
+        Set<Controller> controllers = game.getControllers();
 
 
-        for (GameObject gameObject : gameWorld.getScheduledForAdd()) {
+        // Scheduled additions
+        for (GameObject gameObject : gameWorld.getScheduledForAddGameObjects()) {
             gameWorld.addGameObject(gameObject);
         }
-        gameWorld.getScheduledForAdd().clear();
+
+        for (Drawable drawable: gameWorld.getScheduledForAddDrawables()) {
+            gameWorld.addDrawable(drawable);
+        }
+
+        gameWorld.getScheduledForAddGameObjects().clear();
+        gameWorld.getScheduledForAddDrawables().clear();
+        // **
+
         game.getKeyboardHandler().getKeyEvents();
         game.getKeyboardHandler().setCanUpdate(false);
+
         for (Controller controller : controllers) {
             controller.update();
         }
+
         game.getKeyboardHandler().setCanUpdate(true);
+
         for (GameObject go : gameWorld.getGameObjects()) {
             go.update(deltaTime);
         }
+
         for (Camera camera : game.getCameras()) {
             camera.update(deltaTime);
         }
-        //List<GameObject> scheduledForDelete = gameWorld.getScheduledForDelete(); //иначе ConcurrentModificationException
-        //Мы типа меняем другой список с чего исключение?
-        for (GameObject gameObject : gameWorld.getScheduledForDelete()) {
+
+        // Scheduled deletions
+        for (GameObject gameObject : gameWorld.getScheduledForDeleteGameObjects()) {
             gameWorld.removeGameObject(gameObject);
         }
-        gameWorld.getScheduledForDelete().clear();
+
+        for (Drawable drawable: gameWorld.getScheduledForDeleteDrawables()) {
+            gameWorld.removeDrawable(drawable);
+        }
+
+        gameWorld.getScheduledForDeleteGameObjects().clear();
+        gameWorld.getScheduledForDeleteDrawables().clear();
+        // **
     }
 
 }

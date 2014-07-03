@@ -25,24 +25,24 @@ public class TileGun extends Tile{
         int y = unit.getRealY()+GameOptions.TILE_SIZE;
         Fireball fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
         fireball.setDirection(GameOptions.DIRECTION.DOWN);
-        unit.getGameWorld().scheduleAdd(fireball);
+        unit.getGameWorld().scheduleAddGameObject(fireball);
 
         x = unit.getRealX();
         y = unit.getRealY()-GameOptions.TILE_SIZE;
         fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
         fireball.setDirection(GameOptions.DIRECTION.UP);
-        unit.getGameWorld().scheduleAdd(fireball);
+        unit.getGameWorld().scheduleAddGameObject(fireball);
 
         x = unit.getRealX()-GameOptions.TILE_SIZE;
         y = unit.getRealY();
         fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
         fireball.setDirection(GameOptions.DIRECTION.LEFT);
-        unit.getGameWorld().scheduleAdd(fireball);
+        unit.getGameWorld().scheduleAddGameObject(fireball);
 
         x = unit.getRealX()+GameOptions.TILE_SIZE;
         y = unit.getRealY();
         fireball = (Fireball) GameObjectFactory.make(x, y, GameOptions.TILE_TYPE.SKILL_FIREBALL, unit.getGameWorld());
         fireball.setDirection(GameOptions.DIRECTION.RIGHT);
-        unit.getGameWorld().scheduleAdd(fireball);
+        unit.getGameWorld().scheduleAddGameObject(fireball);
     }
 }

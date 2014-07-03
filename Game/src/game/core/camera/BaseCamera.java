@@ -5,6 +5,7 @@ import game.core.GameWorld;
 import game.core.model.Point;
 import game.gameobject.model.GameObject;
 import game.graphics.Drawable;
+import game.graphics.sprite.hud.DamageTaken;
 import game.map.model.Tile;
 import game.util.Build;
 import game.util.GameOptions;
@@ -12,6 +13,8 @@ import game.util.GameOptions;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -156,7 +159,7 @@ public abstract class BaseCamera implements Camera {
     @Override
     public void render() {
 
-        java.util.List<GameObject> gameObjects = gameWorld.getGameObjects();
+        Set<GameObject> gameObjects = gameWorld.getGameObjects();
         BufferStrategy bs = canvas.getBufferStrategy();
 
         if (bs == null) {
@@ -171,7 +174,7 @@ public abstract class BaseCamera implements Camera {
 
         int cameraOffsetX = (int) topLeft.getX();
         int centerRenderY = (int) topLeft.getY();
-        java.util.List<java.util.List<Tile>> tiles = gameWorld.getCurrentLevel().getLevelMap().getTiles();
+        List<List<Tile>> tiles = gameWorld.getCurrentLevel().getLevelMap().getTiles();
 
         for (int y = 0; y < tiles.size(); y++) {
             java.util.List<Tile> row = tiles.get(y);
@@ -181,6 +184,7 @@ public abstract class BaseCamera implements Camera {
                 int yC = y * TILE_SIZE;
                 Point p = Point.newPoint(xC, yC);
                 Point p2 = p.add(TILE_SIZE, TILE_SIZE);
+
                 if (intersects(p, p2)) {
                     xC -= cameraOffsetX;
                     yC -= centerRenderY;
@@ -213,6 +217,27 @@ public abstract class BaseCamera implements Camera {
             p2.recycle();
             p.recycle();
         }
+
+        for (Drawable drawable: gameWorld.getDrawables()) {
+            DamageTaken damageTaken = (DamageTaken)drawable;
+            int xC = damageTaken.getX();
+            int yC = damageTaken.getY();
+
+            Point p = Point.newPoint(xC, yC);
+            Point p2 = p.add(TILE_SIZE, TILE_SIZE);
+
+            if (intersects(p, p2)) {
+                xC -= cameraOffsetX;
+                yC -= centerRenderY;
+
+                drawable.onRender(g, xC, yC);
+                drawable.afterRender(g, xC, yC);
+            }
+
+            p2.recycle();
+            p.recycle();
+        }
+
         if (Build.DEBUG) {
             int xSz = width / TILE_SIZE;
             int ySz = height / TILE_SIZE;
@@ -226,6 +251,7 @@ public abstract class BaseCamera implements Camera {
                 g.drawLine(0, y, width, y);
             }
         }
+
         g.dispose();
         bs.show(); //показать
     }

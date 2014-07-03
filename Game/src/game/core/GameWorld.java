@@ -1,31 +1,49 @@
 package game.core;
 
-import game.controller.model.Controller;
 import game.gameobject.model.GameObject;
 import game.gameobject.unit.Player;
-import game.gameobject.unit.model.Unit;
+import game.graphics.Drawable;
 import game.level.model.Level;
 import game.map.model.LevelMap;
 import game.util.GameOptions;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Semyon Danilov on 27.06.2014.
  */
 public class GameWorld {
 
-    private List<GameObject> gameObjects = null;
+    private Set<GameObject> gameObjects = null;
 
-    private List<GameObject> scheduledForDelete = null;
+    private Set<GameObject> scheduledForDeleteGameObjects = null;
+
+    private Set<GameObject> scheduledForAddGameObjects;
+
+        private Set<Drawable> drawables = null;
+
+        private Set<Drawable> scheduledForDeleteDrawables = null;
+
+
+        private Set<Drawable> scheduledForAddDrawables = null;
 
     private Level currentLevel;
 
     private Player player;
-    private List<GameObject> scheduledForAdd;
 
     private Player secondPlayer;
+
+    public GameWorld() {
+        this.gameObjects = new LinkedHashSet<>();
+        this.scheduledForDeleteGameObjects = new LinkedHashSet<>();
+        this.scheduledForAddGameObjects = new LinkedHashSet<>();
+
+        this.drawables = new LinkedHashSet<>();
+        this.scheduledForDeleteDrawables = new LinkedHashSet<>();
+        this.scheduledForAddDrawables = new LinkedHashSet<>();
+    }
 
     public void setPlayer(final Player player) {
         this.player = player;
@@ -41,12 +59,6 @@ public class GameWorld {
 
     public void setSecondPlayer(final Player secondPlayer) {
         this.secondPlayer = secondPlayer;
-    }
-
-    public GameWorld() {
-        this.gameObjects = new ArrayList<>();
-        this.scheduledForDelete = new ArrayList<>();
-        this.scheduledForAdd = new ArrayList<>();
     }
 
     public Level getCurrentLevel() {
@@ -65,7 +77,7 @@ public class GameWorld {
         this.gameObjects.addAll(gameObjects);
     }
 
-    public List<GameObject> getGameObjects() {
+    public Set<GameObject> getGameObjects() {
         return gameObjects;
     }
 
@@ -73,12 +85,12 @@ public class GameWorld {
         gameObjects.remove(gameObject);
     }
 
-    public void scheduleDelete(final GameObject gameObject) {
-        scheduledForDelete.add(gameObject);
+    public void scheduleDeleteGameObject(final GameObject gameObject) {
+        scheduledForDeleteGameObjects.add(gameObject);
     }
 
-    public List<GameObject> getScheduledForDelete() {
-        return scheduledForDelete;
+    public Set<GameObject> getScheduledForDeleteGameObjects() {
+        return scheduledForDeleteGameObjects;
     }
 
     public boolean isOccupiedByTilePos(final int x, final int y) {
@@ -153,19 +165,51 @@ public class GameWorld {
         return null;
     }
 
-    public List<GameObject> getScheduledForAdd() {
-        return scheduledForAdd;
+    public Set<GameObject> getScheduledForAddGameObjects() {
+        return scheduledForAddGameObjects;
     }
 
-    public void scheduleAdd(final GameObject gameObject) {
-        if (scheduledForAdd == null)
+    public void scheduleAddGameObject(final GameObject gameObject) {
+        if (scheduledForAddGameObjects == null)
             throw new NullPointerException();
 
-        scheduledForAdd.add(gameObject);
+        scheduledForAddGameObjects.add(gameObject);
     }
 
-    public void addUnit(Unit unit, List<Controller> controllers, Controller keyboardController) {
-        addGameObject(unit);
-        controllers.add(keyboardController);
+    public void scheduledForAddDrawable(final Drawable drawable) {
+        if (scheduledForAddDrawables == null)
+            throw new NullPointerException();
+
+        scheduledForAddDrawables.add(drawable);
+    }
+
+    public void scheduledForDeleteDrawable(final Drawable drawable) {
+        scheduledForDeleteDrawables.add(drawable);
+    }
+
+    public Set<Drawable> getScheduledForDeleteDrawables() {
+        return scheduledForDeleteDrawables;
+    }
+
+    public void removeDrawable(final Drawable drawable) {
+        if (drawables == null)
+            throw new NullPointerException();
+
+        drawables.remove(drawable);
+    }
+
+    public Set<Drawable> getDrawables() {
+        return drawables;
+    }
+
+    public Set<Drawable> getScheduledForAddDrawables() {
+        return scheduledForAddDrawables;
+    }
+
+    public void addDrawable(final Drawable drawable) {
+        if (drawables == null)
+            throw new NullPointerException();
+
+        drawables.add(drawable);
     }
 }

@@ -4,6 +4,7 @@ import game.core.GameWorld;
 import game.gameobject.model.GameObject;
 import game.gameobject.skill.model.Skill;
 import game.gameobject.unit.model.Unit;
+import game.graphics.sprite.hud.DamageTaken;
 import game.graphics.sprite.model.AbstractSprite;
 import game.util.Logger;
 import game.util.ResourceManager;
@@ -45,14 +46,14 @@ public class Fireball extends Skill {
             final GameObject go = getGameWorld().getGameObjectByRealPos(x, y);
 
             if (go != this && go != null)
-                act(go);
+                cast(go);
 
             removeSelf();
         }
     }
 
     @Override
-    public void act(final GameObject gameObject) {
+    public void cast(final GameObject gameObject) {
         if (!(gameObject instanceof Unit))
             return;
 
@@ -63,5 +64,7 @@ public class Fireball extends Skill {
 
         Logger.getLogger(this.getClass()).log("unitHp: " + unit.getHp() + "; damage: " + damage);
         unit.changeHp(-damage);
+
+        getGameWorld().scheduledForAddDrawable(new DamageTaken(getRealX(), getRealY(), -damage, getGameWorld()));
     }
 }

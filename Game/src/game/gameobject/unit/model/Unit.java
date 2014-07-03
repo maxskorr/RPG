@@ -169,6 +169,10 @@ public class Unit extends GameObject {
         this.alive = alive;
     }
 
+    /**
+     * Обработчик смерти игрока.
+     * Обнуляет скорость, удаляет его из игрового мира.
+     */
     public void onDie() {
         if (isAlive()) {
             setAlive(false);
@@ -179,7 +183,7 @@ public class Unit extends GameObject {
 
             setSpeedX(0);
             setSpeedY(0);
-            getGameWorld().scheduleDelete(this);
+            getGameWorld().scheduleDeleteGameObject(this);
         }
     }
 
@@ -190,7 +194,7 @@ public class Unit extends GameObject {
     public void cast(final Skill skill) {
         getGameWorld().addGameObject(skill);
         skill.setGameWorld(getGameWorld());
-        skill.act(this);
+        skill.cast(this);
     }
 
     public boolean isMoving() {

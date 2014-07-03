@@ -106,7 +106,7 @@ public abstract class GameObject {
 
     public void removeSelf() {
         if (gameWorld != null) {
-            gameWorld.scheduleDelete(this);
+            gameWorld.scheduleDeleteGameObject(this);
         }
     }
 
