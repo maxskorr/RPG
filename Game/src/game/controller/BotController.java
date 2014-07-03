@@ -79,7 +79,7 @@ public class BotController implements Controller {
             }else{
 
             }
-
+            } else {
 
             }
         }
