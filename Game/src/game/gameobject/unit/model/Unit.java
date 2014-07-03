@@ -5,6 +5,7 @@ import game.gameobject.model.GameObject;
 import game.gameobject.skill.model.Skill;
 import game.graphics.sprite.AnimatedSprite;
 import game.graphics.sprite.model.AbstractSprite;
+import game.util.GameOptions;
 import game.util.Logger;
 
 import static game.util.GameOptions.DIRECTION;
@@ -28,6 +29,9 @@ public class Unit extends GameObject {
     private int def; // Защита персонажа
     private int atk; // Атака персонажа
     private int fraction;
+
+    private long lastDamageTime = 0;
+
     private DIRECTION lookDirection; // В какую сторону смотрит персонаж
 
     public Unit(final Integer x, final Integer y, final String spriteFileName,
@@ -97,7 +101,6 @@ public class Unit extends GameObject {
         if (hp <= 0) {
             this.hp = 0;
             onDie();
-
             return;
         }
 
@@ -151,6 +154,9 @@ public class Unit extends GameObject {
     }
 
     public void changeHp(final int diff) {
+        if (diff < 0) {
+            setLastDamageTime(System.currentTimeMillis());
+        }
         setHp(getHp() + diff);
         Logger.getLogger(this.getClass()).log("hp changed: " + hp);
     }
@@ -227,6 +233,10 @@ public class Unit extends GameObject {
         if (isMoving()) {
             //TODO: CurrentState (который enum) будет go
             ((AnimatedSprite) getDrawable()).play();
+
+            final int lastX = getRealX();
+            final int lastY = getRealY();
+
             int vx = getSpeedX();
             int vy = getSpeedY();
 
@@ -274,6 +284,10 @@ public class Unit extends GameObject {
 
                 vy += dy;
             }
+
+            if(!(lastX == getRealX() && lastY == getRealY())) {
+                getGameWorld().getCurrentLevel().getLevelMap().getTileByTilePos(getTileX(), getTileY()).trigger(this);
+            }
         } else {
             //TODO: CurrentState (который enum) будет idle
             ((AnimatedSprite) getDrawable()).stop();
@@ -285,12 +299,22 @@ public class Unit extends GameObject {
     public void updateAttributes() {
         if(isAlive()) {
             if(getHp() < getMaxHp()) {
-                setHp((int) (getHp() + Math.ceil(getMaxHp() * 0.01)));
+                //регенерации в бою нет
+                if (System.currentTimeMillis() > getLastDamageTime() + GameOptions.REGENERATION_DELAY_MILLISECONDS) {
+                    changeHp((int) ( Math.ceil(getMaxHp() * 0.01)));
+                }
             }
             if(getMp() < getMaxMp()) {
                 setMp((int) (getMp() + Math.ceil(getMaxMp() * 0.01)));
             }
             //TODO:Тут пробег по всем эффектам
         }
+    }
+
+    public void setLastDamageTime(long lastDamageTime) {
+        this.lastDamageTime = lastDamageTime;
+    }
+    public long getLastDamageTime() {
+        return this.lastDamageTime;
     }
 }

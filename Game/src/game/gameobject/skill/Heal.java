@@ -39,7 +39,7 @@ public class Heal extends Skill {
         }
 
         if (curTime >= ITERATION_TIME * curIteration) {
-            unit.setHp(unit.getHp() + (10 * curIteration));
+            unit.changeHp((10 * curIteration));
             curIteration++;
         }
 
