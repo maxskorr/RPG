@@ -1,5 +1,6 @@
 package game.core;
 
+import game.controller.BotController;
 import game.controller.KeyboardController;
 import game.controller.KeyboardController2;
 import game.controller.keyboard.KeyboardHandler;
@@ -70,6 +71,13 @@ public class Game {
         controllers.add(keyboardController2);
         frame.getCanvas().addKeyListener(keyboardHandler2);
 
+
+        //Добавление 2 игрока
+        final Player bot = (Player) GameObjectFactory.make(100, 100, PLAYER, gameWorld);
+        gameWorld.addGameObject(bot);
+        BotController botController = new BotController(bot);
+        controllers.add(botController);
+        
         getCamera().smoothAnimTo(Point.newPoint(200l, 200l));
     }
 

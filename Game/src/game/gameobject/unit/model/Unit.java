@@ -28,6 +28,7 @@ public class Unit extends GameObject {
     private int maxSpeed;
     private int def; // Защита персонажа
     private int atk; // Атака персонажа
+    private int fraction;
     private DIRECTION lookDirection; // В какую сторону смотрит персонаж
 
     public Unit(final Integer x, final Integer y, final String spriteFileName,
@@ -177,6 +178,10 @@ public class Unit extends GameObject {
         }
     }
 
+    public void setFraction(int fraction) {
+        this.fraction = fraction;
+    }
+
     public void cast(final Skill skill) {
         getGameWorld().addGameObject(skill);
         skill.setGameWorld(getGameWorld());
@@ -224,6 +229,9 @@ public class Unit extends GameObject {
         if (isMoving()) {
             //TODO: CurrentState (который enum) будет go
             ((AnimatedSprite) getDrawable()).play();
+            final int lastX = getRealX();
+            final int lastY = getRealY();
+
             int vx = getSpeedX();
             int vy = getSpeedY();
 
@@ -232,8 +240,8 @@ public class Unit extends GameObject {
 
             if (vx < 0) {
                 dx = 1;
-               setLookDirection(DIRECTION.LEFT);
-            }else if (vx > 0) {
+                setLookDirection(DIRECTION.LEFT);
+            } else if (vx > 0) {
                 dx = -1;
                 setLookDirection(DIRECTION.RIGHT);
             }
@@ -260,7 +268,7 @@ public class Unit extends GameObject {
             }
 
             while (vy != 0) {
-                final int newY =  getTileY() - dy;
+                final int newY = getTileY() - dy;
 
                 if (canGo(getTileX(), newY) || (getDeltaRenderY() != 0 && getDeltaRenderY() != GameOptions.TILE_SIZE)) {
                     changeY(-dy);
@@ -271,8 +279,9 @@ public class Unit extends GameObject {
 
                 vy += dy;
             }
-
-          getGameWorld().getCurrentLevel().getLevelMap().getTile(getTileX(), getTileY()).trigger(this);
+        if(!(lastX == getRealX() && lastY == getRealY())){
+            getGameWorld().getCurrentLevel().getLevelMap().getTile(getTileX(), getTileY()).trigger(this);
+        }
         } else {
             //TODO: CurrentState (который enum) будет idle
             ((AnimatedSprite) getDrawable()).stop();

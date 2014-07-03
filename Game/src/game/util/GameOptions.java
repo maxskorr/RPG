@@ -7,6 +7,7 @@ public class GameOptions {
     public static final int TILE_SIZE = 20;
     public static final int PHYSICS_ITERATION = 100;
     public static final int ANIMATION_DELAY_MILLISECONDS = 70;
+    public static final int AI_DELAY_MILLISECONDS = 1000;
 
     public enum TILE_TYPE {
 
